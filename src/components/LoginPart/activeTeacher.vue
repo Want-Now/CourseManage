@@ -8,18 +8,17 @@
       <el-main>
         <el-form :model="activeForm">
           <el-form-item>
-            <el-input class="input" v-model="activeForm.password" placeholder="请输入密码"></el-input>
-            <p style="font-size: 13px;color: #ccadad;margin: 0px">可包含数字、字母、下划线、长度不少于六位</p>
+            <el-input class="activeInput" v-model="activeForm.password" placeholder="请输入密码"></el-input>
+            <p style="font-size: 13px;color: #ccadad;margin: 0px;padding: 0px">可包含数字、字母、下划线、长度不少于六位</p>
           </el-form-item>
           <el-form-item>
-            <el-input class="input" v-model="activeForm.passwordCheck" placeholder="确认密码"></el-input>
+            <el-input class="activeInput" v-model="activeForm.passwordCheck" placeholder="确认密码"></el-input>
           </el-form-item>
+
           <el-form-item>
-            <p style="font-size: 13px;margin: 0px 20px;">发送验证码到邮箱:{{teacherMail}}</p>
-          </el-form-item>
-          <el-form-item>
+            <p style="font-size: 13px;color:#595959;margin: 0px;padding: 0px;">发送验证码到邮箱:{{teacherMail}}</p>
             <el-col :span="14">
-              <el-input class="input" v-model="activeForm.verification" placeholder="验证码"></el-input>
+              <el-input class="activeInput" v-model="activeForm.verification" placeholder="验证码"></el-input>
             </el-col>
             <el-col :span="1" :push="1">
               <el-button class="ver-button">发送验证码</el-button>
@@ -87,9 +86,10 @@
     color: white;
   }
 
-
-  .input{
+</style>
+<style>
+  .activeInput .el-input__inner{
     height: 50px;
-    font-size: 15px;
+    font-size: 20px;
   }
 </style>
