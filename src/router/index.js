@@ -1,18 +1,23 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-//LoginPart
+
 import Login from '@/components/LoginPart/login'
 import ActiveT from '@/components/LoginPart/activeTeacher'
 import ActiveS from '@/components/LoginPart/activeStudent'
 import RetrievePsw from '@/components/LoginPart/retrievePassword'
 import ResetPsw from '@/components/LoginPart/resetPassword'
-//SeminarTeacher
+//LoginPart
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
 import ChangeReportScore from '@/components/SeminarTeacher/changeReportScore'
 import SeminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import ViewReportScore from '@/components/SeminarTeacher/viewReportScore'
 import ViewScore from '@/components/SeminarTeacher/viewScore'
+//SeminarTeacher
+
+import StuPersonCenter from '@/components/StudentPersonal/stuPersonalCenter'
+import StudentCourse from '@/components/StudentPersonal/studentCourse'
+import CourseInfo from '@/components/StudentPersonal/courseInfo'
 Vue.use(Router)
 
 export default new Router({
@@ -72,6 +77,22 @@ export default new Router({
       path: '/Score',
       name: 'viewScore',
       component: ViewScore
-    }
+    },
+    //
+    {
+      path: '/StuPersonCenter',
+      name: 'StuPersonalCenter',
+      component: StuPersonCenter
+    },
+    {
+      path: '/StudentCourse',
+      name: 'StudentCourse',
+      component: StudentCourse
+    },
+    {
+      path: '/CourseInfo',
+      name: 'CourseInfo',
+      component: CourseInfo
+    },
   ]
 })
