@@ -3,7 +3,7 @@
       <el-header>
         <el-button class="el-icon-back" @click="back()"></el-button>
         <p>{{topic}}</p>
-        <el-button class="el-icon-plus" ></el-button>
+        <el-button class="el-icon-menu" ></el-button>
       </el-header>
       <el-main>
         <div class="seminarTopic">
@@ -22,7 +22,7 @@
             <div class="info">
               {{questionTime}}
             </div>
-            <el-input v-model="presentationScore" type="input" ></el-input>
+            <el-input v-model="presentationScore" type="input" class="scoreInput"></el-input>
             <p>展示分数</p>
             <el-button @click="getQuestion()">
               抽取提问
@@ -71,6 +71,7 @@
 
           this.$message({
             message: m,
+            duration:800,
             center: true
           });
         },
@@ -145,8 +146,8 @@
 
 
 </style>
-<style scoped>
-  .el-input__inner{
+<style>
+  .scoreInput .el-input__inner{
     position: relative;
     top: 30px;
     height: 150px;
@@ -156,4 +157,5 @@
     text-align: center;
     height: 150px;
   }
+
 </style>

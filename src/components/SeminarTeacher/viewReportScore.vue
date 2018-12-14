@@ -3,7 +3,7 @@
     <el-header>
       <el-button class="el-icon-back" ></el-button>
       <p>{{topic}}</p>
-      <el-button class="el-icon-plus" ></el-button>
+      <el-button class="el-icon-menu" ></el-button>
     </el-header>
     <el-main>
       <el-table
