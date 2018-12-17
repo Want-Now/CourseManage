@@ -18,6 +18,9 @@ import ViewScore from '@/components/SeminarTeacher/viewScore'
 import StuPersonCenter from '@/components/StudentPersonal/stuPersonalCenter'
 import StudentCourse from '@/components/StudentPersonal/studentCourse'
 import CourseInfo from '@/components/StudentPersonal/courseInfo'
+import CourseScore from '@/components/StudentPersonal/courseScore'
+import TeamPage from '@/components/StudentPersonal/teamPage'
+//StudentPersonal
 Vue.use(Router)
 
 export default new Router({
@@ -93,6 +96,16 @@ export default new Router({
       path: '/CourseInfo',
       name: 'CourseInfo',
       component: CourseInfo
+    },
+    {
+      path: '/CourseScore',
+      name: 'CourseScore',
+      component: CourseScore
+    },
+    {
+      path: '/TeamPage',
+      name: 'TeamPage',
+      component: TeamPage
     },
   ]
 })

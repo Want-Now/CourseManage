@@ -71,4 +71,27 @@ export default {
   line-height: 55px;
   text-align: center;
 }
+
+.buttomButton{
+  margin: 0px;
+  height: 45px;
+  width: 80vw;
+  font-size: 17px;
+  background-color: #494e8f;
+  border-color: #494e8f;
+  color: white;
+}
+.buttomButton:hover{
+  background-color: #8084b1;
+  border-color: #8084b1;
+  color: white;
+}
+.buttomButton:focus{
+  background-color: #8084b1;
+  border-color: #8084b1;
+  color: white;
+}
+.el-collapse-item__header{
+  font-size: 18px;
+}
 </style>
