@@ -87,9 +87,3 @@
   }
 
 </style>
-<style>
-  .activeInput .el-input__inner{
-    height: 50px;
-    font-size: 20px;
-  }
-</style>

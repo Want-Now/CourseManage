@@ -94,4 +94,12 @@ export default {
 .el-collapse-item__header{
   font-size: 18px;
 }
+
+.activeInput .el-input__inner{
+  height: 50px;
+  font-size: 20px;
+}
+.activeInput .el-input-group__prepend{
+  font-size: 18px;
+}
 </style>

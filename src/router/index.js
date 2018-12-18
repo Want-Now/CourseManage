@@ -20,6 +20,8 @@ import StudentCourse from '@/components/StudentPersonal/studentCourse'
 import CourseInfo from '@/components/StudentPersonal/courseInfo'
 import CourseScore from '@/components/StudentPersonal/courseScore'
 import TeamPage from '@/components/StudentPersonal/teamPage'
+import CreateTeam from '@/components/StudentPersonal/createTeam'
+import LeaderTeam from '@/components/StudentPersonal/leaderTeam'
 //StudentPersonal
 Vue.use(Router)
 
@@ -106,6 +108,15 @@ export default new Router({
       path: '/TeamPage',
       name: 'TeamPage',
       component: TeamPage
+    },
+    {
+      path: '/CreateTeam',
+      name: 'CreateTeam',
+      component: CreateTeam
+    },{
+      path: '/LeaderTeam',
+      name: 'LeaderTeam',
+      component: LeaderTeam
     },
   ]
 })

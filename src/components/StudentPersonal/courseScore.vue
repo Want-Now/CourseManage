@@ -13,9 +13,9 @@
     </el-header>
     <el-main>
       <el-collapse accordion>
-        <el-collapse-item v-for="round in rounds">
+        <el-collapse-item v-for="round in rounds" :key="round.id">
           <template slot="title">{{round.title}}</template>
-          <el-collapse v-for="seminar in round.seminars">
+          <el-collapse v-for="seminar in round.seminars" :key="seminar.id">
             <el-collapse-item>
               <template slot="title">{{seminar.name}}</template>
                 <div class="scoreDiv">
