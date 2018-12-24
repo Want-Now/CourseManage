@@ -6,6 +6,8 @@ import ActiveT from '@/components/LoginPart/activeTeacher'
 import ActiveS from '@/components/LoginPart/activeStudent'
 import RetrievePsw from '@/components/LoginPart/retrievePassword'
 import ResetPsw from '@/components/LoginPart/resetPassword'
+import PswSetting from '@/components/LoginPart/pswSetting'
+import MailSetting from '@/components/LoginPart/mailSetting'
 //LoginPart
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
@@ -22,7 +24,22 @@ import CourseScore from '@/components/StudentPersonal/courseScore'
 import TeamPage from '@/components/StudentPersonal/teamPage'
 import CreateTeam from '@/components/StudentPersonal/createTeam'
 import LeaderTeam from '@/components/StudentPersonal/leaderTeam'
+import MemberTeam from '@/components/StudentPersonal/memberTeam'
+import StudentSetting from '@/components/StudentPersonal/studentSetting'
 //StudentPersonal
+
+import TeacherSetting from '@/components/TeacherPersonal/teacherSetting'
+import BacklogPage from '@/components/TeacherPersonal/backlogPage'
+
+
+
+import LoginPC from '@/components/PC/loginPC'
+import CoursePage from '@/components/PC/coursePage'
+import ImportStu from '@/components/PC/TeacherPart/importStudent'
+import TeaViewScorePC from '@/components/PC/TeacherPart/teaViewScore'
+//PC
+
+
 Vue.use(Router)
 
 export default new Router({
@@ -51,6 +68,16 @@ export default new Router({
       path: '/ResetPsw',
       name: 'ResetPassword',
       component: ResetPsw
+    },
+    {
+      path: '/PswSetting',
+      name: 'PswSetting',
+      component: PswSetting
+    },
+    {
+      path: '/MailSetting',
+      name: 'MailSetting',
+      component: MailSetting
     },
     //LoginPart
     {
@@ -83,7 +110,7 @@ export default new Router({
       name: 'viewScore',
       component: ViewScore
     },
-    //
+    //SeminarTeacher
     {
       path: '/StuPersonCenter',
       name: 'StuPersonalCenter',
@@ -117,6 +144,47 @@ export default new Router({
       path: '/LeaderTeam',
       name: 'LeaderTeam',
       component: LeaderTeam
+    },{
+      path: '/MemberTeam',
+      name: 'MemberTeam',
+      component: MemberTeam
+    },{
+      path: '/StuSetting',
+      name: 'StuSetting',
+      component: StudentSetting
     },
+    //StudentPersonal
+    {
+      path: '/TeaSetting',
+      name: 'TeacherSetting',
+      component: TeacherSetting
+    },
+    {
+      path: '/BacklogPage',
+      name: 'BacklogPage',
+      component: BacklogPage
+    },
+    //TeacherPersonal
+    {
+      path: '/PC',
+      name: 'LoginPC',
+      component: LoginPC
+    },
+    {
+      path: '/CoursePagePC',
+      name: 'CoursePage',
+      component: CoursePage
+    },
+    {
+      path: '/ImportStuPC',
+      name: 'ImportStu',
+      component: ImportStu
+    },
+    {
+      path: '/TeaViewScorePC',
+      name: 'TeaViewScorePC',
+      component: TeaViewScorePC
+    },
+    //PC
   ]
 })
