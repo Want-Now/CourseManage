@@ -37,6 +37,13 @@ import LoginPC from '@/components/PC/loginPC'
 import CoursePage from '@/components/PC/coursePage'
 import ImportStu from '@/components/PC/TeacherPart/importStudent'
 import TeaViewScorePC from '@/components/PC/TeacherPart/teaViewScore'
+import TeaExportScorePC from '@/components/PC/TeacherPart/teaExportScore'
+import TeaDownloadFilePC from '@/components/PC/TeacherPart/downloadFile'
+import TeaDownloadPagePC from '@/components/PC/TeacherPart/downloadPage'
+import TeaDownloadBatchPC from '@/components/PC/TeacherPart/downloadBatch'
+
+import StuViewScorePC from '@/components/PC/StudentPart/stuViewScore'
+
 //PC
 
 
@@ -185,6 +192,32 @@ export default new Router({
       name: 'TeaViewScorePC',
       component: TeaViewScorePC
     },
+    {
+      path: '/TeaExportScorePC',
+      name: 'TeaExportScorePC',
+      component: TeaExportScorePC
+    },
+    {
+      path: '/TeaDownloadFilePC',
+      name: 'TeaDownloadFilePC',
+      component: TeaDownloadFilePC
+    },
+    {
+      path: '/TeaDownloadPagePC',
+      name: 'TeaDownloadPagePC',
+      component: TeaDownloadPagePC
+    },
+    {
+      path: '/TeaDownloadBatchPC',
+      name: 'TeaDownloadBatchPC',
+      component: TeaDownloadBatchPC
+    }
+    ,
+    {
+      path: '/StuViewScorePC',
+      name: 'StuViewScorePC',
+      component: StuViewScorePC
+    }
     //PC
   ]
 })
