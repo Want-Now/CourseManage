@@ -12,60 +12,63 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <el-collapse accordion>
-        <el-collapse-item v-for="round in rounds" :key="round.id">
-          <template slot="title">{{round.title}}</template>
-          <el-collapse v-for="seminar in round.seminars" :key="seminar.id">
-            <el-collapse-item>
-              <template slot="title">{{seminar.name}}</template>
-                <div class="scoreDiv">
-                  <span>展示：</span><span class="scoreFont">{{seminar.presentationScore}}</span><br/>
-                  <span>提问：</span><span class="scoreFont">{{seminar.questionScore}}</span><br/>
-                  <span>书面报告：</span><span class="scoreFont">{{seminar.reportScore}}</span><br/>
-                  <span>本次总成绩：</span><span class="scoreFont">{{seminar.seminarScore}}</span><br/>
-                  <span>本轮总成绩：</span><span class="scoreFont">{{seminar.roundScore}}</span><br/>
-                </div>
-            </el-collapse-item>
-          </el-collapse>
-        </el-collapse-item>
-      </el-collapse>
+      <el-menu
+        text-color="#595959"
+        active-text-color="#494e8f">
+        <el-menu-item index="1">
+          <span class="infoName">姓名</span><span>{{stuName}}</span>
+        </el-menu-item>
+        <el-menu-item index="2">
+          <span class="infoName">学号</span><span>{{stuID}}</span>
+        </el-menu-item>
+        <el-menu-item index="3">
+          <span class="infoName">性别</span><span>{{stuSex}}</span>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <span class="infoName">出生年月</span><span>{{stuBirth}}</span>
+        </el-menu-item>
+        <el-menu-item index="5" @click="goMailSetting()">
+          <span class="infoName">邮箱</span>
+          <span>{{stuEmail}}<i class="el-icon-arrow-right"></i></span>
+        </el-menu-item>
+        <el-menu-item index="6" @click="goPswSetting()">
+          <span class="infoName">账户密码</span><i class="el-icon-arrow-right"></i>
+        </el-menu-item>
+        <el-menu-item index="7">
+          <span class="infoName">管理员邮箱</span><span>{{adminEmail}}</span>
+        </el-menu-item>
+      </el-menu>
     </el-main>
     <el-footer>
-      <el-button class="buttomButton">导出成绩</el-button>
+      <el-button type="danger" class="buttomButton">
+        退出登录
+      </el-button>
     </el-footer>
   </el-container>
 </template>
 
 <script>
     export default {
-        name: "courseScore",
+        name: "studentSetting",
       data(){
           return{
-            headerLocation:'OOAD-2016(1)',
-            rounds:[
-              {
-                title:'第一轮',
-                seminars:[
-                  {
-                    name:'业务流程',
-                    presentationScore:'5.0',
-                    questionScore:'5.0',
-                    reportScore:'5.0',
-                    seminarScore:'5.0',
-                    roundScore:'5.0'
-
-                  },
-                  {
-                    name:'用例分析'
-                  }
-                ]
-              },
-              {
-                title:'第二轮'
-              }
-            ],
+            headerLocation:'账户与设置',
+            stuName:'Mingming',
+            stuID:'24321324',
+            stuSex:'女',
+            stuBirth:'1998.01',
+            stuEmail:'3278dsadas947@qq.com',
+            adminEmail:'418471@qq.com'
 
           }
+      },
+      methods:{
+          goPswSetting(){
+            this.$router.push("/PswSetting");
+          },
+        goMailSetting(){
+          this.$router.push("/MailSetting");
+        },
       }
     }
 </script>
@@ -73,21 +76,20 @@
 <style scoped>
   .el-container{
     height: 100vh;
-
   }
 
-  .el-collapse-item{
-    font-size: 15px;
+  .el-menu-item{
+    padding-left: 0px;
+    text-align: left;
+    font-size: 16px;
   }
-  .scoreDiv{
-
+  .infoName{
+    margin-right: 10px ;
   }
-  .scoreFont{
-    font-size: 18px;
-    color: #494E8F;
-  }
-  .el-collapse-item__header{
-    text-align: center;
+  .el-icon-arrow-right{
+    position: absolute;
+    right: 0px;
+    top: 20px;
   }
   .el-input__inner{
     height: 50px;

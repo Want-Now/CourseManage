@@ -1,75 +1,88 @@
 <template>
   <el-container>
     <el-header>
+      <el-button class="el-icon-back" @click="back()"></el-button>
       <p>{{headerLocation}}</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>待办</el-dropdown-item>
           <el-dropdown-item>个人页面</el-dropdown-item>
           <el-dropdown-item>讨论课</el-dropdown-item>
-
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
     <el-main>
-      <el-row :span="24" class="personInfo">
-        <p style="position: absolute;left: 20px;top: 15px;">{{studentName}}</p>
-        <p style="position: absolute;left: 20px;top: 55px;">{{studentId}}</p>
-      </el-row>
       <el-menu
-        background-color="#d3d4e4"
         text-color="#595959"
         active-text-color="#494e8f">
-        <el-menu-item index="1" @click="">
-          <i class="el-icon-document"></i>
-          我的课程
+        <el-menu-item index="1">
+          <span class="infoName">姓名</span><span>{{teaName}}</span>
         </el-menu-item>
-        <el-menu-item index="2" @click="">
-          <i class="el-icon-edit"></i>
-          账户与设置
+        <el-menu-item index="2">
+          <span class="infoName">教工号</span><span>{{teaID}}</span>
+        </el-menu-item>
+        <el-menu-item index="3" @click="goMailSetting()">
+          <span class="infoName">邮箱</span>
+          <span>{{teaEmail}}<i class="el-icon-arrow-right"></i></span>
+        </el-menu-item>
+        <el-menu-item index="4" @click="goPswSetting()">
+          <span class="infoName">账户密码</span><i class="el-icon-arrow-right"></i>
+        </el-menu-item>
+        <el-menu-item index="5">
+          <span class="infoName">管理员邮箱</span><span>{{adminEmail}}</span>
         </el-menu-item>
       </el-menu>
     </el-main>
+    <el-footer>
+      <el-button type="danger" class="buttomButton">
+        退出登录
+      </el-button>
+    </el-footer>
   </el-container>
 </template>
 
 <script>
-  export default {
-    name: "StuPersonalCenter",
-    data(){
-      return{
-        headerLocation:"个人中心",
-        studentName:"黄明明",
-        studentId:"242324323435455",
+    export default {
+        name: "studentSetting",
+      data(){
+          return{
+            headerLocation:'账户与设置',
+            teaName:'Mingming',
+            teaID:'24321324',
+            teaEmail:'3278dsadas947@qq.com',
+            adminEmail:'418471@qq.com'
+
+          }
+      },
+      methods:{
+          goPswSetting(){
+            this.$router.push("/PswSetting");
+          },
+        goMailSetting(){
+          this.$router.push("/MailSetting");
+        },
       }
     }
-  }
 </script>
 
 <style scoped>
-  .el-dropdown{
-    position: absolute;
-    margin: 0px;
-    width: 60px;
-    height: 55px;
-    color: white;
-    right: 0px;
-    top: 0px;
-    line-height: 55px;
-    text-align: center;
+  .el-container{
+    height: 90vh;
   }
-  .personInfo{
-    height: 120px;
-    border: solid #cccccc 1px;
-    border-radius: 5px;
-    vertical-align: middle;
 
-  }
-  .el-menu{
-    margin-top: 20px;
-  }
   .el-menu-item{
+    padding-left: 0px;
     text-align: left;
+    font-size: 16px;
+  }
+  .infoName{
+    margin-right: 10px ;
+  }
+  .el-icon-arrow-right{
+    position: absolute;
+    right: 0px;
+    top: 20px;
   }
   .el-input__inner{
     height: 50px;
