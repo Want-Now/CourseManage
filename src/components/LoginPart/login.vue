@@ -10,7 +10,7 @@
         <img src="../../assets/XMU.png" style="width: 8rem">
       </el-col>
     </el-row>
-    <el-form ref="form" ><!--rules="rule"-->
+    <el-form ref="form" :rules="rules"><!---->
       <el-form-item prop="user">
         <el-row type="flex" justify="center" class="row-height">
           <el-col :span="20">
@@ -26,13 +26,18 @@
         </el-row>
       </el-form-item>
       <el-form-item>
+        <el-radio v-model="form.identity" label="1">教师</el-radio>
+        <el-radio v-model="form.identity" label="0">学生</el-radio>
+      </el-form-item>
+      <el-form-item>
         <el-row  type="flex" justify="center" style="margin-buttom: 5rem;">
           <el-col>
-            <el-button type="primary" class="login-button" @click="sendUserInfo()">登录</el-button>
+            <el-button type="primary" class="login-button" @click="sendUserInfo">登录</el-button>
           </el-col>
         </el-row>
       </el-form-item>
     </el-form>
+    <span class="forgetPsw" @click="forgetPsw">忘记密码</span>
   </div>
 </template>
 
@@ -44,40 +49,57 @@
             form:{
               user:'',
               password:'',
+              identity:'1',
             },
-            // rule:{
-            //   password:[
-            //     {min: 8, max: 20, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-            //   ]
-            // },
+            rules:{
+              user:[
+                { required:true ,message:'用户名不能为空！',trigger: 'blur' }
+              ],
+              password:[
+                { required:true ,message:'密码不能为空！',trigger: 'blur'},
+                { min:6 ,message:'长度不少于六位',trigger: 'blur' }
+              ]
+            },
           }
         },
       methods: {
-        open(){
-          this.$router.push("/ActiveTeacher");
-        },
         sendUserInfo(){
-          axios({
-            method:'post',
-            url:"http://47.107.122.159:8080/user/login/",
-            data:{
+          var that=this;
+          this.$axios({
+            method:'post',      //传输方法
+            url:"http://kt35um.natappfree.cc/user/login",   //路径
+            data:{                                //传给后端的数据（后端数据名：……）
               account:this.form.user,
-              password:this.form.password
+              password:this.form.password,
+              type:parseInt(this.form.identity),
             }
           })
-            .then(
+            .then(                //成功后的操作
               function (response) {
-                if(response.data.message=="1")
+                if(response.data.message===0)
                 {
-                  alert("success");
-                  this.$router.push("/ActiveTeacher");
+                  if(that.form.identity==='1'){
+                    that.$router.push({path:"/ActiveTeacher",query:{account:this.form.user}});
+                  }
+                  else if(that.form.identity==='0'){
+                    that.$router.push("/ActiveStudent");
+                  }
+                  else{
+                    console.log('Error');
+                  }
+                }
+                else if(response.data.message===1)
+                {
+                  that.$router.push("/");
                 }
                 else{
-                  alert("fail");
+                  alert("登录失败！");
                 }
               }
             )
-
+        },
+        forgetPsw(){
+          this.$router.push('/ForgetPsw')
         }
       }
     }
@@ -85,7 +107,7 @@
 
 <style scoped>
   #app-login{
-    height: 100vh;
+    height: 90vh;
     width:100vw;
     margin: auto;
     text-align: center;
@@ -117,4 +139,7 @@
     border-color: #8084b1;
   }
 
+  .el-radio{
+    font-size: 25px;
+  }
 </style>
