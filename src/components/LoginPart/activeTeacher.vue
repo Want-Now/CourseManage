@@ -1,72 +1,127 @@
 <template>
-
     <el-container>
       <el-header id="header">
         <el-button class="el-icon-back" @click="back()"></el-button>
         <p>{{headerLocation}}</p>
       </el-header>
       <el-main>
-        <el-form :model="activeForm">
-          <el-form-item>
-            <el-input class="activeInput" v-model="activeForm.password" placeholder="请输入密码"></el-input>
-            <p style="font-size: 13px;color: #ccadad;margin: 0px;padding: 0px">可包含数字、字母、下划线、长度不少于六位</p>
+        <el-form :model="activeForm" :rules="activeRule" ref="activeForm">
+          <el-form-item prop="password">
+            <el-input class="activeInput" type="password" v-model="activeForm.password" placeholder="请输入密码"></el-input>
           </el-form-item>
-          <el-form-item>
-            <el-input class="activeInput" v-model="activeForm.passwordCheck" placeholder="确认密码"></el-input>
+          <el-form-item prop="passwordCheck">
+            <el-input class="activeInput" type="password" v-model="activeForm.passwordCheck" placeholder="确认密码"></el-input>
           </el-form-item>
-
-          <el-form-item>
-            <p style="font-size: 13px;color:#595959;margin: 0px;padding: 0px;">发送验证码到邮箱:{{teacherMail}}</p>
-            <el-col :span="14">
-              <el-input class="activeInput" v-model="activeForm.verification" placeholder="验证码"></el-input>
-            </el-col>
-            <el-col :span="1" :push="1">
-              <el-button class="ver-button">发送验证码</el-button>
-            </el-col>
-          </el-form-item>
-
         </el-form>
-
       </el-main>
       <el-footer>
+        <span style="font-size: 13px;color: #ccadad;">可包含数字、字母、下划线、长度不少于六位</span>
         <el-row type="flex" justify="center">
-          <el-button class="up-button">确认提交</el-button>
+          <el-button class="up-button" @click="submitForm('activeForm')">确认提交</el-button>
         </el-row>
       </el-footer>
     </el-container>
-
 </template>
+
+<!--教师激活账户-->
 
 <script>
     export default {
       name:"ActiveTeacher",
       data(){
+        var validatePass = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入密码'));
+          } else if(value.length<6) {
+            callback(new Error('密码长度不少于六位'));
+          } else{
+            if (this.activeForm.passwordCheck!== '') {
+              this.$refs.activeForm.validateField('passwordCheck');
+            }
+            callback();
+          }
+        };
+        var validatePass2 = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请再次输入密码'));
+          } else if (value !== this.activeForm.password) {
+            callback(new Error('两次输入密码不一致!'));
+          } else {
+            callback();
+          }
+        };
         return{
           headerLocation: "激活账号",
           teacherMail: '437842798@xmu.edu.cn',
           activeForm: {
             password: '',
             passwordCheck: '',
-            mail: '',
-            verification: '',
-        }
+          },
+          activeRule:{
+            password: [
+              { validator: validatePass, trigger: 'blur' }
+            ],
+            passwordCheck: [
+              { validator: validatePass2, trigger: 'blur' }
+            ]
+          }
+
         }
       },
       methods:{
+        back(){
+          this.$router.go(-1);
+        },
+        submitForm(formName) {
+          var that=this;
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.$axios({
+                method:'put',
+                url:'http://3uc6ic.natappfree.cc/teacher/active',
+                data:{
+                  // account:'2700',
+                  password:this.activeForm.password,
+                  email:this.activeForm.email
+                }
+              }).then(function (response) {
+                if(response.data.message===true){
+                  that.$message({
+                    message:'激活成功',
+                    type:'success',
+                    duration:800
+                  });
+                }
+                else{
+                  that.$message({
+                    message:'激活失败',
+                    type:'error',
+                    duration:800
+                  });
+                }
+              })
+                .catch(function (error) {
+                  console.log(error);
+                })
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
+        },
       }
     }
 </script>
 
 <style scoped>
-  .ver-button{
-    height: 50px;
-    font-size: 15px;
+
+  .el-container{
+    height: 80vh;
   }
 
-
   .up-button{
-    height: 60px;
-    width: 90%;
+    height: 50px;
+    width: 85vw;
     font-size: 20px;
     background-color: #494e8f;
     border-color: #494e8f;

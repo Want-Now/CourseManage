@@ -99,85 +99,165 @@ export default new Router({
     },
     //LoginPart
     {
+
       path: '/SeminarProceed',
+
       name: 'SeminarProceed',
+
       component: SeminarProceed
+
     },
+
     {
+
       path: '/ChangeReportScore',
+
       name: 'changeReportScore',
+
       component: ChangeReportScore
+
     },
+
     {
+
       path: '/SeminarChangePScore',
+
       name: 'seminarChangePScore',
+
       component: SeminarChangePScore
+
     },
+
     {
+
       path: '/SeminarQuestionScore',
+
       name: 'seminarQuestionScore',
+
       component: SeminarQuestionScore
+
     },
+
     {
+
       path: '/Seminarppt',
+
       name: 'Seminarppt',
+
       component: Seminarppt
+
     },
+
     {
+
       path: '/teacherCouseSeminar',
+
       name: 'teacherCouseSeminar',
+
       component: teacherCouseSeminar
+
     },
+
     {
+
       path: '/roundSeting',
+
       name: 'roundSeting',
+
       component: teacherSeminar
+
     },
+
     {
+
       path: '/teacherSeminar',
+
       name: 'teacherSeminar',
+
       component: teacherSeminar
+
     },
+
     {
+
       path: '/teacherSeminarFinished',
+
       name: 'teacherSeminarFinished',
+
       component: teacherSeminarFinished
+
     },
+
     {
+
       path: '/teacherSeminarRunning',
+
       name: 'teacherSeminarRunning',
+
       component: teacherSeminarRunning
+
     },
+
     {
+
       path: '/modifySeminar',
+
       name: 'modifySeminar',
+
       component: modifySeminar
+
     },
+
     {
+
       path: '/creatSeminar',
+
       name: 'creatSeminar',
+
       component: creatSeminar
+
     },
+
     {
+
       path: '/teacherSeminarNotstart',
+
       name: 'teacherSeminarNotstart',
+
       component: teacherSeminarNotstart
+
     },
+
     {
+
       path: '/teacherSeminarPause',
+
       name: 'teacherSeminarPause',
+
       component: teacherSeminarPause
+
     },
+
     {
+
       path: '/ReportScore',
+
       name: 'viewReportScore',
+
       component: ViewReportScore
+
     },
+
     {
+
       path: '/Score',
+
       name: 'viewScore',
+
       component: ViewScore
+
     },
+
 
     //SeminarTeacher
     {

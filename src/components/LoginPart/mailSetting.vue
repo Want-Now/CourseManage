@@ -5,11 +5,15 @@
       <p>{{headerLocation}}</p>
     </el-header>
     <el-main>
-      <el-input v-model="newMail" autocomplete="off" class="pswInput" placeholder="填写新邮箱" clearable></el-input>
+      <el-form ref="form" :model="form" :rules="rule">
+        <el-form-item prop="mail">
+          <el-input v-model="form.mail" autocomplete="off" class="pswInput" placeholder="填写新邮箱" clearable></el-input>
+        </el-form-item>
+      </el-form>
     </el-main>
     <el-footer>
       <p>邮箱格式如：user@host.domainnames</p>
-      <el-button type="danger" class="buttomButton">
+      <el-button type="danger" class="buttomButton" @click="submitEmail('form')">
         确认提交
       </el-button>
     </el-footer>
@@ -20,16 +24,68 @@
     export default {
         name: "mailSetting",
       data(){
+        var validateEmail=(rule,value,callback)=>{
+          if (value === '') {
+            callback(new Error('请正确填写邮箱'));
+          } else {
+            if (value !== '') {
+              var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+              if(!reg.test(value)){
+                callback(new Error('请输入有效的邮箱'));
+              }
+            }
+            callback();
+          }
+        };
           return{
             headerLocation:'账户邮箱',
-            newMail:'',
-
+            form:{
+              mail:''
+            },
+            rule:{
+              mail:[
+                {validator:validateEmail,trigger:'blur'}
+              ]
+            }
           }
       },
       methods:{
         back(){
           this.$router.go(-1);
-        }
+        },
+        submitEmail(formName){
+          var _this=this;
+          this.$refs[formName].validate((valid)=>{
+            if(valid){
+              this.$axios({
+                method:'put',
+                url:'/user/email',
+                data:{
+                  Email:this.form.mail
+                }
+              }).then(function (response) {
+                if(response.data===true){
+                  _this.$message({
+                    message:'修改邮箱成功',
+                    type:'success',
+                    duration:800
+                  });
+                } else{
+                  _this.$message({
+                    message:'修改邮箱失败',
+                    type:'error',
+                    duration:800
+                  });
+                }
+              })
+                .catch(function (error) {
+                  console.log(error);
+                })
+            }else{
+              console.log('Submit Failed.');
+            }
+          })
+        },
       }
     }
 </script>
