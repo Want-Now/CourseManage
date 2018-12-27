@@ -4,11 +4,14 @@ import Router from 'vue-router'
 import Login from '@/components/LoginPart/login'
 import ActiveT from '@/components/LoginPart/activeTeacher'
 import ActiveS from '@/components/LoginPart/activeStudent'
-import RetrievePsw from '@/components/LoginPart/retrievePassword'
-import ResetPsw from '@/components/LoginPart/resetPassword'
+// import RetrievePsw from '@/components/LoginPart/retrievePassword'
+// import ResetPsw from '@/components/LoginPart/resetPassword'
 import PswSetting from '@/components/LoginPart/pswSetting'
 import MailSetting from '@/components/LoginPart/mailSetting'
+import ForgetPsw from '@/components/LoginPart/forgetPsw'
 //LoginPart
+
+
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
 import ChangeReportScore from '@/components/SeminarTeacher/changeReportScore'
@@ -66,16 +69,16 @@ export default new Router({
       name: 'ActiveTeacher',
       component: ActiveT
     },
-    {
-      path: '/RetrievePsw',
-      name: 'RetrievePassword',
-      component: RetrievePsw
-    },
-    {
-      path: '/ResetPsw',
-      name: 'ResetPassword',
-      component: ResetPsw
-    },
+    // {
+    //   path: '/RetrievePsw',
+    //   name: 'RetrievePassword',
+    //   component: RetrievePsw
+    // },
+    // {
+    //   path: '/ResetPsw',
+    //   name: 'ResetPassword',
+    //   component: ResetPsw
+    // },
     {
       path: '/PswSetting',
       name: 'PswSetting',
@@ -85,6 +88,10 @@ export default new Router({
       path: '/MailSetting',
       name: 'MailSetting',
       component: MailSetting
+    },{
+      path: '/ForgetPsw',
+      name: 'ForgetPsw',
+      component: ForgetPsw
     },
     //LoginPart
     {
