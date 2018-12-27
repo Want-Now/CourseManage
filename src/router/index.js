@@ -23,6 +23,8 @@ import ChangeReportScore from '@/components/SeminarTeacher/changeReportScore'
 import SeminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import ViewReportScore from '@/components/SeminarTeacher/viewReportScore'
 import ViewScore from '@/components/SeminarTeacher/viewScore'
+import creatSeminar from '@/components/SeminarTeacher/creatSeminar'
+import modifySeminar from '@/components/SeminarTeacher/modifySeminar'
 //SeminarTeacher
 
 import StuPersonCenter from '@/components/StudentPersonal/stuPersonalCenter'
@@ -145,6 +147,16 @@ export default new Router({
       path: '/teacherSeminarRunning',
       name: 'teacherSeminarRunning',
       component: teacherSeminarRunning
+    },
+    {
+      path: '/modifySeminar',
+      name: 'modifySeminar',
+      component: modifySeminar
+    },
+    {
+      path: '/creatSeminar',
+      name: 'creatSeminar',
+      component: creatSeminar
     },
     {
       path: '/teacherSeminarNotstart',
