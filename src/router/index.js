@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
 import Login from '@/components/LoginPart/login'
 import ActiveT from '@/components/LoginPart/activeTeacher'
 import ActiveS from '@/components/LoginPart/activeStudent'
@@ -8,7 +7,16 @@ import RetrievePsw from '@/components/LoginPart/retrievePassword'
 import ResetPsw from '@/components/LoginPart/resetPassword'
 import PswSetting from '@/components/LoginPart/pswSetting'
 import MailSetting from '@/components/LoginPart/mailSetting'
+
 //LoginPart
+import roundSeting from '@/components/SeminarTeacher/roundSeting'
+import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
+import teacherCouseSeminar from '@/components/SeminarTeacher/teacherCouseSeminar'
+import teacherSeminarFinished from '@/components/SeminarTeacher/teacherSeminarFinished'
+import teacherSeminarRunning from '@/components/SeminarTeacher/teacherSeminarRunning'
+import teacherSeminarNotstart from '@/components/SeminarTeacher/teacherSeminarNotstart'
+import teacherSeminarPause from '@/components/SeminarTeacher/teacherSeminarPause'
+import teacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
 import ChangeReportScore from '@/components/SeminarTeacher/changeReportScore'
@@ -48,6 +56,7 @@ import StuViewScorePC from '@/components/PC/StudentPart/stuViewScore'
 
 
 Vue.use(Router)
+
 
 export default new Router({
   routes: [
@@ -108,6 +117,46 @@ export default new Router({
       component: SeminarQuestionScore
     },
     {
+      path: '/Seminarppt',
+      name: 'Seminarppt',
+      component: Seminarppt
+    },
+    {
+      path: '/teacherCouseSeminar',
+      name: 'teacherCouseSeminar',
+      component: teacherCouseSeminar
+    },
+    {
+      path: '/roundSeting',
+      name: 'roundSeting',
+      component: teacherSeminar
+    },
+    {
+      path: '/teacherSeminar',
+      name: 'teacherSeminar',
+      component: teacherSeminar
+    },
+    {
+      path: '/teacherSeminarFinished',
+      name: 'teacherSeminarFinished',
+      component: teacherSeminarFinished
+    },
+    {
+      path: '/teacherSeminarRunning',
+      name: 'teacherSeminarRunning',
+      component: teacherSeminarRunning
+    },
+    {
+      path: '/teacherSeminarNotstart',
+      name: 'teacherSeminarNotstart',
+      component: teacherSeminarNotstart
+    },
+    {
+      path: '/teacherSeminarPause',
+      name: 'teacherSeminarPause',
+      component: teacherSeminarPause
+    },
+    {
       path: '/ReportScore',
       name: 'viewReportScore',
       component: ViewReportScore
@@ -117,6 +166,7 @@ export default new Router({
       name: 'viewScore',
       component: ViewScore
     },
+
     //SeminarTeacher
     {
       path: '/StuPersonCenter',
