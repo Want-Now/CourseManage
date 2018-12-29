@@ -4,8 +4,6 @@ import Router from 'vue-router'
 import Login from '@/components/LoginPart/login'
 import ActiveT from '@/components/LoginPart/activeTeacher'
 import ActiveS from '@/components/LoginPart/activeStudent'
-// import RetrievePsw from '@/components/LoginPart/retrievePassword'
-// import ResetPsw from '@/components/LoginPart/resetPassword'
 import PswSetting from '@/components/LoginPart/pswSetting'
 import MailSetting from '@/components/LoginPart/mailSetting'
 import ForgetPsw from '@/components/LoginPart/forgetPsw'
@@ -26,7 +24,6 @@ import CourseInfo from '@/components/StudentPersonal/courseInfo'
 import CourseScore from '@/components/StudentPersonal/courseScore'
 import TeamPage from '@/components/StudentPersonal/teamPage'
 import CreateTeam from '@/components/StudentPersonal/createTeam'
-import LeaderTeam from '@/components/StudentPersonal/leaderTeam'
 import MemberTeam from '@/components/StudentPersonal/memberTeam'
 import StudentSetting from '@/components/StudentPersonal/studentSetting'
 //StudentPersonal
@@ -69,16 +66,6 @@ export default new Router({
       name: 'ActiveTeacher',
       component: ActiveT
     },
-    // {
-    //   path: '/RetrievePsw',
-    //   name: 'RetrievePassword',
-    //   component: RetrievePsw
-    // },
-    // {
-    //   path: '/ResetPsw',
-    //   name: 'ResetPassword',
-    //   component: ResetPsw
-    // },
     {
       path: '/PswSetting',
       name: 'PswSetting',
@@ -115,12 +102,12 @@ export default new Router({
       component: SeminarQuestionScore
     },
     {
-      path: '/ReportScore',
+      path: '/ViewReportScore',
       name: 'viewReportScore',
       component: ViewReportScore
     },
     {
-      path: '/Score',
+      path: '/ViewScore',
       name: 'viewScore',
       component: ViewScore
     },
@@ -154,10 +141,6 @@ export default new Router({
       path: '/CreateTeam',
       name: 'CreateTeam',
       component: CreateTeam
-    },{
-      path: '/LeaderTeam',
-      name: 'LeaderTeam',
-      component: LeaderTeam
     },{
       path: '/MemberTeam',
       name: 'MemberTeam',
