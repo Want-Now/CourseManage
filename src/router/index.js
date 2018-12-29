@@ -11,6 +11,7 @@ import roundSeting from '@/components/SeminarTeacher/roundSeting'
 import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
 import teacherCouseSeminar from '@/components/SeminarTeacher/teacherCouseSeminar'
 import teacherSeminarFinished from '@/components/SeminarTeacher/teacherSeminarFinished'
+import seminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import teacherSeminarRunning from '@/components/SeminarTeacher/teacherSeminarRunning'
 import teacherSeminarNotstart from '@/components/SeminarTeacher/teacherSeminarNotstart'
 import teacherSeminarPause from '@/components/SeminarTeacher/teacherSeminarPause'
@@ -18,7 +19,6 @@ import teacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
 import ChangeReportScore from '@/components/SeminarTeacher/changeReportScore'
-import SeminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import ViewReportScore from '@/components/SeminarTeacher/viewReportScore'
 import ViewScore from '@/components/SeminarTeacher/viewScore'
 import creatSeminar from '@/components/SeminarTeacher/creatSeminar'
@@ -73,9 +73,9 @@ import TeaExportScorePC from '@/components/PC/TeacherPart/teaExportScore'
 import TeaDownloadFilePC from '@/components/PC/TeacherPart/downloadFile'
 import TeaDownloadPagePC from '@/components/PC/TeacherPart/downloadPage'
 import TeaDownloadBatchPC from '@/components/PC/TeacherPart/downloadBatch'
-
 import StuViewScorePC from '@/components/PC/StudentPart/stuViewScore'
-import ManIndex from '@/components/PC/PCManager/index'
+import createStudentAccount from '@/components/PC/PCManager/createStudentAccount'
+import ManagerIndex from '@/components/PC/PCManager/index'
 //PC
 
 
@@ -146,7 +146,7 @@ export default new Router({
 
       name: 'seminarQuestionScore',
 
-      component: SeminarQuestionScore
+      component: seminarQuestionScore
 
     },
 
@@ -530,9 +530,14 @@ export default new Router({
       component: StuViewScorePC
     },
     {
-      path: '/ManIndex',
-      name: 'ManIndex',
-      component: ManIndex
+      path: '/ManagerIndex',
+      name: 'ManagerIndex',
+      component: ManagerIndex
+    },
+    {
+      path:'/createStudentAccount',
+      name:'createStudentAccount',
+      component:createStudentAccount
     }
     //PC
   ]
