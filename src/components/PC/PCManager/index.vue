@@ -15,9 +15,9 @@
               <el-form-item style="background-color: #D3DCE6" >
                 <div>
                   <el-button slot="append" icon="el-icon-search" style="float:left;background-color: #D3DCE6"></el-button>
-                  <el-input placeholder="请输入教工号/姓名" v-model="input1"  style="width:70%;float:left" class="input-with-select">
+                  <el-input placeholder="请输入教工姓名" v-model="search"  style="width:70%;float:left" class="input-with-select">
                   </el-input>
-                  <el-button style="width:6%"  size="mini" type="primary" @click="resetForm('ruleForm')">搜素</el-button>
+                  <el-button style="width:6%"  size="mini" type="primary" @click="">搜索</el-button>
                 </div>
               </el-form-item>
               <el-form-item>
@@ -32,7 +32,7 @@
                       style="width: 100%">
                       <el-table-column
                         padding-left="10px"
-                        prop="id"
+                        prop="account"
                         label="教工号"
                         width="220">
                       </el-table-column>
@@ -75,9 +75,9 @@
               <el-form-item style="background-color: #D3DCE6" >
                 <div>
                   <el-button slot="append" icon="el-icon-search" style="float:left;background-color: #D3DCE6"></el-button>
-                  <el-input placeholder="请输入学号号/姓名" v-model="input1"  style="width:70%;float:left" class="input-with-select">
+                  <el-input placeholder="请输入学号号/姓名" v-model="search"  style="width:70%;float:left" class="input-with-select">
                   </el-input>
-                  <el-button style="width:6%"  size="mini" type="primary" @click="resetForm('ruleForm')">搜素</el-button>
+                  <el-button style="width:6%"  size="mini" type="primary" @click="">搜索</el-button>
                 </div>
               </el-form-item>
               <el-form-item>
@@ -97,18 +97,15 @@
                         width="220">
                       </el-table-column>
                       <el-table-column
-                        prop="name"
+                        prop="sname"
                         label="姓名"
                         width="220">
                       </el-table-column>
                       <el-table-column
-                        prop="email"
+                        prop="semail"
                         label="邮箱">
                       </el-table-column>
-                      <el-table-column
-                        fixed="right"
-                        label="操作"
-                        width="220">
+                      <el-table-column>
                         <template slot-scope="scope">
                           <el-button type="text" @click=""><i class="el-icon-edit"></i></el-button>
                           <el-button type="text" @click="refresh"> <i class="el-icon-refresh"></i></el-button>
@@ -135,88 +132,109 @@
   export default {
     data() {
       return {
-        input: '',
+
+        search: '',
         activeName: 'first',
+        type1:'1',
+/*
         tableData: [{
-          id: '20160504',
+          account: '20160504',
           name: '王小虎',
           email: '1234567@qq.com'
         }, {
-          id: '20160504',
-          name: '王小虎',
+          account: '20160504',
+          name: '王虎',
           email: '1234567@qq.com'
         }, {
-          id: '20160504',
+          account: '20160504',
           name: '王小虎',
           email: '1234567@qq.com'
         }],
         tableData2: [{
           sid: '20160504',
-          name: '王小虎',
-          email: '1234567@qq.com'
+          sname: '王小虎',
+          semail: '1234567@qq.com'
         }, {
           sid: '20160504',
-          name: '王小虎',
-          email: '1234567@qq.com'
+          sname: '王大大',
+          semail: '1234567@qq.com'
         }, {
           sid: '20160504',
-          name: '王小虎',
-          email: '1234567@qq.com'
+          sname: '王小虎',
+          semail: '1234567@qq.com'
         }]
+*/
       }
     },
-    methods: {
-      handleClick(tab, event) {
-        console.log(tab, event);
-      },
-      refresh(){
-        this.$confirm('您确定要将此账号的密码重置为"123456"吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '重置成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消重置'
-          });
-        });
-      },
-      del(){
-        this.$confirm('您确定要删除此账号吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          });
-        });
+        mounted() {
+          this.gettables()
+        },
 
-      },
-      con() {
-        this.$alert('创建成功', '提示', {
-          confirmButtonText: '确定',
-          callback: action => {
-            this.$message({
-              type: 'info',
-              message: `action: ${action}`
+        methods: {
+          handleClick(tab, event) {
+            console.log(tab, event);
+          },
+          gettables() {
+            var _this = this;
+            this.$axios({
+              method: 'get',
+              url: "http://ghctcourse.natapp1.cc/teacher",
+              data:{
+                type:this.type1
+              }
+            }).then(function (res) {
+                console.log(res);
+                _this.tableData = res.data
+              })
+          },
+          refresh(){
+            this.$confirm('您确定要将此账号的密码重置为"123456"吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '重置成功!'
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消重置'
+              });
+            });
+          },
+          del(){
+            this.$confirm('您确定要删除此账号吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消'
+              });
+            });
+
+          },
+          con() {
+            this.$alert('创建成功', '提示', {
+              confirmButtonText: '确定',
+              callback: action => {
+                this.$message({
+                  type: 'info',
+                  message: `action: ${action}`
+                });
+              }
             });
           }
-        });
+        }
       }
-    }
-  }
 </script>
 <style>
   .text {
