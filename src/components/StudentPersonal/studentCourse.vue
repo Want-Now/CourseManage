@@ -12,32 +12,20 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <el-menu
-        >
-        <el-submenu index="1">
-          <template slot="title">OOAD</template>
-          <el-menu-item index="1-1">课程信息
+      <el-menu>
+        <el-submenu v-for="(item,index) in courseList" :key="item.courseId" :index="(index+'')">
+          <template slot="title">{{item.courseName}}&nbsp;&nbsp;{{item.klassName}}</template>
+          <el-menu-item :index="index+'-1'" @click="">课程信息
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
-          <el-menu-item index="1-2">我的成绩
+          <el-menu-item :index="index+'-2'" @click="">我的成绩
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
-          <el-menu-item index="1-3">我的组队
-            <i class="el-icon-arrow-right"></i>
-          </el-menu-item>
-        </el-submenu>
-        <el-submenu index="2">
-          <template slot="title">J2EE</template>
-          <el-menu-item index="2-1">课程信息
-            <i class="el-icon-arrow-right"></i>
-          </el-menu-item>
-          <el-menu-item index="2-2">我的成绩
-            <i class="el-icon-arrow-right"></i>
-          </el-menu-item>
-          <el-menu-item index="2-3">我的组队
+          <el-menu-item :index="index+'-3'" @click="">我的组队
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
         </el-submenu>
+
       </el-menu>
     </el-main>
   </el-container>
@@ -49,7 +37,25 @@
     data(){
       return{
         headerLocation:'我的课程',
-        courseList:['1']
+        courseList:[
+          {
+            courseName:'',
+            klassName:'',
+            courseId:''
+
+          }
+        ],
+        method:{
+          goCourseInfo(){
+            this.$router.push('/CourseInfo');
+          },
+          goScorePage(){
+            this.$router.push('/CourseScore');
+          },
+          goMyTeam(){
+                      //判断是组长还是组员
+          }
+        }
       }
     }
   }

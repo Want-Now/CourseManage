@@ -6,8 +6,8 @@
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
+          <el-dropdown-item @click="goStudentSet">个人页面</el-dropdown-item>
+          <el-dropdown-item @click="goCoursePage">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
@@ -66,38 +66,6 @@
           return{
             headerLocation:"OOAD 2016(1)",
             teams:[
-              {
-                teamName:'2-1 HHHHHH',
-                teamState:'Invalide',
-                teamMember:[
-                  {
-                    identity:'组长',
-                    studentNum:'24331434324',
-                    name:'MINGming'
-                  },
-                  {
-                    identity:'组员',
-                    studentNum:'24331434324',
-                    name:'MINGming'
-                  }
-                ]
-              },
-              {
-                teamName:'2-1 HHHHHH',
-                teamState:' ',
-                teamMember:[
-                  {
-                    identity:'组长',
-                    studentNum:'24331434324',
-                    name:'MINGming'
-                  },
-                  {
-                    identity:'组员',
-                    studentNum:'24331434324',
-                    name:'MINGming'
-                  }
-                ]
-              },
             ],
             unteamMember:[
               {
@@ -113,6 +81,19 @@
 
           }
       },
+      created(){
+          // this.$axios({
+          //   methods: 'get',
+          // })
+      },
+      methods:{
+        goStudentSet(){
+          this.$router.push('/StuSetting');
+        },
+        goCoursePage(){
+          this.$router.push('/StudentCourse');
+        },
+      }
 
     }
 </script>

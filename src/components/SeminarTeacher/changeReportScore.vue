@@ -3,17 +3,25 @@
     <el-header>
       <el-button class="el-icon-back" ></el-button>
       <p>{{topic}}</p>
-      <el-button class="el-icon-menu" ></el-button>
+      <el-dropdown>
+        <el-button class="el-icon-menu"></el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>代办</el-dropdown-item>
+          <el-dropdown-item>个人页面</el-dropdown-item>
+          <el-dropdown-item>讨论课</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </el-header>
     <el-main>
       <el-table
         :data="tableData"
-        style="width: 100%">
+        :header-cell-style="{'color':'#494e8f','font-size':'18px'}"
+        :row-style="{'font-size':'18px','height':'70px'}">
         <el-table-column
-          prop="team" label="组别" width="50">
+          prop="team" label="组别" width="60px" align="center">
         </el-table-column>
         <el-table-column
-          label="报告">
+          label="报告" align="center">
           <template slot-scope="scope">
             <a :href="'http://'+scope.row.Address"
                target="_blank"
@@ -21,22 +29,16 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="成绩" width="80">
+          label="成绩" width="80" align="center">
           <template slot-scope="scope">
-            <el-input
-
-              placeholder="成绩"></el-input>
+            <el-input placeholder="成绩" :model="tableData.repoScore"></el-input>
           </template>
         </el-table-column>
       </el-table>
     </el-main>
     <el-footer>
-      <el-row type="flex" justify="center">
-        <el-button style="width: 80%;">批量下载</el-button>
-      </el-row>
-      <el-row type="flex" justify="center">
-        <el-button style="width: 80%;">确认</el-button>
-      </el-row>
+      <el-button class="bottom-button">批量下载</el-button>
+      <el-button class="bottom-button">确认</el-button>
 
     </el-footer>
   </el-container>
@@ -52,22 +54,9 @@
               team:"1-2",
               Address:"baidu.com",
               filename:"1-2 书面报告",
-            }, {
-              team:"1-2",
-              Address:"baidu.com",
-              filename:"1-2 书面报告",
-
-            }, {
-              team:"1-2",
-              Address:"baidu.com",
-              filename:"1-2 书面报告",
-
-            }, {
-              team:"1-2",
-              Address:"baidu.com",
-              filename:"1-2 书面报告",
-
-            }],
+              repoScore:''
+            },
+            ],
           }
       }
     }
@@ -102,7 +91,7 @@
   .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
   .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
 
-  .el-header .el-icon-plus{
+  .el-header .el-icon-menu{
     position: absolute;
     width: 60px;
     height: 55px;
@@ -112,11 +101,23 @@
     right: 10px;
     top: 10px;
   }
-  .el-header .el-icon-plus:hover{background-color: #494e8f;border-color: #494e8f;}
-  .el-header .el-icon-plus:focus{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-menu:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-menu:focus{background-color: #494e8f;border-color: #494e8f;}
 
+  .el-header .el-dropdown{
+    position: absolute;
+    margin: 0px;
+    width: 60px;
+    height: 55px;
+    color: white;
+    right: 0px;
+    top: 0px;
+    line-height: 55px;
+    text-align: center;
+  }
 
-  .el-row .el-button{
+  .bottom-button{
+    width: 85vw;
     height: 50px;
     margin:10px;
     font-size: 18px;
@@ -125,11 +126,11 @@
     color: white;
 
   }
-  .el-button:hover{
+  .bottom-button:hover{
     background-color: #8084b1;
     border-color: #8084b1;
   }
-  .el-button:focus{
+  .bottom-button:focus{
     background-color: #8084b1;
     border-color: #8084b1;
   }

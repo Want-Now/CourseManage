@@ -7,15 +7,15 @@
     </el-header>
     <el-main>
       <div class="seminarTopic">{{topic}}</div>
-      <el-tabs tab-position="left" @tab-click="handleClick" >
-        <el-tab-pane label="1-8 黄杰">
+      <el-tabs tab-position="left" @tab-click="handleClick1" >
+        <el-tab-pane v-for="question in questions" :key="question.id" :label="question.team">
           <div class="info">
-            {{teamInfo}}
+            {{question.preTeam}}正在展示
           </div>
           <div class="info">
-            {{questionTime}}
+            已有{{question.questionNum}}名同学提问
           </div>
-          <el-input v-model="questionScore" type="input" class="scoreInput"></el-input>
+          <el-input v-model="question.questionScore" type="input" class="scoreInput"></el-input>
           <p>提问分数</p>
           <el-button>
             下个提问
@@ -24,9 +24,10 @@
             下组展示
           </el-button>
         </el-tab-pane>
-        <el-tab-pane label="1-5 黄振敏"></el-tab-pane>
-        <el-tab-pane label="1-7 黄一琳"></el-tab-pane>
       </el-tabs>
+
+
+
     </el-main>
   </el-container>
 </template>
@@ -36,11 +37,19 @@
       name: "seminarQuestionScore",
       data(){
         return{
-          topic:'业务流程',
           headerLocation:"讨论课",
-          presentationScore:'',
-          teamInfo:"向1-3组展示提问",
-          questionTime:"已有3名同学提问",
+          topic:'业务流程',
+          questions:[
+            {
+              team:'1-3'
+            }
+          ],
+          // seminarInfos:[
+          //   {
+          //     preTeam: '1-1'
+          //   }
+          // ]
+
         }
       },
       methods: {
@@ -48,6 +57,9 @@
           this.$router.go(-1);
         },
         handleClick(tab, event) {
+          console.log(tab, event);
+        },
+        handleClick1(tab, event) {
           console.log(tab, event);
         }
       }

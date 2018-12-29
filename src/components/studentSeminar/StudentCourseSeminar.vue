@@ -24,7 +24,6 @@
           </el-row>
         </el-collapse-item>
         <el-collapse-item title="第二轮" name="2"></el-collapse-item>
-        </el-collapse-item>
       </el-collapse>
     </el-main>
   </el-container>

@@ -13,7 +13,7 @@
     </el-main>
     <el-footer>
       <p>邮箱格式如：user@host.domainnames</p>
-      <el-button type="danger" class="buttomButton" @click="submitEmail('form')">
+      <el-button type="danger" class="bottomButt" @click="submitEmail('form')">
         确认提交
       </el-button>
     </el-footer>
@@ -94,16 +94,9 @@
   .el-container{
     height: 80vh;
   }
-</style>
-<style>
-  .pswInput .el-input__inner{
-    height: 45px;
-    font-size: 16px;
-  }
-  .el-input__inner{
-    height: 50px;
-    font-size: 15px;
-  }
+
+
+
 
   .el-header{
     margin: 0px;
@@ -158,4 +151,10 @@
     text-align: center;
   }
 
+</style>
+<style>
+  .pswInput .el-input__inner{
+    height: 45px;
+    font-size: 16px;
+  }
 </style>

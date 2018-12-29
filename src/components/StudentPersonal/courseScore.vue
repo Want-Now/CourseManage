@@ -31,7 +31,7 @@
       </el-collapse>
     </el-main>
     <el-footer>
-      <el-button class="buttomButton">导出成绩</el-button>
+      <el-button class="bottomButt">导出成绩</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -72,7 +72,7 @@
 
 <style scoped>
   .el-container{
-    height: 100vh;
+    height: 98vh;
 
   }
 
