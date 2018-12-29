@@ -75,7 +75,7 @@ import TeaDownloadPagePC from '@/components/PC/TeacherPart/downloadPage'
 import TeaDownloadBatchPC from '@/components/PC/TeacherPart/downloadBatch'
 
 import StuViewScorePC from '@/components/PC/StudentPart/stuViewScore'
-
+import ManIndex from '@/components/PC/PCManager/index'
 //PC
 
 
@@ -176,7 +176,7 @@ export default new Router({
 
       name: 'roundSeting',
 
-      component: teacherSeminar
+      component: roundSeting
 
     },
 
@@ -490,6 +490,15 @@ export default new Router({
       component: ImportStu
     },
     {
+
+      path: '/ChangeReportScore',
+
+      name: 'changeReportScore',
+
+      component: ChangeReportScore
+
+    },
+    {
       path: '/TeaViewScorePC',
       name: 'TeaViewScorePC',
       component: TeaViewScorePC
@@ -519,6 +528,11 @@ export default new Router({
       path: '/StuViewScorePC',
       name: 'StuViewScorePC',
       component: StuViewScorePC
+    },
+    {
+      path: '/ManIndex',
+      name: 'ManIndex',
+      component: ManIndex
     }
     //PC
   ]
