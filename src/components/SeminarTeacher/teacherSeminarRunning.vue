@@ -41,7 +41,7 @@
         </router-link>
       </el-row>
     </el-main>
-    <br>
+
     <br>
     <el-form>
       <el-form-item style="padding-bottom: 20px;">

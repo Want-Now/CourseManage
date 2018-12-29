@@ -30,6 +30,12 @@
       <el-form>
         <el-form-item style="padding-bottom:20%;float:right;">
           &nbsp;&nbsp;
+
+          <el-button style="background-color:red;color:white;"size="small"
+
+                     @click="" v-if="scope.row.type=== 1">正在进行讨论课
+
+          </el-button>
           <el-button style="background-color:red;color:white;" @click="">正在进行讨论课</el-button>
         </el-form-item>
       </el-form>
