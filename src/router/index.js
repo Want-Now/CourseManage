@@ -4,27 +4,18 @@ import Router from 'vue-router'
 import Login from '@/components/LoginPart/login'
 import ActiveT from '@/components/LoginPart/activeTeacher'
 import ActiveS from '@/components/LoginPart/activeStudent'
-import RetrievePsw from '@/components/LoginPart/retrievePassword'
-import ResetPsw from '@/components/LoginPart/resetPassword'
 import PswSetting from '@/components/LoginPart/pswSetting'
 import MailSetting from '@/components/LoginPart/mailSetting'
+import ForgetPsw from '@/components/LoginPart/forgetPsw'
 //LoginPart
-import roundSeting from '@/components/SeminarTeacher/roundSeting'
-import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
-import teacherCouseSeminar from '@/components/SeminarTeacher/teacherCouseSeminar'
-import teacherSeminarFinished from '@/components/SeminarTeacher/teacherSeminarFinished'
-import teacherSeminarRunning from '@/components/SeminarTeacher/teacherSeminarRunning'
-import teacherSeminarNotstart from '@/components/SeminarTeacher/teacherSeminarNotstart'
-import teacherSeminarPause from '@/components/SeminarTeacher/teacherSeminarPause'
-import teacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
+
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
 import ChangeReportScore from '@/components/SeminarTeacher/changeReportScore'
 import SeminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import ViewReportScore from '@/components/SeminarTeacher/viewReportScore'
 import ViewScore from '@/components/SeminarTeacher/viewScore'
-import creatSeminar from '@/components/SeminarTeacher/creatSeminar'
-import modifySeminar from '@/components/SeminarTeacher/modifySeminar'
+
 //SeminarTeacher
 import seminarFinishedSigned from '@/components/studentSeminar/seminarFinishedSigned'
 import seminarUnstartUnsigned from '@/components/studentSeminar/seminarUnstartUnsigned '
@@ -45,16 +36,15 @@ import CourseInfo from '@/components/StudentPersonal/courseInfo'
 import CourseScore from '@/components/StudentPersonal/courseScore'
 import TeamPage from '@/components/StudentPersonal/teamPage'
 import CreateTeam from '@/components/StudentPersonal/createTeam'
-import LeaderTeam from '@/components/StudentPersonal/leaderTeam'
 import MemberTeam from '@/components/StudentPersonal/memberTeam'
 import StudentSetting from '@/components/StudentPersonal/studentSetting'
 //StudentPersonal
 
+import TeaPersonCenter from '@/components/TeacherPersonal/teaPersonalCenter'
 import TeacherSetting from '@/components/TeacherPersonal/teacherSetting'
 import BacklogPage from '@/components/TeacherPersonal/backlogPage'
 import classmessage from '@/components/TeacherPersonal/classmessage'
 import courseManage from '@/components/TeacherPersonal/courseManage'
-import courseMessage from '@/components/TeacherPersonal/courseMessage'
 import createClass from '@/components/TeacherPersonal/createClass'
 
 import createCourse from '@/components/TeacherPersonal/createCourse'
@@ -76,7 +66,7 @@ import TeaDownloadPagePC from '@/components/PC/TeacherPart/downloadPage'
 import TeaDownloadBatchPC from '@/components/PC/TeacherPart/downloadBatch'
 
 import StuViewScorePC from '@/components/PC/StudentPart/stuViewScore'
-import ManIndex from '@/components/PC/PCManager/index'
+// import ManageIndex from '@/components/PC/PCManager/index'
 //PC
 
 
@@ -122,7 +112,7 @@ export default new Router({
     },
     {
       path: '/ChangeReportScore',
-      name: 'changeReportScore',
+      name: 'ChangeReportScore',
       component: ChangeReportScore
     },
     {
@@ -265,13 +255,8 @@ export default new Router({
       component:courseManage
     },
     {
-      path: '/courseMessage',
-      name: 'courseMessage',
-      component:courseMessage
-    },
-    {
-      path: '/createClass',
-      name: 'createCourse',
+      path: '/CreateClass',
+      name: 'CreateClass',
       component:createClass
     },
     {
@@ -313,6 +298,11 @@ export default new Router({
       path: '/BacklogPage',
       name: 'BacklogPage',
       component: BacklogPage
+    },
+    {
+      path:'/TeaPersonCenter',
+      name:'TeaPersonCenter',
+      component:TeaPersonCenter
     },
     //TeacherPersonal
     {
@@ -366,11 +356,11 @@ export default new Router({
       name: 'StuViewScorePC',
       component: StuViewScorePC
     },
-    {
-      path: '/ManageIndex',
-      name: 'ManageIndex',
-      component: ManageIndex
-    },
+    // {
+    //   path: '/ManageIndex',
+    //   name: 'ManageIndex',
+    //   component: ManageIndex
+    // },
     //PC
   ]
 })
