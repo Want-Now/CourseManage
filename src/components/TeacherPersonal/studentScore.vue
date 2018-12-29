@@ -12,96 +12,123 @@
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
-    <hr>
-    <hr>
-    <el-collapse v-model="activeNames" @change="handleChange">
-      <hr>
-      <el-collapse-item title="第一轮" name="1">
-        <el-collapse-item style="padding-left:5%; font-size:150%;" title="2-1" name="1-1">
-          <div style="border:1px solid white;background-color:#f1f1f1">
-            <br>
-            <div style="text-align: center;font-size:120%;color:green;">用例分析 &nbsp;&nbsp;&nbsp;</div>
-            <br>
-            <el-row>
-              <el-col :span="8">展示：5.0</el-col>
-              <el-col :span="8">提问：4.5</el-col>
-              <el-col :span="8">报告：5.0</el-col>
-            </el-row>
-            <div style="text-align: center;font-size:120%;color:green;">总成绩 &nbsp;&nbsp;&nbsp;</div>
-            <br>
-            <el-row>
-              <el-col :span="8">展示：5.0</el-col>
-              <el-col :span="8">提问：4.5</el-col>
-              <el-col :span="8">报告：5.0</el-col>
-            </el-row>
-            <br>
-          </div>   <br>
-            <el-button style="background-color:white;" size="small" type="" @click="">修改成绩</el-button>
-            <br>
-          </div>
-          <div style="border:1px solid white;background-color:#f1f1f1">
-            <br>
-            <div style="text-align: center;font-size:120%;color:green;">业务流程 &nbsp;&nbsp;&nbsp;</div>
-            <br>
-            <el-row>
-              <el-col :span="8">展示：5.0</el-col>
-              <el-col :span="8">提问：4.5</el-col>
-              <el-col :span="8">报告：5.0</el-col>
-            </el-row>
-            <br>
-            <el-button style="background-color:white"size="small" type="" @click="">修改成绩</el-button>
-          </div>
-          <div style="border:1px solid white;background-color:#f1f1f1">
-            <br>
-            <div style="text-align: center;font-size:120%;color:green;">总成绩 &nbsp;&nbsp;&nbsp;</div>
-            <br>
-            <el-row>
-              <el-col :span="8">展示：5.0</el-col>
-              <el-col :span="8">提问：4.5</el-col>
-              <el-col :span="8">报告：5.0</el-col>
-            </el-row>
-            <br>
-          </div>
+    <el-main>
+      <el-collapse accordion>
+        <el-collapse-item v-for="round in rounds" :key="round.id">
+          <template slot="title">{{round.title}}</template>
+          <el-collapse v-for="team in teams" :key="team.id">
+            <el-collapse-item>
+              <template slot="title">{{team.teamName}}<span style="margin-left: 30px;">{{team.teamScore}}</span></template>
+              <div class="scoreDiv" v-for="seminar in seminars" :key="seminar.id">
+                <p class="seminarName">{{seminar.name}}</p>
+                <span>展示：</span><span class="scoreFont">{{seminar.presentationScore}}</span>
+                <span>提问：</span><span class="scoreFont">{{seminar.questionScore}}</span>
+                <span>书面报告：</span><span class="scoreFont">{{seminar.reportScore}}</span>
+              </div>
+              <div class="scoreDiv">
+                <p class="seminarName">总成绩</p>
+                <span>展示：</span><span class="scoreFont">{{team.presentationScore}}</span>
+                <span>提问：</span><span class="scoreFont">{{team.questionScore}}</span>
+                <span>书面报告：</span><span class="scoreFont">{{team.reportScore}}</span>
+              </div>
+            </el-collapse-item>
+          </el-collapse>
         </el-collapse-item>
-
-        <el-collapse-item style="padding-left:5%" title="2-2" name="1-2"></el-collapse-item>
-
-      </el-collapse-item>
-      <el-collapse-item title="第二轮" name="2">
-
-      </el-collapse-item>
-    </el-collapse>
-    <br>
-    <br>
-    <el-form>
-      <el-form-item>
-        <router-link to="Create_Seminar">
-          <el-button style="width:100%;background-color:#494e8e" type="primary" @click="submitForm('ruleForm')">新建讨论课</el-button>
-        </router-link>
-      </el-form-item>
-    </el-form>
+      </el-collapse>
+    </el-main>
+    <el-footer>
+      <el-button class="bottomButt">导出成绩</el-button>
+    </el-footer>
   </el-container>
 </template>
 <script>
   export default {
-    data() {
-      return {
-        activeNames: ['1']
-      };
-    },
-    methods: {
-      handleChange(val) {
-        console.log(val);
+    name:"studentScore",
+    data(){
+      return{
+        headerLocation:'',
+        rounds:[],
+        teams:[],
+        seminars:[],
       }
     }
   }
 </script>
 <style>
   .el-container {
-    margin-bottom: 40px;
-    color: #333;
-    background-color:white;
+    height: 98vh;
   }
 
+  .el-collapse-item{
+    font-size: 15px;
+  }
+  .scoreDiv{
+    border-bottom: solid 1px #595959;
+  }
+  .scoreFont{
+    font-size: 18px;
+    color: #494E8F;
+    margin-right: 20px;
+  }
+  .el-collapse-item__header{
+    text-align: center;
+  }
+  .el-input__inner{
+    height: 50px;
+    font-size: 15px;
+  }
+
+  .el-header{
+    margin: 0px;
+    padding: 0px;
+    background-color: #494e8f;
+    color:white;
+    font-size: 20px;
+    line-height: 22px;
+    text-align: center;
+  }
+
+  .el-header p{
+    display: inline-block;
+  }
+
+  .el-header .el-icon-back{
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
+    left: 10px;
+    top: 10px;
+  }
+
+  .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
+
+  .el-header .el-icon-menu{
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
+    right: 10px;
+    top: 10px;
+  }
+  .el-header .el-icon-menu:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-menu:focus{background-color: #494e8f;border-color: #494e8f;}
+
+  .el-header .el-dropdown{
+    position: absolute;
+    margin: 0px;
+    width: 60px;
+    height: 55px;
+    color: white;
+    right: 0px;
+    top: 0px;
+    line-height: 55px;
+    text-align: center;
+  }
 </style>
 

@@ -35,7 +35,7 @@
       </el-menu>
     </el-main>
     <el-footer>
-      <el-button type="danger" class="buttomButton">
+      <el-button type="danger" class="buttomButton" @click="loginOut()">
         退出登录
       </el-button>
     </el-footer>
@@ -55,6 +55,17 @@
 
           }
       },
+      created(){
+        var _this=this;
+        this.$axios({
+          method:'get',
+          url:'/user/information',
+        }).then(res=>{_this.teaName=res.data.name;
+            _this.teaID=res.data.account;
+            _this.teaEmail=res.data.email;})
+          .catch(error=>{console.log(error);});
+
+      },
       methods:{
           goPswSetting(){
             this.$router.push("/PswSetting");
@@ -62,6 +73,9 @@
         goMailSetting(){
           this.$router.push("/MailSetting");
         },
+        loginOut(){
+          this.$router.push("/");
+        }
       }
     }
 </script>
