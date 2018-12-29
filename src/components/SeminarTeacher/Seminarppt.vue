@@ -86,7 +86,6 @@
     left: 10px;
     top: 10px;
   }
-
   .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
   .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
 
@@ -102,7 +101,6 @@
   }
   .el-header .el-icon-menu:hover{background-color: #494e8f;border-color: #494e8f;}
   .el-header .el-icon-menu:focus{background-color: #494e8f;border-color: #494e8f;}
-
   .el-header .el-dropdown{
     position: absolute;
     margin: 0px;
@@ -114,5 +112,4 @@
     line-height: 55px;
     text-align: center;
   }
-
 </style>

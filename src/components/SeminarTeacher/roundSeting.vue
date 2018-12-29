@@ -59,7 +59,7 @@
         </div>
         <div  class="text item">
           一班：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <el-select v-model="region3" placeholder="请选择">
+          <el-select v-model="region1" placeholder="请选择">
             <el-option label="1" value="1"></el-option>
             <el-option label="2" value="2"></el-option>
           </el-select>
@@ -75,7 +75,7 @@
         <br>
         <div  class="text item">
           三班：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <el-select v-model="region2" placeholder="请选择">
+          <el-select v-model="region3" placeholder="请选择">
             <el-option label="1" value="1"></el-option>
             <el-option label="2" value="2"></el-option>
           </el-select>

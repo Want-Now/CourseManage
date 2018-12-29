@@ -31,12 +31,9 @@
         <el-form-item style="padding-bottom:20%;float:right;">
           &nbsp;&nbsp;
 
-          <el-button style="background-color:red;color:white;"size="small"
-
-                     @click="" v-if="scope.row.type=== 1">正在进行讨论课
-
-          </el-button>
-          <el-button style="background-color:red;color:white;" @click="">正在进行讨论课</el-button>
+          <span style="background-color:red;color:white;"size="small" @click="" >正在进行讨论课
+          </span>
+          <el-button style="background-color:red;color:white;" size="small" v-if="status" @click="">{{message}}</el-button>
         </el-form-item>
       </el-form>
     </el-main>
@@ -51,8 +48,21 @@
         headerLocation: "讨论课",
         class1:"OOAD(主)",
         class2:"J2EE",
+        message:"正在进行讨论课",
+        status:"正在进行",
       }
-    }
+    },
+    methods:{
+      teacherSeminar(){
+        var that=this;
+        this.$axios({
+          method:'get',
+          url:"/",
+          data:{
+            status:this.status,
+          }
+    })
+  }}
   }
 </script>
 <style>
