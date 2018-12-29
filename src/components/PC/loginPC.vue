@@ -13,7 +13,12 @@
           <el-form-item prop="password" label="密码">
             <el-input class="loginInput" type="password" v-model="pcLoginData.password" placeholder="请输入密码" clearable></el-input>
           </el-form-item>
-          <el-button class="buttomButt" type="primary">登录</el-button>
+          <el-form-item>
+            <el-radio v-model="pcLoginData.identity" label="2">管理员</el-radio>
+            <el-radio v-model="pcLoginData.identity" label="1">教师</el-radio>
+            <el-radio v-model="pcLoginData.identity" label="0">学生</el-radio>
+          </el-form-item>
+          <el-button class="buttomButt" type="primary" @click="login()">登录</el-button>
         </el-form>
       </el-card>
     </div>
@@ -28,7 +33,8 @@
           return{
             pcLoginData:{
               username:'',
-              password:''
+              password:'',
+              identity:'2',
             },
             rules:{
               username:[
@@ -36,9 +42,34 @@
               ],
               password:[
                 { required:true ,message:'密码不能为空！',trigger: 'blur'},
-                { min:8 ,max:30 ,message:'长度在8到30个字符',trigger: 'blur' }
+                { min:5 ,max:30 ,message:'长度在5到30个字符',trigger: 'blur' }
               ]
             },
+          }
+      },
+      methods:{
+          login(){
+            var _this=this;
+            this.$axios({
+              method:'post',
+              url:'http://ghctcourse.natapp1.cc/user/login',
+              data:{
+                account:this.pcLoginData.username,
+                password:this.pcLoginData.password,
+                type:parseInt(this.pcLoginData.identity)
+              }
+            }).then(function (response) {
+                if(response.data.message===1||response.data.message===0){
+                  alert("登录成功！");
+                  if(_this.pcLoginData.identity==='2') _this.$router.push("/ManagerIndex");
+                  else if(_this.pcLoginData.identity==='1'||_this.pcLoginData.identity==='0')  _this.$router.push("/CoursePagePC");
+                  else console.log("error");
+                }
+                else{
+                  alert("登录失败!");
+                }
+              })
+              .catch(error=>{console.log(error);});
           }
       }
     }
@@ -53,13 +84,10 @@
     color: #409EFF;
     text-align: left;
   }
-  .main{
-
-  }
   .el-card{
     margin: 100px auto;
-    height: 440px;
-    width: 600px;
+    height: 500px;
+    width: 650px;
     padding: 20px 20px;
 
   }
@@ -79,6 +107,9 @@
     width: 100%;
     font-size: 25px;
     margin-top: 30px;
+  }
+  .el-radio__label{
+    font-size: 25px;
   }
 
 </style>
