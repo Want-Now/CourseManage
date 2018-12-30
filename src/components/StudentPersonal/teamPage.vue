@@ -11,42 +11,52 @@
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
-    <el-main>
-      <el-collapse>
-        <el-collapse-item v-for="team in teams" :key="team.id">
-          <template slot="title">
-            <i class="el-icon-circle-check-outline"></i>
-            {{team.teamName}}
-            <span class="teamState">{{team.teamState}}</span>
+    <el-main v-loading="loading">
+      <el-collapse accordion>
+        <el-collapse-item v-for="team in teams" :key="team.teamId">
+          <template slot="title" class="title">
+            <div class="collapseDiv"  @click="viewTeamMember(team)">
+              <i class="el-icon-circle-check-outline"></i>
+              {{team.teamSerial}}&nbsp;&nbsp;&nbsp;&nbsp;{{team.teamName}}
+              <span class="teamState">{{status}}</span>
+            </div>
           </template>
-          <el-table  :data="team.teamMember">
+          <el-table  :data="teamMember" v-loading="loading1">
             <el-table-column
               prop="identity"
-              label="身份">
+              label="身份"
+              width="50px"
+              align="center">
             </el-table-column>
             <el-table-column
-              prop="studentNum"
-              label="学号">
+              prop="account"
+              label="学号"
+              align="center">
             </el-table-column>
             <el-table-column
               prop="name"
-              label="姓名">
+              label="姓名"
+              align="center">
             </el-table-column>
           </el-table>
         </el-collapse-item>
         <el-collapse-item>
           <template slot="title">
-            <i class="el-icon-refresh"></i>
-            未组队学生
+            <div class="collapseDiv" @click="unTeamList">
+              <i class="el-icon-refresh"></i>
+              未组队学生
+            </div>
           </template>
-          <el-table  :data="unteamMember">
+          <el-table  :data="unteamMember"  v-loading="loading2">
             <el-table-column
-              prop="studentNum"
-              label="学号">
+              prop="account"
+              label="学号"
+              align="center">
             </el-table-column>
             <el-table-column
               prop="name"
-              label="姓名">
+              label="姓名"
+              align="center">
             </el-table-column>
           </el-table>
 
@@ -54,7 +64,7 @@
       </el-collapse>
     </el-main>
     <el-footer v-if="seen">
-      <el-button class="buttomButton">创建小组<i class="el-icon-plus"></i></el-button>
+      <el-button class="bottomButt">创建小组<i class="el-icon-plus"></i></el-button>
     </el-footer>
   </el-container>
 </template>
@@ -64,34 +74,67 @@
         name: "teamPage",
       data(){
           return{
-            headerLocation:"OOAD 2016(1)",
+            headerLocation:"",
             teams:[
             ],
-            unteamMember:[
-              {
-                studentNum:'24331434324',
-                name:'MINGming'
-              },
-              {
-                studentNum:'24331434324',
-                name:'MINGming'
-              }
-            ],
+            teamMember:[],
+            unteamMember:[],
+            status:'',
             seen:true,
-
+            loading2:true,
+            loading1:true,
+            loading:true
           }
       },
       created(){
-          // this.$axios({
-          //   methods: 'get',
-          // })
+          var _this=this;
+          this.$axios({
+            method:'get',
+            url:'/course/'+this.$route.query.courseId+'/team'
+          }).then(response=>{
+            _this.headerLocation=_this.$route.query.courseName;
+            _this.teams=response.data;
+            _this.loading=false;
+          })
+
       },
       methods:{
+        back(){
+          this.$router.go(-1);
+        },
         goStudentSet(){
           this.$router.push('/StuSetting');
         },
         goCoursePage(){
           this.$router.push('/StudentCourse');
+        },
+        viewTeamMember(team){
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/team/'+team.teamId,
+          }).then(response=>{
+            _this.loading1=true;
+            var member=response.data.members;
+            var leader=response.data.teamLeader;
+            _this.teamMember=member.concat(leader).reverse();
+            _this.teamMember[0].identity="组长";
+            for(var i=1;i<_this.teamMember.length;i++)
+            {
+              _this.teamMember[i].identity="组员";
+            }
+            _this.loading1=false;
+          })
+        },
+        unTeamList(){
+          let _this=this;
+          this.$axios({
+            method: 'get',
+            url:'/course/'+this.$route.query.courseId+'/noTeam'
+          }).then(response=>{
+            _this.unteamMember=response.data;
+            _this.loading2=false;
+          })
         },
       }
 
@@ -100,7 +143,7 @@
 
 <style scoped>
   .el-container{
-    height: 100vh;
+    height: 98vh;
 
   }
   .teamState{
@@ -165,4 +208,20 @@
     text-align: center;
   }
 
+  .el-icon-circle-check-outline{
+    font-size: 18px;
+    margin-right:10px;
+  }
+  .el-icon-refresh{
+    font-size: 18px;
+    margin-right:10px;
+  }
+  .collapseDiv{
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    text-align: left;
+  }
+
 </style>
+
