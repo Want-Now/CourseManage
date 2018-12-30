@@ -1,104 +1,42 @@
 <template>
   <el-container>
     <el-header id="header">
+      <el-button class="el-icon-back" @click="concel()"></el-button>
       <p>翻转课堂管理平台</p>
     </el-header>
     <el-container>
       <el-main>
-        <el-tabs v-model="activeName" @tab-click="handleClick" tab-position="left" stretch="true" size="large">
-          <el-tab-pane label="管理教师信息" name="first">
-            <el-form>
-              <el-form-item>
-                <div style="font-family:Calibri;font-size:120%;font-weight:bold;width:100%;background-color:white;border:1px solid #dfdfdf;color:#62bab1;">修改教师信息</div>
-              </el-form-item>
-              <el-form-item style="border:1px solid #dfdfdf;">
-                <br>
-                <el-row>
-                  <el-col :span="3">教师姓名：</el-col>
-                  <el-col :span="4"><el-input v-model="input1" placeholder=""></el-input></el-col>
-                </el-row>
-                <br>
-                <el-row>
-                  <el-col :span="3">教工号</el-col>
-                  <el-col :span="4"><el-input v-model="input2" placeholder=""></el-input></el-col>
-                </el-row>
-                <br>
-                <el-row>
-                  <el-col :span="3">电子邮箱：</el-col>
-                  <el-col :span="4"><el-input v-model="input3" placeholder="" ></el-input></el-col>
-                </el-row>
-                <br>
-              </el-form-item>
-            </el-form>
-            <el-form>
-              <el-form-item style="padding-bottom: 20px;">
-                <el-button type="primary" style="background-color: #494e8e" @click="con">确认修改</el-button>
-                &nbsp;&nbsp;
-                <el-button @click="resetForm('ruleForm')">取消</el-button>
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane label="管理学生信息" name="second">
-            <el-form>
-              <el-form-item>
-                <div style="font-family:Calibri;font-size:120%;font-weight:bold;width:100%;background-color:white;border:1px solid #dfdfdf;color:#62bab1;">学生信息管理</div>
-              </el-form-item>
-
-              <el-form-item style="background-color: #D3DCE6" >
-                <div>
-                  <el-button slot="append" icon="el-icon-search" style="float:left;background-color: #D3DCE6"></el-button>
-                  <el-input placeholder="请输入学号号/姓名" v-model="input1"  style="width:70%;float:left" class="input-with-select">
-                  </el-input>
-                  <el-button style="width:6%"  size="mini" type="primary" @click="resetForm('ruleForm')">搜素</el-button>
-                </div>
-              </el-form-item>
-              <el-form-item>
-                <el-card class="box-card">
-                  <div slot="header" class="clearfix" style="height:20px;line-height:20px;">
-                    <span style="float:left;">学生列表</span>
-                    <el-button style="float:right;padding:3px 0" type="text">新建账号</el-button>
-                  </div>
-                  <div  class="text item">
-                    <el-table
-                      :data="tableData2"
-                      style="width: 100%">
-                      <el-table-column
-                        padding-left="10px"
-                        prop="sid"
-                        label="学号"
-                        width="220">
-                      </el-table-column>
-                      <el-table-column
-                        prop="name"
-                        label="姓名"
-                        width="220">
-                      </el-table-column>
-                      <el-table-column
-                        prop="email"
-                        label="邮箱">
-                      </el-table-column>
-                      <el-table-column
-                        fixed="right"
-                        label="操作"
-                        width="220">
-                        <template slot-scope="scope">
-                          <el-button type="text" @click=""><i class="el-icon-edit"></i></el-button>
-                          <el-button type="text" @click="srefresh"> <i class="el-icon-refresh"></i></el-button>
-                          <el-button type="text" @click="sdel"> <i class="el-icon-delete"></i></el-button>
-                        </template>
-                      </el-table-column>
-                    </el-table>
-                  </div>
-                </el-card>
-              </el-form-item>
-            </el-form>
-            <el-pagination
-              small
-              layout="prev, pager, next"
-              :total="50">
-            </el-pagination>
-          </el-tab-pane>
-        </el-tabs>
+        <el-form>
+          <el-form-item>
+            <div style="font-family:Calibri;font-size:120%;font-weight:bold;width:100%;background-color:white;border:1px solid #dfdfdf;color:#62bab1;">修改教师信息</div>
+          </el-form-item>
+          <el-form-item style="border:1px solid #dfdfdf;">
+            <br>
+            <el-row>
+              <el-col :span="3">教师姓名：</el-col>
+              <el-col :span="8"><el-input v-model="name"></el-input></el-col>
+            </el-row>
+            <br>
+            <el-row>
+              <el-col :span="3">教工号：</el-col>
+              <el-col :span="8"><el-input v-model="account"></el-input></el-col>
+            </el-row>
+            <br>
+            <el-row>
+              <el-col :span="3">电子邮箱：</el-col>
+              <el-col :span="8"><el-input v-model="email"></el-input></el-col>
+            </el-row>
+            <br>
+            <br>
+          </el-form-item>
+        </el-form>
+        <el-form>
+          <el-form-item style="padding-bottom: 20px;">
+            <el-button type="primary" style="background-color: #494e8e" @click="modif">修改</el-button>
+            &nbsp;&nbsp;
+            <el-button @click="concel">取消</el-button>
+          </el-form-item>
+        </el-form>
       </el-main>
     </el-container>
   </el-container>
@@ -107,72 +45,84 @@
   export default {
     data() {
       return {
-        input: '',
-        activeName: 'first',
-        tableData: [{
-          id: '20160504',
-          name: '王小虎',
-          email: '1234567@qq.com'
-        }, {
-          id: '20160504',
-          name: '王小虎',
-          email: '1234567@qq.com'
-        }, {
-          id: '20160504',
-          name: '王小虎',
-          email: '1234567@qq.com'
-        }],
-        tableData2: [{
-          sid: '20160504',
-          name: '王小虎',
-          email: '1234567@qq.com'
-        }, {
-          sid: '20160504',
-          name: '王小虎',
-          email: '1234567@qq.com'
-        }, {
-          sid: '20160504',
-          name: '王小虎',
-          email: '1234567@qq.com'
-        }]
+        name:'',
+        email:'',
+        account:'',
+        id:'',
+        type:'1'
       }
+    },
+    created(){
+      this.getParams()
     },
     methods: {
       handleClick(tab, event) {
         console.log(tab, event);
       },
-      con() {
-        this.$alert('修改成功', '提示', {
-          confirmButtonText: '确定',
-          callback: action => {
-            this.$message({
-              type: 'info',
-              message: `action: ${action}`
+      getParams () {
+        const iid = this.$route.query.id
+        const acc = this.$route.query.account
+        const nam = this.$route.query.name
+        const ema = this.$route.query.email
+        this.id=iid
+            this.email = ema
+        this.name = nam
+        this.account = acc
+      },
+      back(){
+        this.$router.go(-1);
+      },
+        concel(){
+          this.$router.push({path:'/ManagerIndex',
+            query:{
+              type:this.type,
+            }
+          })
+        },
+      modif(){
+        var that=this;
+        this.$axios({
+          method:'put',
+          url:"http://ghctcourse.natapp1.cc/teacher/"+this.id+"/information",
+          data:{
+            teacherId:this.id,
+            newTeacherAccount:this.account,
+            newTeacherName:this.name,
+            newTeacherEmail:this.email,
+            type:1,
+          }
+        }).then(function (response) {
+          if(response.data===true){
+            that.$message({
+              message:'修改成功',
+              type:'success',
+              duration:800
+            });
+          } else{
+            that.$message({
+              message:'修改失败',
+              type:'error',
+              duration:800
             });
           }
-        });
+        })
       }
-    }
+    },
   }
 </script>
 <style>
-  .text {
-    font-size: 140px;
+  .el-header .el-icon-back{
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
+    left: 10px;
+    top: 10px;
   }
-
-
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-  .clearfix:after {
-    clear: both
-  }
-
-  .box-card {
-    width: 100%;
-  }
+  .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
 
 </style>
 
