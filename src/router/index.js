@@ -552,11 +552,6 @@ export default new Router({
       name:'modeifyTeacherMessage',
       component:modeifyTeacherMessage
     },
-    {
-      path:'/empty',
-      name:'empty',
-      component:empty
-    }
     //PC
   ]
 })
