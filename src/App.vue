@@ -7,6 +7,15 @@
 <script>
 export default {
   name: 'App',
+  mounted(){
+    var _this = this
+    window.onresize = () => {
+      _this.$store.state.screenWidth = document.documentElement.clientWidth
+      _this.$store.state.screenHeight = document.documentElement.clientHeight
+      _this.$store.state.isMobile = navigator.userAgent.toLowerCase().match(/(phone|pad|pod|iphone|ipod|ios|ipad|android|mobile|blackberry|iemobile|mqqbrowser|juc|fennec|wosbrowser|browserng|webos|symbian|windows phone)/i) !== null
+      _this.$store.state.isVertical = document.documentElement.clientWidth < document.documentElement.clientHeight
+    }
+  }
 }
 </script>
 

@@ -12,14 +12,21 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <el-menu
-        text-color="#595959"
-        active-text-color="#494e8f">
-        <el-menu-item v-for="(item,index) in courseList" :key="item.courseId" :index="String(index)" @click="goCourseSeminar(item)">
-          <i class="el-icon-document"></i>
-          <span class="titleSpan">{{item.courseName}}</span>
-        </el-menu-item>
-      </el-menu>
+      <el-table :data="courseData"  >
+        <el-table-column label="当前课程">
+          <template slot-scope="scope">
+            <i class="el-icon-document"></i>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="courseName">
+        </el-table-column>
+        <el-table-column >
+          <template slot-scope="scope">
+            <el-button size="small" @click="goCourseSeminar(scope.$index, scope.row)">进入</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-main>
   </el-container>
 </template>
@@ -30,41 +37,55 @@
     data(){
       return{
         headerLocation: "讨论课",
-        courseList:[],
+        teacherId:'',
+        courseData:[],
       }
     },
     created(){
-      let _this=this;
-      this.$axios({
-        method:'get',
-        url:'/getCourse/teacher',
-        params:{
-          teacherId:3  //需要更改
-        }
-      }).then(
-        response=>{
-          _this.courseList=response.data;
-        }
-      )
+      this.seminar();
     },
     methods:{
-      goCourseSeminar(item){
-        this.$router.push({path:'/TeacherCourseSeminar',query:{courseId:item.courseId,courseName:item.courseName}});
+      seminar() {
+        var _this = this;
+        this.$axios({
+          method: 'get',
+          url: "http://ghctcourse.natapp1.cc/getCourse/teacher",
+          params:{
+            teacherId:3
+          }
+        }).then(function (response) {
+          console.log(response.data);
+          _this.courseData=response.data;
+        })
+      },
+      goCourseSeminar(index,row){
+        console.log(index, row);
+        this.$router.push({path:"/teacherCourseSeminar",
+          query:{
+           courseId:row.courseId,
+            courseName:row.courseName
+          }})
       }
-    }
+  },
   }
 </script>
-<style>
-  .el-menu-item{
-    text-align: left;
+<style scoped>
+  .el-container {
+    margin-bottom: 40px;
+    color: #333;
+    background-color:white;
   }
-  .titleSpan{
-    font-size: 20px;
+  .el-col{
+    font-size:100%;
+    width:30%;
+    height: 400%;
+    line-height: 200%;
+  }
+  .el-input__inner{
+    height: 50px;
+    font-size: 15px;
   }
 
-  .el-icon-document{
-    font-size: 20px;
-  }
   .el-header{
     margin: 0px;
     padding: 0px;

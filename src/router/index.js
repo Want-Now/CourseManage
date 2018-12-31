@@ -9,8 +9,9 @@ import ForgetPsw from '@/components/LoginPart/forgetPsw'
 //LoginPart
 import roundSeting from '@/components/SeminarTeacher/roundSeting'
 import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
-import teacherCourseSeminar from '@/components/SeminarTeacher/teacherCouseSeminar'
+import teacherCourseSeminar from '@/components/SeminarTeacher/teacherCourseSeminar'
 import seminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
+import teacherSeminarIndex from '@/components/SeminarTeacher/teacherSeminarIndex'
 import TeacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
@@ -21,15 +22,10 @@ import ViewScore from '@/components/SeminarTeacher/viewScore'
 import creatSeminar from '@/components/SeminarTeacher/creatSeminar'
 import modifySeminar from '@/components/SeminarTeacher/modifySeminar'
 //SeminarTeacher
-import seminarFinishedSigned from '@/components/studentSeminar/seminarFinishedSigned'
-import seminarUnstartUnsigned from '@/components/studentSeminar/seminarUnstartUnsigned '
 import StudentCourseSeminar from '@/components/studentSeminar/StudentCourseSeminar'
 import studentSeminar from '@/components/studentSeminar/studentSeminar'
-import studentSeminarFinishedSignedNotReport from '@/components/studentSeminar/studentSeminarFinishedSignedNotReport'
-import studentSeminarNotStartSigned from '@/components/studentSeminar/studentSeminarNotstartSigned'
 import studentSeminarPre from '@/components/studentSeminar/studentSeminarPre'
-import studentSeminarRunning from '@/components/studentSeminar/studentSeminarRunning'
-import studentSeminarRunningSigned from '@/components/studentSeminar/studentSeminarRunningSigned'
+import studentSeminarIndex from '@/components/studentSeminar/studentSeminarIndex'
 import studentSeminarViewScore from '@/components/studentSeminar/studentSeminarViewScore'
 import studentViewPpt from '@/components/studentSeminar/studentViewPpt'
 import ViewDeatilsAndSignUp from '@/components/studentSeminar/ViewDeatilsAndSignUp'
@@ -145,12 +141,11 @@ export default new Router({
       component: roundSeting
 
     },
-    // {
-    //   path: '/teacherSeminarIndex',
-    //   name: 'teacherSeminarIndex',
-    //   component: teacherSeminarIndex
-    // },
     {
+      path: '/teacherSeminarIndex',
+      name: 'teacherSeminarIndex',
+      component: teacherSeminarIndex
+    }, {
       path: '/modifySeminar',
       name: 'modifySeminar',
       component: modifySeminar
@@ -176,16 +171,6 @@ export default new Router({
     },
     //SeminarTeacher
     {
-      path: '/seminarFinishedSigned',
-      name: 'seminarFinishedSigned',
-      component: seminarFinishedSigned
-    },
-    {
-      path: '/seminarUnstartUnsigned',
-      name: 'seminarUnstartUnsigned',
-      component: seminarUnstartUnsigned
-    },
-    {
       path: '/StudentCourseSeminar',
       name: 'StudentCourseSeminar',
       component: StudentCourseSeminar
@@ -198,29 +183,14 @@ export default new Router({
 
     },
     {
-      path: '/studentSeminarFinishedSignedNotReport',
-      name: 'studentSeminarFinishedSignedNotReport',
-      component: studentSeminarFinishedSignedNotReport
-    },
-    {
-      path: '/studentSeminarNotstartSigned',
-      name: 'studentSeminarNotstartSigned',
-      component: studentSeminarNotStartSigned
-    },
-    {
       path: '/studentSeminarPre',
       name: 'studentSeminarPre',
       component: studentSeminarPre
     },
     {
-      path: '/studentSeminarRunning',
-      name: 'studentSeminarRunning',
-      component: studentSeminarRunning
-    },
-    {
-      path: '/studentSeminarRunningSigned',
-      name: 'studentSeminarRunningSigned',
-      component: studentSeminarRunningSigned
+      path: '/studentSeminarIndex',
+      name: 'studentSeminarIndex',
+      component: studentSeminarIndex
     },
     {
       path: '/studentSeminarViewScore',

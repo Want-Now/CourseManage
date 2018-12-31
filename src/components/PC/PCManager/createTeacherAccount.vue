@@ -55,9 +55,22 @@
         password:'',
       }
     },
+    created(){
+      this.getParams ();
+    },
     methods: {
       handleClick(tab, event) {
         console.log(tab, event);
+      },
+      getParams () {
+        const iid = this.$route.query.id
+        const acc = this.$route.query.account
+        const nam = this.$route.query.name
+        const ema = this.$route.query.email
+        this.id=iid
+        this.email = ema
+        this.name = nam
+        this.account = acc
       },
       back(){
         this.$router.go(-1);
