@@ -66,7 +66,6 @@
       concel(){
         this.$router.push({path:"/ManagerIndex"});
       },
-
       create(){
         var that=this;
         this.$axios({
