@@ -6,7 +6,7 @@
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
+          <el-dropdown-item @click="goSeminarPage()">讨论课</el-dropdown-item>
 
         </el-dropdown-menu>
       </el-dropdown>
@@ -20,11 +20,11 @@
         background-color="#d3d4e4"
         text-color="#595959"
         active-text-color="#494e8f">
-        <el-menu-item index="1" @click="">
+        <el-menu-item index="1" @click="goCoursePage()">
           <i class="el-icon-document"></i>
           我的课程
         </el-menu-item>
-        <el-menu-item index="2" @click="">
+        <el-menu-item index="2" @click="goStudentSet()">
           <i class="el-icon-edit"></i>
           账户与设置
         </el-menu-item>
@@ -39,10 +39,39 @@
     data(){
       return{
         headerLocation:"个人中心",
-        studentName:"黄明明",
-        studentId:"242324323435455",
+        studentName:"",
+        studentId:"",
       }
+    },
+    created() {
+      let _this=this;
+      this.$axios({
+        method:'get',
+        url:'/user/index',               //url
+      }).then(function (response) {
+        _this.studentName=response.data;
+        // _this.studentId=response.data.account;
+      })
+        .catch(
+          function (error) {
+            console.log(error);
+          }
+        );
+    },
+    methods:{
+      goStudentSet(){
+        this.$router.push('/StuSetting');
+      },
+      goCoursePage(){
+        this.$router.push('/');
+      },
+      goSeminarPage(){
+        this.$router.push('/');
+      }
+
     }
+
+
   }
 </script>
 

@@ -21,26 +21,26 @@
         <el-menu-item index="2">
           <span class="infoName">学号</span><span>{{stuID}}</span>
         </el-menu-item>
-        <el-menu-item index="3">
-          <span class="infoName">性别</span><span>{{stuSex}}</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <span class="infoName">出生年月</span><span>{{stuBirth}}</span>
-        </el-menu-item>
-        <el-menu-item index="5" @click="goMailSetting()">
+        <!--<el-menu-item index="3">-->
+          <!--<span class="infoName">性别</span><span>{{stuSex}}</span>-->
+        <!--</el-menu-item>-->
+        <!--<el-menu-item index="4">-->
+          <!--<span class="infoName">出生年月</span><span>{{stuBirth}}</span>-->
+        <!--</el-menu-item>-->
+        <el-menu-item index="3" @click="goMailSetting()">
           <span class="infoName">邮箱</span>
           <span>{{stuEmail}}<i class="el-icon-arrow-right"></i></span>
         </el-menu-item>
-        <el-menu-item index="6" @click="goPswSetting()">
+        <el-menu-item index="4" @click="goPswSetting()">
           <span class="infoName">账户密码</span><i class="el-icon-arrow-right"></i>
         </el-menu-item>
-        <el-menu-item index="7">
+        <el-menu-item index="5">
           <span class="infoName">管理员邮箱</span><span>{{adminEmail}}</span>
         </el-menu-item>
       </el-menu>
     </el-main>
     <el-footer>
-      <el-button type="danger" class="buttomButton">
+      <el-button type="danger" class="buttomButton" @click="loginOut()">
         退出登录
       </el-button>
     </el-footer>
@@ -53,29 +53,46 @@
       data(){
           return{
             headerLocation:'账户与设置',
-            stuName:'Mingming',
-            stuID:'24321324',
-            stuSex:'女',
-            stuBirth:'1998.01',
-            stuEmail:'3278dsadas947@qq.com',
+            stuName:'',
+            stuID:'',
+            // stuSex:'女',
+            // stuBirth:'1998.01',
+            stuEmail:'',
             adminEmail:'418471@qq.com'
 
           }
       },
+      created(){
+          var that=this;
+        this.$axios({
+          method:'get',
+          url:'/user/information',
+
+        }).then(function (response) {
+          that.stuName=response.data.name;
+          that.stuID=response.data.account;
+          that.stuEmail=response.data.email;
+        }).catch(function (error) {
+          console.log(error);
+        })
+      },
       methods:{
-          goPswSetting(){
-            this.$router.push("/PswSetting");
-          },
+        goPswSetting(){
+          this.$router.push("/PswSetting");
+        },
         goMailSetting(){
           this.$router.push("/MailSetting");
         },
+        loginOut(){
+          this.$router.push("/");
+        }
       }
     }
 </script>
 
 <style scoped>
   .el-container{
-    height: 100vh;
+    height: 90vh;
   }
 
   .el-menu-item{

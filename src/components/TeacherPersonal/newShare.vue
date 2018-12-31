@@ -12,124 +12,70 @@
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
-    <hr>
+    <el-main>
+      <el-card>
+        <el-form :model="shareForm">
+          <el-form-item label="共享类型">
+            <el-select v-model="shareForm.shareType">
+              <el-option
+                v-for="type in shareForm.shareTypes"
+                :key="type.value"
+                :label="type.label"
+                :value="type.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="共享对象">
+            <el-select v-model="shareForm.shareCourse">
+              <el-option
+                v-for="course in shareForm.shareCourses"
+                :key="course.id"
+                :label="type.label"
+                :value="course.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </el-card>
 
-    <el-card>
-      <div>
-        <el-row size="small">
-          <el-col :span="6">共享类型：</el-col>
-          <el-select v-model="value5" clearable placeholder="请选择" size="mini">
-            <el-option
-              v-for="item in options1"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-row>
-        <br>
-        <el-row size="small">
-          <el-col :span="6">共享对象：</el-col>
-          <el-select v-model="value6" clearable placeholder="请选择" size="mini">
-            <el-option
-              v-for="item in options2"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-row>
-      </div>
-    </el-card>
-    <br>
-    <el-form>
-      <el-form-item style="padding-bottom: 20px;">
-        <router-link to="Seminar_index">
-          <el-button type="primary" style="background-color: #494e8e" @click="submitForm('ruleForm')">确认</el-button>
-        </router-link>
-        &nbsp;&nbsp;
-        <el-button @click="resetForm('ruleForm')">取消</el-button>
-      </el-form-item>
-    </el-form>
+    </el-main>
+    <el-footer>
+      <el-button class="bottomButt">确认共享</el-button>
+    </el-footer>
   </el-container>
 </template>
 <script>
   export default {
     data() {
       return {
-        visible2: false,
-        fileList: [],
-        activeNames: ['1'],
-        filename1:"XXX.xsl",
-        value1: '',
-        value2: '',
-        value3: '',
-        value4: '',
-        ruleForm: {
-          name: '',
-          delivery1: false,
-          delivery2: false,
-          resource: '',
-          desc: ''},
-        options1: [{
-          value: '选项1',
-          label: '共享讨论课'
-        }, {
-          value: '选项2',
-          label: '共享分组'
-        }, {
-          value: '选项3',
-          label: '共享分组和讨论课'
-        }],
-        options2: [{
-          value: '选项1',
-          label: 'XXX(XX老师)'
-        }, {
-          value: '选项2',
-          label: 'XXX(XX老师)'
-        }],
-        value5: '',
-        value6: '',
+        shareForm:{
+          shareTypes:[
+            {
+              label:'共享讨论课',
+              value:1
+            },
+            {
+              label:'共享分组',
+              value:2
+            }
+          ],
+          shareCourses: [
+
+          ],
+          shareType:'',
+          shareCourse:''
+        },
       };
     },
-    rules: {
-      date1: [
-        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-      ],
-      date2: [
-        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-      ],
-      date3: [
-        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-      ],
-      desc: [
-        { required: true, message: '请输入课程描述', trigger: 'blur' }
-      ],
-      name: [
-        { required: true, message: '请输入课程名称', trigger: 'blur' },
-      ],
-    },
+
     methods: {
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
-      handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 1个文件，本次已上传了 ${fileList.length} 个文件`);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
-      }
+
     }
   }
 </script>
 <style>
   .el-container {
-    margin-bottom: 40px;
-    color: #333;
-    background-color:white;
+    height: 80vh;
   }
   .text {
     font-size: 100%;
@@ -148,8 +94,57 @@
     clear: both
   }
 
-  .box-card {
-    width: 100%px;
+  .el-header{
+    margin: 0px;
+    padding: 0px;
+    background-color: #494e8f;
+    color:white;
+    font-size: 20px;
+    line-height: 22px;
+    text-align: center;
+  }
+
+  .el-header p{
+    display: inline-block;
+  }
+
+  .el-header .el-icon-back{
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
+    left: 10px;
+    top: 10px;
+  }
+
+  .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
+
+  .el-header .el-icon-menu{
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
+    right: 10px;
+    top: 10px;
+  }
+  .el-header .el-icon-menu:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-menu:focus{background-color: #494e8f;border-color: #494e8f;}
+
+  .el-header .el-dropdown{
+    position: absolute;
+    margin: 0px;
+    width: 60px;
+    height: 55px;
+    color: white;
+    right: 0px;
+    top: 0px;
+    line-height: 55px;
+    text-align: center;
   }
 
 </style>

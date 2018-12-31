@@ -132,11 +132,6 @@
   .el-container{
     height: 90vh;
   }
-  .ver-button{
-    height: 50px;
-    font-size: 15px;
-  }
-
 
   .up-button{
     height: 50px;
@@ -157,11 +152,6 @@
     color: white;
   }
 
-
-  .el-input__inner{
-    height: 50px;
-    font-size: 15px;
-  }
 
   .el-header{
     margin: 0px;

@@ -12,57 +12,48 @@
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
-    <hr>
-    <el-card class="box-card">
-      </div>
-      <div>
-        <el-row>
-          <el-col :span="12">班级名：</el-col>
-          <el-col :span="6" ><el-input size="mini" v-model="input1" placeholder="年级"></el-input></el-col>
-          <el-col :span="6" ><el-input size="mini" v-mode1="input2" placeholder="编号"></el-input></el-col>
-        </el-row>
-        <br>
-        <el-row size="small">
-          <el-col :span="12">上课时间：</el-col>
-          <el-col :span="12" ><el-input size="mini" v-model="input3" placeholder="请输入"></el-input></el-col>
-        </el-row>
-        <br>
-        <el-row>
-          <el-col :span="12">上课地点：</el-col>
-          <el-col :span="12" ><el-input size="mini" v-model="input4" placeholder="请输入"></el-input></el-col>
-        </el-row>
-        <br>
-        <el-row>
-          <el-col :span="12">班级学生名单：</el-col>
-          <el-col :span="12">{{filename1}} &nbsp; <i class="el-icon-circle-close-outline"></i></el-col>
-        </el-row>
-        <el-row>
-          <el-col  :span="12">&nbsp;</el-col>
-          <el-col :span="12"><el-upload
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            multiple
-            :limit="1"
-            :on-exceed="handleExceed"
-            :file-list="fileList">
-            <el-button size="small" type="primary">点击上传</el-button>
-          </el-upload></el-col>
-        </el-row>
-      </div>
-    </el-card>
-    <br><br>
-    <el-form>
-      <el-form-item style="padding-bottom: 20px;">
-        <router-link to="Seminar_index">
-          <el-button type="primary" style="background-color: #494e8e" @click="submitForm('ruleForm')">立即创建</el-button>
-        </router-link>
-        &nbsp;&nbsp;
-        <el-button @click="resetForm('ruleForm')">取消</el-button>
-      </el-form-item>
-    </el-form>
+    <el-main>
+      <el-card class="box-card">
+        <div>
+          <el-row>
+            <el-col :span="12">班级名：</el-col>
+            <el-col :span="6" ><el-input v-model="grade" placeholder="年级"></el-input></el-col>
+            <el-col :span="6" ><el-input v-model="klass" placeholder="编号"></el-input></el-col>
+          </el-row>
+          <br>
+          <el-row size="small">
+            <el-col :span="12">上课时间：</el-col>
+            <el-col :span="12" ><el-input v-model="klassTime" placeholder="请输入"></el-input></el-col>
+          </el-row>
+          <br>
+          <el-row>
+            <el-col :span="12">上课地点：</el-col>
+            <el-col :span="12" ><el-input v-model="klassSite" placeholder="请输入"></el-input></el-col>
+          </el-row>
+          <br>
+          <el-row>
+            <el-col :span="12">班级学生名单：</el-col>
+            <el-col :span="12">
+              <el-upload
+              class="upload-demo"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :before-remove="beforeRemove"
+              multiple
+              :limit="1"
+              :on-exceed="handleExceed"
+              :file-list="fileList">
+              <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload></el-col>
+          </el-row>
+        </div>
+      </el-card>
+    </el-main>
+
+    <el-footer>
+      <el-button class="bottomButt">保存</el-button>
+    </el-footer>
   </el-container>
 </template>
 <script>
@@ -71,7 +62,10 @@
       return {
         fileList: [],
         activeNames: ['1'],
-        filename1:"XXX.xsl"
+        grade:'',
+        klass:'',
+        klassTime:'',
+        klassSite:''
       };
     },
     methods: {
@@ -92,9 +86,7 @@
 </script>
 <style>
   .el-container {
-    margin-bottom: 40px;
-    color: #333;
-    background-color:white;
+   height: 80vh;
   }
   .text {
     font-size: 100%;
@@ -113,9 +105,61 @@
     clear: both
   }
 
+
   .box-card {
     width: 100%px;
   }
+  .el-header{
+    margin: 0px;
+    padding: 0px;
+    background-color: #494e8f;
+    color:white;
+    font-size: 20px;
+    line-height: 22px;
+    text-align: center;
+  }
 
+  .el-header p{
+    display: inline-block;
+  }
+
+  .el-header .el-icon-back{
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
+    left: 10px;
+    top: 10px;
+  }
+
+  .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
+
+  .el-header .el-icon-menu{
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
+    right: 10px;
+    top: 10px;
+  }
+  .el-header .el-icon-menu:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-menu:focus{background-color: #494e8f;border-color: #494e8f;}
+
+  .el-header .el-dropdown{
+    position: absolute;
+    margin: 0px;
+    width: 60px;
+    height: 55px;
+    color: white;
+    right: 0px;
+    top: 0px;
+    line-height: 55px;
+    text-align: center;
+  }
 </style>
 

@@ -6,24 +6,16 @@
         <el-button class="el-icon-menu" ></el-button>
       </el-header>
       <el-main>
-        <div class="seminarTopic">
-          <el-switch
-            v-model="start1"
-            active-text="开始"
-            inactive-text="暂停"
-            @change="stopOrStartSeminar">
-          </el-switch>
-        </div>
         <el-tabs tab-position="left" @tab-click="handleClick">
-          <el-tab-pane label="1-3">
+          <el-tab-pane v-for="item in seminarInfos" :label="item.preTeam" :key="item.id">
             <div class="info">
-              {{message}}
+              已有{{item.questionNum}}位同学提问
             </div>
-            <div class="info">
-              {{questionTime}}
-            </div>
-            <el-input v-model="presentationScore" type="input" class="scoreInput"></el-input>
+            <el-input v-model="item.presentationScore" :key="item.id" type="input" class="scoreInput"></el-input>
             <p>展示分数</p>
+            <el-button>
+              确认打分
+            </el-button><br/>
             <el-button @click="getQuestion()">
               抽取提问
             </el-button><br/>
@@ -31,9 +23,6 @@
               下组展示
             </el-button>
           </el-tab-pane>
-          <el-tab-pane label="1-5"></el-tab-pane>
-          <el-tab-pane label="1-7"></el-tab-pane>
-          <el-tab-pane label="1-2"></el-tab-pane>
         </el-tabs>
       </el-main>
     </el-container>
@@ -46,12 +35,16 @@
       data(){
         return{
           topic:"业务流程分析",
-          presentationScore:'',
-          message:"1-3组展示 5：00 ",
-          questionTime:"已有2名同学提问",
-          start1:true
-        }
+          seminarInfos:[
+            {
+              id:'',
+              preTeam:'',
+              questionNum:'',
+              presentationScore:'',
+            },
+          ]
 
+        }
       },
       methods: {
         back(){
@@ -62,18 +55,6 @@
         },
         handleClick(tab, event) {
           console.log(tab, event);
-        },
-        stopOrStartSeminar()
-        {
-          var m="";
-          if(this.start1==true) m="Start";
-          else m="Stop";
-
-          this.$message({
-            message: m,
-            duration:800,
-            center: true
-          });
         },
 
       }
@@ -86,7 +67,6 @@
     height: 75%;
     width: 100%;
     left: 10px;
-    top:140px;
   }
 
   .el-tab-pane{

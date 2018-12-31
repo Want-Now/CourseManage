@@ -5,7 +5,7 @@ import ActiveT from '@/components/LoginPart/activeTeacher'
 import ActiveS from '@/components/LoginPart/activeStudent'
 import PswSetting from '@/components/LoginPart/pswSetting'
 import MailSetting from '@/components/LoginPart/mailSetting'
-
+import ForgetPsw from '@/components/LoginPart/forgetPsw'
 //LoginPart
 import roundSeting from '@/components/SeminarTeacher/roundSeting'
 import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
@@ -19,6 +19,7 @@ import teacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
 import ChangeReportScore from '@/components/SeminarTeacher/changeReportScore'
+import SeminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import ViewReportScore from '@/components/SeminarTeacher/viewReportScore'
 import ViewScore from '@/components/SeminarTeacher/viewScore'
 import creatSeminar from '@/components/SeminarTeacher/creatSeminar'
@@ -73,12 +74,13 @@ import TeaExportScorePC from '@/components/PC/TeacherPart/teaExportScore'
 import TeaDownloadFilePC from '@/components/PC/TeacherPart/downloadFile'
 import TeaDownloadPagePC from '@/components/PC/TeacherPart/downloadPage'
 import TeaDownloadBatchPC from '@/components/PC/TeacherPart/downloadBatch'
+
 import StuViewScorePC from '@/components/PC/StudentPart/stuViewScore'
 import createTeacherAccount from '@/components/PC/PCManager/createTeacherAccount'
 import modeifyStudentMessage from '@/components/PC/PCManager/modeifyStudentMessage'
 import modeifyTeacherMessage from '@/components/PC/PCManager/modifyTeacherMessage'
 import ManagerIndex from '@/components/PC/PCManager/index'
-import empty from '@/components/PC/PCManager/empty'
+
 //PC
 
 
@@ -111,259 +113,148 @@ export default new Router({
       path: '/MailSetting',
       name: 'MailSetting',
       component: MailSetting
+    },{
+      path: '/ForgetPsw',
+      name: 'ForgetPsw',
+      component: ForgetPsw
     },
     //LoginPart
     {
-
       path: '/SeminarProceed',
-
       name: 'SeminarProceed',
-
       component: SeminarProceed
-
     },
-
     {
-
       path: '/ChangeReportScore',
-
-      name: 'changeReportScore',
-
+      name: 'ChangeReportScore',
       component: ChangeReportScore
-
     },
-
     {
-
       path: '/SeminarChangePScore',
-
       name: 'seminarChangePScore',
-
       component: SeminarChangePScore
-
     },
-
     {
-
       path: '/SeminarQuestionScore',
-
       name: 'seminarQuestionScore',
-
-      component: seminarQuestionScore
-
+      component:SeminarQuestionScore
     },
-
     {
-
       path: '/Seminarppt',
-
       name: 'Seminarppt',
-
       component: Seminarppt
-
-    },
-
-    {
-
+    }, {
       path: '/teacherCouseSeminar',
-
       name: 'teacherCouseSeminar',
-
       component: teacherCouseSeminar
-
-    },
-
-    {
-
+    }, {
       path: '/roundSeting',
-
       name: 'roundSeting',
-
       component: roundSeting
 
-    },
-
-    {
-
+    }, {
       path: '/teacherSeminar',
-
       name: 'teacherSeminar',
-
       component: teacherSeminar
-
-    },
-
-    {
-
+    }, {
       path: '/teacherSeminarFinished',
-
       name: 'teacherSeminarFinished',
-
       component: teacherSeminarFinished
-
-    },
-
-    {
-
+    }, {
       path: '/teacherSeminarRunning',
-
       name: 'teacherSeminarRunning',
-
       component: teacherSeminarRunning
-
-    },
-
-    {
-
+    }, {
       path: '/modifySeminar',
-
       name: 'modifySeminar',
-
       component: modifySeminar
 
-    },
-
-    {
-
+    },{
       path: '/creatSeminar',
-
       name: 'creatSeminar',
-
       component: creatSeminar
-
-    },
-
-    {
-
-      path: '/teacherSeminarNotstart',
-
-      name: 'teacherSeminarNotstart',
-
-      component: teacherSeminarNotstart
-
-    },
-
-    {
-
-      path: '/teacherSeminarPause',
-
-      name: 'teacherSeminarPause',
-
-      component: teacherSeminarPause
-
-    },
-
-    {
-
-      path: '/ReportScore',
-
+    }, {
+      path: '/ViewReportScore',
       name: 'viewReportScore',
-
       component: ViewReportScore
-
     },
-
     {
-
-      path: '/Score',
-
+      path: '/ViewScore',
       name: 'viewScore',
-
       component: ViewScore
-
     },
-
+    {
+      path:'/TeacherSeminar',
+      name:'TeacherSeminar',
+      component:TeacherSeminar
+    },
+    {
+      path:'/TeacherCourseSeminar',
+      name:'TeacherCourseSeminar',
+      component:TeacherCourseSeminar
+    },
     //SeminarTeacher
     {
-
       path: '/seminarFinishedSigned',
-
       name: 'seminarFinishedSigned',
-
       component: seminarFinishedSigned
-
     },
     {
-
       path: '/seminarUnstartUnsigned',
-
       name: 'seminarUnstartUnsigned',
-
       component: seminarUnstartUnsigned
-
     },
     {
-
       path: '/StudentCourseSeminar',
-
       name: 'StudentCourseSeminar',
-
       component: StudentCourseSeminar
 
     },
     {
 
       path: '/studentSeminar',
-
       name: 'studentSeminar',
-
       component: studentSeminar
 
     },
     {
       path: '/studentSeminarFinishedSignedNotReport',
-
       name: 'studentSeminarFinishedSignedNotReport',
-
       component: studentSeminarFinishedSignedNotReport
     },
     {
       path: '/studentSeminarNotstartSigned',
-
       name: 'studentSeminarNotstartSigned',
-
       component: studentSeminarNotStartSigned
     },
     {
       path: '/studentSeminarPre',
-
       name: 'studentSeminarPre',
-
       component: studentSeminarPre
     },
     {
       path: '/studentSeminarRunning',
-
       name: 'studentSeminarRunning',
-
       component: studentSeminarRunning
     },
     {
       path: '/studentSeminarRunningSigned',
-
       name: 'studentSeminarRunningSigned',
-
       component: studentSeminarRunningSigned
     },
     {
       path: '/studentSeminarViewScore',
-
       name: 'studentSeminarViewScore',
-
       component: studentSeminarViewScore
     },
     {
       path: '/studentViewPpt',
-
       name: 'studentViewPpt',
-
       component:studentViewPpt
     },
     {
       path: '/ViewDeatilsAndSignUp',
-
       name: 'ViewDeatilsAndSignUp',
-
       component:ViewDeatilsAndSignUp
     },
     //SeminarStudent
@@ -377,7 +268,6 @@ export default new Router({
       name: 'StudentCourse',
       component: StudentCourse
     },
-
     {
       path: '/CourseInfo',
       name: 'CourseInfo',
@@ -397,10 +287,6 @@ export default new Router({
       path: '/CreateTeam',
       name: 'CreateTeam',
       component: CreateTeam
-    },{
-      path: '/LeaderTeam',
-      name: 'LeaderTeam',
-      component: LeaderTeam
     },{
       path: '/MemberTeam',
       name: 'MemberTeam',
@@ -427,14 +313,14 @@ export default new Router({
       component:courseManage
     },
     {
+      path: '/CreateClass',
+      name: 'CreateClass',
+      component:createClass
+    },
+    {
       path: '/courseMessage',
       name: 'courseMessage',
       component:courseMessage
-    },
-    {
-      path: '/createClass',
-      name: 'createCourse',
-      component:createClass
     },
     {
       path: '/teacherStudentTeam',
@@ -476,6 +362,11 @@ export default new Router({
       name: 'BacklogPage',
       component: BacklogPage
     },
+    {
+      path:'/TeaPersonCenter',
+      name:'TeaPersonCenter',
+      component:TeaPersonCenter
+    },
     //TeacherPersonal
     {
       path: '/PC',
@@ -493,13 +384,9 @@ export default new Router({
       component: ImportStu
     },
     {
-
       path: '/ChangeReportScore',
-
       name: 'changeReportScore',
-
       component: ChangeReportScore
-
     },
     {
       path: '/TeaViewScorePC',

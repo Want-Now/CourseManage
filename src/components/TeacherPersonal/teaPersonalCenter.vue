@@ -1,31 +1,33 @@
 <template>
   <el-container>
     <el-header>
-      <el-button class="el-icon-back" @click="back()"></el-button>
       <p>{{headerLocation}}</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>待办</el-dropdown-item>
           <el-dropdown-item>个人页面</el-dropdown-item>
           <el-dropdown-item>讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
     <el-main>
-      <el-menu>
-        <el-submenu v-for="(item,index) in courseList" :key="item.courseId" :index="(index+'')">
-          <template slot="title">{{item.courseName}}&nbsp; &nbsp; {{item.grade}}({{item.klassSerial}})</template>
-          <el-menu-item :index="index+'-1'" @click="goCourseInfo(item)">课程信息
-            <i class="el-icon-arrow-right"></i>
-          </el-menu-item>
-          <el-menu-item :index="index+'-2'" @click="goScorePage(item)">我的成绩
-            <i class="el-icon-arrow-right"></i>
-          </el-menu-item>
-          <el-menu-item :index="index+'-3'" @click="goMyTeam(item)">我的组队
-            <i class="el-icon-arrow-right"></i>
-          </el-menu-item>
-        </el-submenu>
-
+      <el-row :span="24" class="personInfo">
+        <p style="position: absolute;left: 20px;top: 15px;">{{teacherName}}</p>
+        <p style="position: absolute;left: 20px;top: 55px;">{{teacherId}}</p>
+      </el-row>
+      <el-menu
+        background-color="#d3d4e4"
+        text-color="#595959"
+        active-text-color="#494e8f">
+        <el-menu-item index="1" @click="goCoursePage()">
+          <i class="el-icon-document"></i>
+          我的课程
+        </el-menu-item>
+        <el-menu-item index="2" @click="goStudentSet()">
+          <i class="el-icon-edit"></i>
+          账户与设置
+        </el-menu-item>
       </el-menu>
     </el-main>
   </el-container>
@@ -33,37 +35,40 @@
 
 <script>
   export default {
-    name: "studentCourse",
-    data() {
-      return {
-        headerLocation: '我的课程',
-        courseList: [],
+    name: "StuPersonalCenter",
+    data(){
+      return{
+        headerLocation:"个人中心",
+        teacherName:"",
+        teacherId:"",
       }
     },
-    created(){
+    created() {
       let _this=this;
       this.$axios({
         method:'get',
-        url:'/getCourse/student',
-        params:{
-          studentId:103
-        }
-      }).then(
-        function(response){
-          console.log(response.data);
-          _this.courseList=response.data;
-        }).catch(error=>{console.log(error)});
+        url:'/user/index',               //url
+      }).then(function (response) {
+        _this.teacherName=response.data;
+        // _this.studentId=response.data.account;
+      })
+        .catch(
+          function (error) {
+            console.log(error);
+          }
+        );
     },
     methods:{
-      goCourseInfo(item){
-        this.$router.push({path:'/CourseInfo',query:{courseId:item.courseId,courseName:item.courseName}});
+      goStudentSet(){
+        this.$router.push('/StuSetting');
       },
-      goScorePage(item){
-        this.$router.push('/CourseScore');
+      goCoursePage(){
+        this.$router.push('/');
       },
-      goMyTeam(item){
-        //判断是组长还是组员
+      goSeminarPage(){
+        this.$router.push('/');
       }
+
     }
 
 
@@ -89,13 +94,11 @@
     vertical-align: middle;
 
   }
-  .el-submenu{
-    text-align: left;
+  .el-menu{
+    margin-top: 20px;
   }
-  .el-menu-item i{
-    position: absolute;
-    right: 10px;
-    top:15px;
+  .el-menu-item{
+    text-align: left;
   }
   .el-input__inner{
     height: 50px;

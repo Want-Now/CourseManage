@@ -15,16 +15,19 @@
         <el-card>
           <p>课程介绍</p>
           <div style="word-wrap: break-word;">{{courseIntro}}</div>
+          <p>成绩计算规则</p>
+          <span class="itemSpan">课堂展示</span><span class="itemSpan">{{prePercent}}%</span>
+          <span class="itemSpan">课堂提问</span><span class="itemSpan">{{quesPercent}}%</span>
+          <span class="itemSpan">书面报告</span><span class="itemSpan">{{repoPercent}}%</span>
+          <hr/>
+          <span class="itemSpan">组队开始</span><span class="itemSpan">{{teamStartTime}}</span>
+          <span class="itemSpan">组队截止</span><span class="itemSpan">{{teamEndTime}}</span>
+          <p>组员基本要求</p>
+          <span class="itemSpan">组队截止</span><span class="itemSpan">{{teamEndTime}}</span>
+
+
         </el-card>
-        <el-table
-        :data="tableIntroData">
-          <el-table-column prop="dataName">
 
-          </el-table-column>
-          <el-table-column prop="dataContent">
-
-          </el-table-column>
-        </el-table>
       </el-main>
     </el-container>
 </template>
@@ -34,8 +37,17 @@
         name: "courseInfo",
       data(){
           return{
-            headerLocation:"OOAD",
+            headerLocation:"",
             courseIntro:"OOADfdsafadsfasfdsafdsfdasfdsafdsafdasfsdafdsafdfdsfds",
+            prePercent:'',
+            quesPercent:'',
+            repoPercent:'',
+            teamStartTime:'',
+            teamEndTime:'',
+            minMember:'',//组队人数
+            maxMember:'',
+
+
             tableIntroData:[{
               dataName:'课程成绩分布',
               dataContent:'XXXX 10%' +'dsadsa',
@@ -59,6 +71,35 @@
               dataContent:'.net(XX老师)',
             }]
           }
+      },
+      created(){
+          let _this=this;
+          this.headerLocation=this.$route.query.courseName;
+          this.$axios({
+            method:'get',
+            url:'/course/'+this.$route.query.courseId
+          }).then(
+            function (response) {
+              var startDate=new Date(response.data.teamStartTime);
+              var endDate=new Date(response.data.teamEndTime);
+              _this.courseIntro=response.data.introduction;
+              _this.prePercent=response.data.presentationPercentage;
+              _this.quesPercent=response.data.questionPercentage;
+              _this.repoPercent=response.data.reportPercentage;
+              _this.teamStartTime=_this.toNormalDate(startDate);
+              _this.teamEndTime=_this.toNormalDate(endDate);
+            }
+          )
+            .catch()
+      },
+      methods: {
+        toNormalDate(date){
+          // var time1=date.toLocaleString();
+          // var date1=time1.substring(0,10);
+          // var date2=time1.substring(10,20);
+          // return date1+date2;
+          return date.getFullYear()+'.'+(date.getMonth()+1)+'.'+date.getDate()+'  '+date.getHours()+':'+date.getMinutes();
+        }
       }
     }
 </script>
@@ -71,6 +112,14 @@
   .el-card p{
     color: #494e8f;
     font-size: 18px;
+
+  }
+  .itemSpan{
+    display: inline-block;
+    width:50%;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
 
   }
   .el-table{

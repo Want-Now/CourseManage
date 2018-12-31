@@ -19,7 +19,7 @@
     </el-main>
     <el-footer>
       <p>密码长度6-32位，须包含数字、字母、符号至少2种或以上元素</p>
-      <el-button type="danger" class="buttomButton" @click="submitPsw('ruleForm2')">
+      <el-button class="bottomButt" @click="submitPsw('ruleForm2')">
         确认提交
       </el-button>
     </el-footer>
@@ -33,8 +33,8 @@
         var validatePass = (rule, value, callback) => {
           if (value === '') {
             callback(new Error('请输入密码'));
-          } else if(value.length>8){
-            var reg=/^(((?=.*[0-9])(?=.*[a-zA-Z])|(?=.*[0-9])(?=.*[^\s0-9a-zA-Z])|(?=.*[a-zA-Z])(?=.*[^\s0-9a-zA-Z]))[^\s]{8,32})$/;
+          } else if(value.length>6){
+            var reg=/^(((?=.*[0-9])(?=.*[a-zA-Z])|(?=.*[0-9])(?=.*[^\s0-9a-zA-Z])|(?=.*[a-zA-Z])(?=.*[^\s0-9a-zA-Z]))[^\s]{6,32})$/;
             if(!reg.test(value)){
               callback(new Error('请输入有效的密码'));
             }
@@ -121,16 +121,7 @@
   .el-container{
     height: 80vh;
   }
-</style>
-<style>
-  .pswInput .el-input__inner{
-    height: 45px;
-    font-size: 16px;
-  }
-  .el-input__inner{
-    height: 50px;
-    font-size: 15px;
-  }
+
 
   .el-header{
     margin: 0px;
@@ -185,4 +176,10 @@
     text-align: center;
   }
 
+</style>
+<style>
+  .pswInput .el-input__inner{
+    height: 45px;
+    font-size: 16px;
+  }
 </style>

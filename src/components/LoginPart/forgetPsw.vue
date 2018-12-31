@@ -8,7 +8,7 @@
       <el-input v-model="account" autocomplete="off" class="pswInput" placeholder="学号/教工号" clearable></el-input>
     </el-main>
     <el-footer>
-      <el-button type="danger" class="buttomButton" @click="forgetPsw()">
+      <el-button type="danger" class="bottomButt" @click="forgetPsw()">
         下一步
       </el-button>
     </el-footer>
@@ -64,16 +64,7 @@
   .el-container{
     height: 80vh;
   }
-</style>
-<style>
-  .pswInput .el-input__inner{
-    height: 45px;
-    font-size: 16px;
-  }
-  .el-input__inner{
-    height: 50px;
-    font-size: 15px;
-  }
+
 
   .el-header{
     margin: 0px;
@@ -128,4 +119,10 @@
     text-align: center;
   }
 
+</style>
+<style>
+  .pswInput .el-input__inner{
+    height: 45px;
+    font-size: 16px;
+  }
 </style>
