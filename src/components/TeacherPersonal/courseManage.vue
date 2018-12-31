@@ -16,22 +16,22 @@
       <el-menu>
         <el-submenu v-for="(item,index) in courseList" :key="item.courseId" :index="(index+'')">
           <template slot="title">{{item.courseName}}</template>
-          <el-menu-item :index="index+'-1'" @click="">学生成绩
+          <el-menu-item :index="index+'-1'" @click="goStudentScore(item)">学生成绩
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
-          <el-menu-item :index="index+'-2'" @click="">学生组队
+          <el-menu-item :index="index+'-2'" @click="goTeamPage(item)">学生组队
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
-          <el-menu-item :index="index+'-3'" @click="">课程信息
+          <el-menu-item :index="index+'-3'" @click="goCourseInfo(item)">课程信息
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
-          <el-menu-item :index="index+'-4'" @click="">班级信息
+          <el-menu-item :index="index+'-4'" @click="goKlassInfo(item)">班级信息
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
-          <el-menu-item :index="index+'-5'" @click="">讨论课设置
+          <el-menu-item :index="index+'-5'" @click="goSeminarSetting(item)">讨论课设置
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
-          <el-menu-item :index="index+'-6'" @click="">共享设置
+          <el-menu-item :index="index+'-6'" @click="goShareSetting(item)">共享设置
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
         </el-submenu>
@@ -53,14 +53,15 @@
       };
     },
     created(){
+      var _this=this;
       this.$axios({
         method:'get',
-        url:'http://ghctcourse.natapp1.cc/getCourse/teacher',
-        data:{
-          teacherId:2700
+        url:'/getCourse/teacher',
+        params:{
+          teacherId:3
         }
       }).then(function (response) {
-        console.log(response.data);
+        _this.courseList=response.data;
       }).catch(error=>{
         console.log(error);
       });
@@ -68,6 +69,25 @@
     methods: {
       handleChange(val) {
         console.log(val);
+      },
+      goStudentScore(item){
+
+      },
+      goTeamPage(item){
+        // console.log(item.courseId);
+        this.$router.push({path:'/TeamPage',query:{courseId:item.courseId,courseName:item.courseName}});
+      },
+      goCourseInfo(item){
+        this.$router.push({path:'/CourseInfo',query:{courseId:item.courseId,courseName:item.courseName}});
+      },
+      goKlassInfo(item){
+
+      },
+      goSeminarSetting(item){
+
+      },
+      goShareSetting(item){
+
       }
     }
   }

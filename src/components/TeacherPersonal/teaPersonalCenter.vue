@@ -44,7 +44,19 @@
       }
     },
     created() {
-
+      let _this=this;
+      this.$axios({
+        method:'get',
+        url:'/user/index',               //url
+      }).then(function (response) {
+        _this.teacherName=response.data;
+        // _this.studentId=response.data.account;
+      })
+        .catch(
+          function (error) {
+            console.log(error);
+          }
+        );
     },
     methods:{
       goStudentSet(){
