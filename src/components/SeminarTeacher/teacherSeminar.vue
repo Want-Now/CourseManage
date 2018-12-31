@@ -12,33 +12,14 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <div style="border:1px solid #f7f7f7;">
-        <el-row >
-          <el-button class="el-icon-tickets"></el-button>
-          <p>{{class1}}</p>
-        </el-row>
-      </div>
-      <div style=" border:1px solid #f7f7f7;">
-        <el-row>
-          <el-button  styel="float:left" class="el-icon-tickets"></el-button>
-          <p>{{class2}}</p>
-        </el-row>
-      </div>
-      <br>
-      <br>
-      <br>
-      <el-form>
-        <el-form-item style="padding-bottom:20%;float:right;">
-          &nbsp;&nbsp;
-
-          <el-button style="background-color:red;color:white;"size="small"
-
-                     @click="" v-if="scope.row.type=== 1">正在进行讨论课
-
-          </el-button>
-          <el-button style="background-color:red;color:white;" @click="">正在进行讨论课</el-button>
-        </el-form-item>
-      </el-form>
+      <el-menu
+        text-color="#595959"
+        active-text-color="#494e8f">
+        <el-menu-item v-for="(item,index) in courseList" :key="item.courseId" :index="String(index)" @click="goCourseSeminar(item)">
+          <i class="el-icon-document"></i>
+          <span class="titleSpan">{{item.courseName}}</span>
+        </el-menu-item>
+      </el-menu>
     </el-main>
   </el-container>
 </template>
@@ -49,32 +30,41 @@
     data(){
       return{
         headerLocation: "讨论课",
-        class1:"OOAD(主)",
-        class2:"J2EE",
+        courseList:[],
+      }
+    },
+    created(){
+      let _this=this;
+      this.$axios({
+        method:'get',
+        url:'/getCourse/teacher',
+        params:{
+          teacherId:3
+        }
+      }).then(
+        response=>{
+          _this.courseList=response.data;
+        }
+      )
+    },
+    methods:{
+      goCourseSeminar(item){
+        this.$router.push({path:'/TeacherCourseSeminar',query:{courseId:item.courseId,courseName:item.courseName}});
       }
     }
   }
 </script>
 <style>
-  .el-main .el-icon-tickets{
-    float:left;
-    border-color: white;
-
+  .el-menu-item{
+    text-align: left;
   }
-  .el-main.p {
-    display: inline-block;
-  }
-  .el-main.el-row{
-    width:100px;
-    height:10px;
-    text-align:center;
-    line-height:50px;
-  }
-  .el-input__inner{
-    height: 50px;
-    font-size: 15px;
+  .titleSpan{
+    font-size: 20px;
   }
 
+  .el-icon-document{
+    font-size: 20px;
+  }
   .el-header{
     margin: 0px;
     padding: 0px;

@@ -12,54 +12,126 @@
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
-    <el-collapse v-model="activeNames" @change="handleChange">
-      <el-collapse-item title="第一轮" name="1">
-        <div style="margin-right:80%;border-bottom:1px solid #eaedf4"><i class="el-icon-setting"></i> &nbsp;该轮轮次设置</div>
-        <el-collapse-item style="padding-left:5%; font-size:150%;" title="业务流程分析" name="1-1">
-          <router-link to="">
-            <div style="padding-left:10%">2016-1 &nbsp;&nbsp;&nbsp;
-              <i class="el-icon-edit"></i>
+    <el-main>
+      <el-collapse accordion>
+        <el-collapse-item v-for="round in rounds" :key="round.roundId" @loading="loading">
+          <template slot="title">
+            <div class="clickDiv" @click="getSeminar(round)">
+              <span class="titleSpan">第{{round.roundSerial}}轮</span>
             </div>
-          </router-link>
-          <div style="padding-left:10%">2016-2 &nbsp;&nbsp;&nbsp;
-            <i class="el-icon-edit"></i>
-          </div >
-          <div style="padding-left:10%">2016-3  &nbsp;&nbsp;&nbsp;
-            <i class="el-icon-edit"></i>
-          </div>
+          </template>
+
+          <el-menu>
+            <el-menu-item index="0" @click="goRoundSetting(round)">
+              <i class="el-icon-setting"></i>
+              <span>该轮轮次设置</span>
+            </el-menu-item>
+
+            <el-submenu v-for="(seminar,index) in seminars" :key="seminar.id" :index="(index+'')">
+              <template slot="title">
+                <div class="itemDiv"  @click="getKlass(seminar)">
+                  <span>{{seminar.topic}}</span>
+                </div>
+              </template>
+              <el-menu-item v-for="(klass,index1) in klasses" :key="klass.klassId" :index="index+'-'+index1">
+                <span>{{klass.grade}}-({{klass.klassSerial}})</span>
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
         </el-collapse-item>
+      </el-collapse>
 
-        <el-collapse-item style="padding-left:5%" title="界面原型设计" name="1-2"></el-collapse-item>
+    </el-main>
+    <el-footer>
+      <el-button class="bottomButt">新建讨论课</el-button>
+    </el-footer>
 
-      </el-collapse-item>
-      <el-collapse-item title="第二轮" name="2">
-
-      </el-collapse-item>
-    </el-collapse>
-    <br>
-    <br>
-    <el-form>
-      <el-form-item>
-        <el-button style="width:100%;background-color:#494e8e" type="primary" @click="">新建讨论课</el-button>
-      </el-form-item>
-    </el-form>
   </el-container>
 </template>
 <script>
   export default {
     data() {
       return {
-        headerLocation: "OOAD",
+        headerLocation: "",
+        rounds:[],
+        seminars:[],
+        klasses:[],
+        loading:true
+
       };
     },
+    created(){
+      let _this=this;
+      this.$axios({
+        method:'get',
+        url:'/course/'+this.$route.query.courseId+'/round'
+      }).then(
+        function (response) {
+          _this.headerLocation=_this.$route.query.courseName;
+          _this.rounds=response.data;
+        }
+      );
+    },
     methods: {
-      handleChange(val) {
-        console.log(val);
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      getSeminar(round){
+        this.loading=true;
+        let _this=this;
+        this.$axios({
+          method:'get',
+          url:'/round/'+round.roundId+'/seminar'
+        }).then(response=>{
+          _this.seminars=response.data;
+        })
+        this.loading=false;
+      },
+      getKlass(seminar){
+        let _this=this;
+        this.$axios({
+          method:'get',
+          url:'/seminar/'+seminar.id+'/klass'
+        }).then(response=>{
+          _this.klasses=response.data;
+        })
+      },
+      goRoundSetting(round){
+        this.$router.push({path:'/',query:{roundId:round.roundId}});
       }
     }
   }
 </script>
 <style scoped>
+  .el-container{
+    height:98vh;
+  }
+  .el-menu-item{
+    text-align: left;
+  }
+  .clickDiv{
+    width: 100%;
+    height: 100%;
+    text-align: left;
+  }
+  .titleSpan{
+    font-size: 18px;
+  }
+  .itemDiv{
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    text-align: left;
+  }
+  .itemP{
+    font-size: 15px;
+    text-align: left;
+  }
+
+  .el-icon-arrow-right{
+    position: relative;
+    right: -40vw;
+  }
   .el-input__inner{
     height: 50px;
     font-size: 15px;
