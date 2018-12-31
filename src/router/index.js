@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
 import Login from '@/components/LoginPart/login'
 import ActiveT from '@/components/LoginPart/activeTeacher'
 import ActiveS from '@/components/LoginPart/activeStudent'
@@ -8,15 +7,21 @@ import PswSetting from '@/components/LoginPart/pswSetting'
 import MailSetting from '@/components/LoginPart/mailSetting'
 import ForgetPsw from '@/components/LoginPart/forgetPsw'
 //LoginPart
-
+import roundSeting from '@/components/SeminarTeacher/roundSeting'
+import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
+import teacherCourseSeminar from '@/components/SeminarTeacher/teacherCourseSeminar'
+import teacherSeminarFinished from '@/components/SeminarTeacher/teacherSeminarFinished'
+import seminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
+import teacherSeminarRunning from '@/components/SeminarTeacher/teacherSeminarRunning'
+import teacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
 import ChangeReportScore from '@/components/SeminarTeacher/changeReportScore'
 import SeminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import ViewReportScore from '@/components/SeminarTeacher/viewReportScore'
 import ViewScore from '@/components/SeminarTeacher/viewScore'
-import TeacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
-import TeacherCourseSeminar from '@/components/SeminarTeacher/teacherCouseSeminar'
+import creatSeminar from '@/components/SeminarTeacher/creatSeminar'
+import modifySeminar from '@/components/SeminarTeacher/modifySeminar'
 //SeminarTeacher
 import seminarFinishedSigned from '@/components/studentSeminar/seminarFinishedSigned'
 import seminarUnstartUnsigned from '@/components/studentSeminar/seminarUnstartUnsigned '
@@ -41,7 +46,6 @@ import MemberTeam from '@/components/StudentPersonal/memberTeam'
 import StudentSetting from '@/components/StudentPersonal/studentSetting'
 //StudentPersonal
 
-import TeaPersonCenter from '@/components/TeacherPersonal/teaPersonalCenter'
 import TeacherSetting from '@/components/TeacherPersonal/teacherSetting'
 import BacklogPage from '@/components/TeacherPersonal/backlogPage'
 import classmessage from '@/components/TeacherPersonal/classmessage'
@@ -56,6 +60,7 @@ import teacherSetting from '@/components/TeacherPersonal/teacherSetting'
 import teacherStudentTeam from '@/components/TeacherPersonal/teacherStudentTeam'
 import teamRequirementSetting from '@/components/TeacherPersonal/teamRequirementSetting'
 
+//teacherpersonal
 
 import LoginPC from '@/components/PC/loginPC'
 import CoursePage from '@/components/PC/coursePage'
@@ -65,14 +70,13 @@ import TeaExportScorePC from '@/components/PC/TeacherPart/teaExportScore'
 import TeaDownloadFilePC from '@/components/PC/TeacherPart/downloadFile'
 import TeaDownloadPagePC from '@/components/PC/TeacherPart/downloadPage'
 import TeaDownloadBatchPC from '@/components/PC/TeacherPart/downloadBatch'
-
 import StuViewScorePC from '@/components/PC/StudentPart/stuViewScore'
-// import ManageIndex from '@/components/PC/PCManager/index'
+import createTeacherAccount from '@/components/PC/PCManager/createTeacherAccount'
+import modeifyStudentMessage from '@/components/PC/PCManager/modeifyStudentMessage'
+import modeifyTeacherMessage from '@/components/PC/PCManager/modifyTeacherMessage'
+import ManagerIndex from '@/components/PC/PCManager/index'
 //PC
-
-
 Vue.use(Router)
-
 
 export default new Router({
   routes: [
@@ -124,9 +128,39 @@ export default new Router({
     {
       path: '/SeminarQuestionScore',
       name: 'seminarQuestionScore',
-      component: SeminarQuestionScore
+      component:SeminarQuestionScore
     },
     {
+      path: '/Seminarppt',
+      name: 'Seminarppt',
+      component: Seminarppt
+    }, {
+      path: '/roundSeting',
+      name: 'roundSeting',
+      component: roundSeting
+
+    }, {
+      path: '/teacherSeminar',
+      name: 'teacherSeminar',
+      component: teacherSeminar
+    }, {
+      path: '/teacherSeminarFinished',
+      name: 'teacherSeminarFinished',
+      component: teacherSeminarFinished
+    }, {
+      path: '/teacherSeminarRunning',
+      name: 'teacherSeminarRunning',
+      component: teacherSeminarRunning
+    }, {
+      path: '/modifySeminar',
+      name: 'modifySeminar',
+      component: modifySeminar
+
+    },{
+      path: '/creatSeminar',
+      name: 'creatSeminar',
+      component: creatSeminar
+    }, {
       path: '/ViewReportScore',
       name: 'viewReportScore',
       component: ViewReportScore
@@ -137,14 +171,14 @@ export default new Router({
       component: ViewScore
     },
     {
-      path:'/TeacherSeminar',
-      name:'TeacherSeminar',
-      component:TeacherSeminar
+      path:'/teacherSeminar',
+      name:'teacherSeminar',
+      component:teacherSeminar
     },
     {
-      path:'/TeacherCourseSeminar',
-      name:'TeacherCourseSeminar',
-      component:TeacherCourseSeminar
+      path:'/teacherCourseSeminar',
+      name:'teacherCourseSeminar',
+      component:teacherCourseSeminar
     },
     //SeminarTeacher
     {
@@ -161,7 +195,6 @@ export default new Router({
       path: '/StudentCourseSeminar',
       name: 'StudentCourseSeminar',
       component: StudentCourseSeminar
-
     },
     {
 
@@ -367,11 +400,26 @@ export default new Router({
       name: 'StuViewScorePC',
       component: StuViewScorePC
     },
-    // {
-    //   path: '/ManageIndex',
-    //   name: 'ManageIndex',
-    //   component: ManageIndex
-    // },
+    {
+      path: '/ManagerIndex',
+      name: 'ManagerIndex',
+      component: ManagerIndex
+    },
+    {
+      path:'/createTeacherAccount',
+      name:'createTeacherAccount',
+      component:createTeacherAccount
+    },
+    {
+      path:'/modeifyStudentMessage',
+      name:'modeifyStudentMeeeage',
+      component:modeifyStudentMessage
+    },
+    {
+      path:'/modeifyTeacherMessage',
+      name:'modeifyTeacherMessage',
+      component:modeifyTeacherMessage
+    },
     //PC
   ]
 })

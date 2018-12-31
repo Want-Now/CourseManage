@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
+      <el-button class="el-icon-back" @click="back"></el-button>
       <p>{{headerLocation}}</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
@@ -23,19 +23,19 @@
       </el-row>
       <el-row  >
         <el-col :span="12"><div >主题：</div></el-col>
-        <el-col :span="12"><div>{{topic}}</div></el-col>
+        <el-col :span="12"><div>{{seminarName}}</div></el-col>
       </el-row>
       <el-row style="background-color:#f1f1f1">
         <el-col> <div>要求：</div></el-col>
-        <el-col :span="20"><div>{{item}}</div></el-col>
+        <div style="width:50%;padding-right:5%;float:left;">{{introduction}}</div>
       </el-row>
-      <el-row  >
+      <el-row>
         <el-col style="float:left"><div>课次序号：</div></el-col>
-        <el-col :span="18"><div>{{order}}</div></el-col>
+        <el-col><div>{{ seminarSerial}}</div></el-col>
       </el-row>
       <el-row style="background-color:#f1f1f1">
         <el-col :span="12"><div>课程情况：</div></el-col>
-        <el-col :span="12"><div >已完成</div></el-col>
+        <el-col :span="12"><div >{{sstatus}}</div></el-col>
         <router-link to="check_ppt">
           <el-col :span="12"><div><u>查看信息</u></div></el-col>
         </router-link>
@@ -43,12 +43,29 @@
     </el-main>
     <br>
     <br>
-    <el-form>
+    <el-form v-if="sstatus=='2'">
       <el-form-item style="padding-bottom: 20px;">
         <router-link to="">
-          <el-button style="width:100%;background-color:#494e8e" type="primary" @click="submitForm('ruleForm')">书面报告</el-button>
+          <el-button style="width:100%;background-color:#494e8e" type="primary" @click="" >书面报告</el-button>
         </router-link>
-        <el-button style="width:100%"@click="resetForm('ruleForm')">查看成绩</el-button>
+        <el-button style="width:100%" @click="" >查看成绩</el-button>
+      </el-form-item>
+    </el-form>
+    <el-form v-else-if="sstatus=='0'">
+      <el-form-item style="padding-bottom: 20px;">
+        <router-link to="">
+          <el-button style="width:100%;background-color:#494e8e" type="primary" @click="submitForm('ruleForm')">开始讨论课</el-button>
+        </router-link>
+        <router-link to="">
+          <el-button style="width:100%"@click="modify">修改讨论课</el-button>
+        </router-link>
+      </el-form-item>
+    </el-form>
+    <el-form v-else-if="sstatus=='1'">
+      <el-form-item style="padding-bottom: 20px;">
+        <router-link to="Seminar_ing">
+          <el-button style="width:100%;background-color:#494e8e" type="primary" @click="submitForm('ruleForm')">进入讨论课</el-button>
+        </router-link>
       </el-form-item>
     </el-form>
   </el-container>
@@ -59,10 +76,37 @@
       return {
         headerLocation: "OOAD-讨论课",
         round: "第一轮",
-        order:"1",
-        item:"完成界面原型设计，每个组15分钟展示时间",
-        topic:"界面原型设计",
-        ban_num:"2016-(1)"
+        ban_num: "2016-(1)",
+         seminarSerial:'',
+        introduction:'',
+        seminarName:'',
+        sstatus:"1",
+      }
+    },
+    mounted() {
+      this.changeIcon()
+    },
+
+    methods: {
+      back() {
+        this.$router.go(-1);
+      },
+      modify(){
+        this.$router.push('/modifySeminar')
+      },
+      changeIcon(){
+        var that = this;
+        this.$axios({
+          method: 'get',
+          url: "http://ghctcourse.natapp1.cc/seminar/5/klass/21",
+          data: {
+          }
+        }).then(function (response) {
+          that.seminarSerial = response.data.seminarSerial,
+            that.introduction = response.data.introduction,
+            that.seminarName = response.data.seminarName,
+            that.status = response.data.status
+        })
       }
     }
   }

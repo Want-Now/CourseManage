@@ -39,7 +39,7 @@
         method:'get',
         url:'/getCourse/teacher',
         params:{
-          teacherId:3
+          teacherId:3  //需要更改
         }
       }).then(
         response=>{

@@ -74,7 +74,7 @@
             if(valid){
               this.$axios({
                 method:'post',      //传输方法
-                url:"http://cxpds3.natappfree.cc/user/login",   //路径
+                url:"http://ghctcourse.natapp1.cc/user/login",   //路径
                 data:{                                //传给后端的数据（后端数据名：……）
                   account:this.form.user,
                   password:this.form.password,
@@ -117,8 +117,7 @@
         forgetPsw(){
           this.$router.push('/ForgetPsw')
         }
-      }
-    }
+      }}
 </script>
 
 <style scoped>
