@@ -9,12 +9,10 @@ import ForgetPsw from '@/components/LoginPart/forgetPsw'
 //LoginPart
 import roundSeting from '@/components/SeminarTeacher/roundSeting'
 import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
-import teacherCouseSeminar from '@/components/SeminarTeacher/teacherCouseSeminar'
+import teacherCourseSeminar from '@/components/SeminarTeacher/teacherCourseSeminar'
 import teacherSeminarFinished from '@/components/SeminarTeacher/teacherSeminarFinished'
 import seminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import teacherSeminarRunning from '@/components/SeminarTeacher/teacherSeminarRunning'
-import teacherSeminarNotstart from '@/components/SeminarTeacher/teacherSeminarNotstart'
-import teacherSeminarPause from '@/components/SeminarTeacher/teacherSeminarPause'
 import teacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
@@ -44,7 +42,6 @@ import CourseInfo from '@/components/StudentPersonal/courseInfo'
 import CourseScore from '@/components/StudentPersonal/courseScore'
 import TeamPage from '@/components/StudentPersonal/teamPage'
 import CreateTeam from '@/components/StudentPersonal/createTeam'
-import LeaderTeam from '@/components/StudentPersonal/leaderTeam'
 import MemberTeam from '@/components/StudentPersonal/memberTeam'
 import StudentSetting from '@/components/StudentPersonal/studentSetting'
 //StudentPersonal
@@ -53,7 +50,6 @@ import TeacherSetting from '@/components/TeacherPersonal/teacherSetting'
 import BacklogPage from '@/components/TeacherPersonal/backlogPage'
 import classmessage from '@/components/TeacherPersonal/classmessage'
 import courseManage from '@/components/TeacherPersonal/courseManage'
-import courseMessage from '@/components/TeacherPersonal/courseMessage'
 import createClass from '@/components/TeacherPersonal/createClass'
 
 import createCourse from '@/components/TeacherPersonal/createCourse'
@@ -74,18 +70,13 @@ import TeaExportScorePC from '@/components/PC/TeacherPart/teaExportScore'
 import TeaDownloadFilePC from '@/components/PC/TeacherPart/downloadFile'
 import TeaDownloadPagePC from '@/components/PC/TeacherPart/downloadPage'
 import TeaDownloadBatchPC from '@/components/PC/TeacherPart/downloadBatch'
-
 import StuViewScorePC from '@/components/PC/StudentPart/stuViewScore'
 import createTeacherAccount from '@/components/PC/PCManager/createTeacherAccount'
 import modeifyStudentMessage from '@/components/PC/PCManager/modeifyStudentMessage'
 import modeifyTeacherMessage from '@/components/PC/PCManager/modifyTeacherMessage'
 import ManagerIndex from '@/components/PC/PCManager/index'
-
 //PC
-
-
 Vue.use(Router)
-
 
 export default new Router({
   routes: [
@@ -144,10 +135,6 @@ export default new Router({
       name: 'Seminarppt',
       component: Seminarppt
     }, {
-      path: '/teacherCouseSeminar',
-      name: 'teacherCouseSeminar',
-      component: teacherCouseSeminar
-    }, {
       path: '/roundSeting',
       name: 'roundSeting',
       component: roundSeting
@@ -184,14 +171,14 @@ export default new Router({
       component: ViewScore
     },
     {
-      path:'/TeacherSeminar',
-      name:'TeacherSeminar',
-      component:TeacherSeminar
+      path:'/teacherSeminar',
+      name:'teacherSeminar',
+      component:teacherSeminar
     },
     {
-      path:'/TeacherCourseSeminar',
-      name:'TeacherCourseSeminar',
-      component:TeacherCourseSeminar
+      path:'/teacherCourseSeminar',
+      name:'teacherCourseSeminar',
+      component:teacherCourseSeminar
     },
     //SeminarTeacher
     {
@@ -208,7 +195,6 @@ export default new Router({
       path: '/StudentCourseSeminar',
       name: 'StudentCourseSeminar',
       component: StudentCourseSeminar
-
     },
     {
 
@@ -316,11 +302,6 @@ export default new Router({
       path: '/CreateClass',
       name: 'CreateClass',
       component:createClass
-    },
-    {
-      path: '/courseMessage',
-      name: 'courseMessage',
-      component:courseMessage
     },
     {
       path: '/teacherStudentTeam',
