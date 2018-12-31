@@ -22,7 +22,7 @@
           </template>
 
           <el-menu>
-            <el-menu-item index="0" @click="goRoundSetting(round)">
+            <el-menu-item index="0" @click="goRoundSetting(round,seminars)">
               <i class="el-icon-setting"></i>
               <span>该轮轮次设置</span>
             </el-menu-item>
@@ -96,8 +96,8 @@
           _this.klasses=response.data;
         })
       },
-      goRoundSetting(round){
-        this.$router.push({path:'/',query:{roundId:round.roundId}});
+      goRoundSetting(round,seminars){
+        this.$router.push({path:'/RoundSeting',query:{roundId:round.roundId,seminars:seminars}});
       }
     }
   }
