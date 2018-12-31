@@ -14,14 +14,14 @@
     <el-main>
       <el-menu>
         <el-submenu v-for="(item,index) in courseList" :key="item.courseId" :index="(index+'')">
-          <template slot="title">{{item.courseName}}&nbsp;&nbsp;{{item.klassName}}</template>
-          <el-menu-item :index="index+'-1'" @click="">课程信息
+          <template slot="title">{{item.courseName}}&nbsp; &nbsp; {{item.grade}}({{item.klassSerial}})</template>
+          <el-menu-item :index="index+'-1'" @click="goCourseInfo(item)">课程信息
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
-          <el-menu-item :index="index+'-2'" @click="">我的成绩
+          <el-menu-item :index="index+'-2'" @click="goScorePage(item)">我的成绩
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
-          <el-menu-item :index="index+'-3'" @click="">我的组队
+          <el-menu-item :index="index+'-3'" @click="goMyTeam(item)">我的组队
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
         </el-submenu>
@@ -34,30 +34,39 @@
 <script>
   export default {
     name: "studentCourse",
-    data(){
-      return{
-        headerLocation:'我的课程',
-        courseList:[
-          {
-            courseName:'',
-            klassName:'',
-            courseId:''
-
-          }
-        ],
-        method:{
-          goCourseInfo(){
-            this.$router.push('/CourseInfo');
-          },
-          goScorePage(){
-            this.$router.push('/CourseScore');
-          },
-          goMyTeam(){
-                      //判断是组长还是组员
-          }
+    data() {
+      return {
+        headerLocation: '我的课程',
+        courseList: [],
+      }
+    },
+    created(){
+      let _this=this;
+      this.$axios({
+        method:'get',
+        url:'/getCourse/student',
+        params:{
+          studentId:103
         }
+      }).then(
+        function(response){
+          console.log(response.data);
+          _this.courseList=response.data;
+        }).catch(error=>{console.log(error)});
+    },
+    methods:{
+      goCourseInfo(item){
+        this.$router.push({path:'/CourseInfo',query:{courseId:item.courseId,courseName:item.courseName}});
+      },
+      goScorePage(item){
+        this.$router.push('/CourseScore');
+      },
+      goMyTeam(item){
+        //判断是组长还是组员
       }
     }
+
+
   }
 </script>
 

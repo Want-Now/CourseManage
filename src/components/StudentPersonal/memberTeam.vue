@@ -125,6 +125,9 @@
         searchStudent:'',
       }
     },
+    created(){
+
+    },
     methods:{
       tableSearch(){
 
