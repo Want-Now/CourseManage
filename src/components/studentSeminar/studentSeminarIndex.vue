@@ -65,7 +65,6 @@
     <br>
     <br>
     <br>
-    <br>
     <el-form v-if="status=='0'&&!attendance">
       <el-form-item style="padding-bottom: 20px;">
         <el-button style="width:100%;background-color:#494e8e" type="primary" @click="">报名</el-button>
