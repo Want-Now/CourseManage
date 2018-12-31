@@ -15,9 +15,9 @@ const httpService = axios.create({
 httpService.interceptors.request.use(
   config => {
     // 根据条件加入token-安全携带
-    if (!store.state.token) { // 需自定义
+    if (store.state.token) { // 需自定义
       // 让每个请求携带token
-      config.headers['User-Token'] = store.state.token
+      config.headers['Authorization'] = 'Bearer '+store.state.token
     }
     return config
   },

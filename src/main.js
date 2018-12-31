@@ -18,7 +18,7 @@ import store from './vuex/store'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-Vue.use(VueAxios, axios)
+// Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
 // Vue.prototype.$axios = axios
 /* eslint-disable no-new */
@@ -28,16 +28,17 @@ new Vue({
   el: '#app',
   router,
   store,
-  // created () {
-  //   this.$axios.defaults.withCredentials=true;
-  //   // this.$axios.defaults.baseURL='';
-  //   this.$axios.defaults.baseURL='http://ghctcourse.natapp1.cc';
-  //   this.$axios.interceptors.response.use(function (response) {
-  //     return response;
-  //   }, function (error) {
-  //     return Promise.reject(error);
-  //   });
-  // },
+  created () {
+    // this.$axios.defaults.withCredentials=true;
+    // // this.$axios.defaults.baseURL='';
+    // this.$axios.defaults.baseURL='http://ghctcourse.natapp1.cc';
+    // this.$axios.interceptors.response.use(function (response) {
+    //   return response;
+    // }, function (error) {
+    //   return Promise.reject(error);
+    // });
+  },
+
   components: { App },
   template: '<App/>'
 })

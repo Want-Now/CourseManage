@@ -10,7 +10,6 @@ import ForgetPsw from '@/components/LoginPart/forgetPsw'
 import roundSeting from '@/components/SeminarTeacher/roundSeting'
 import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
 import teacherCourseSeminar from '@/components/SeminarTeacher/teacherCouseSeminar'
-import teacherSeminarFinished from '@/components/SeminarTeacher/teacherSeminarFinished'
 import seminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import TeacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
@@ -146,15 +145,12 @@ export default new Router({
       component: roundSeting
 
     },
+    // {
+    //   path: '/teacherSeminarIndex',
+    //   name: 'teacherSeminarIndex',
+    //   component: teacherSeminarIndex
+    // },
     {
-      path: '/teacherSeminarFinished',
-      name: 'teacherSeminarFinished',
-      component: teacherSeminarFinished
-    }, {
-      path: '/teacherSeminarIndex',
-      name: 'teacherSeminarIndex',
-      component: teacherSeminarIndex
-    }, {
       path: '/modifySeminar',
       name: 'modifySeminar',
       component: modifySeminar
