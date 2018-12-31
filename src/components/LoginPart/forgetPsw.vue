@@ -38,7 +38,7 @@
               account:this.account,
             }
           }).then(function (response) {
-            if(response.data===true){
+            if(response===true){
               that.$message({
                 message:'已发送密码到邮箱',
                 type:'success',

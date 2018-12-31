@@ -92,13 +92,14 @@
             if (valid) {
               this.$axios({
                 method:'put',
-                url:'http://3uc6ic.natappfree.cc/teacher/active',
+                url:'/student/active',
                 data:{
                   // account:'2700',
-                  password:this.activeForm.password
+                  password:this.activeForm.password,
+                  email:this.activeForm.mail
                 }
               }).then(function (response) {
-                if(response.data.message===true){
+                if(response.message===true){
                   that.$message({
                     message:'激活成功',
                     type:'success',

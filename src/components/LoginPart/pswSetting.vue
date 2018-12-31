@@ -89,7 +89,7 @@
                   password:_this.form.password
                 }
               }).then(function (response) {
-                if(response.data===true){
+                if(response===true){
                   _this.$message({
                     message:'修改邮箱成功',
                     type:'success',

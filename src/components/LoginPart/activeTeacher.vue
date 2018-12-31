@@ -7,10 +7,10 @@
       <el-main>
         <el-form :model="activeForm" :rules="activeRule" ref="activeForm">
           <el-form-item prop="password">
-            <el-input class="activeInput" type="password" v-model="activeForm.password" placeholder="请输入密码"></el-input>
+            <el-input class="activeInput" type="password" v-model="activeForm.password" placeholder="请输入密码" clearable></el-input>
           </el-form-item>
           <el-form-item prop="passwordCheck">
-            <el-input class="activeInput" type="password" v-model="activeForm.passwordCheck" placeholder="确认密码"></el-input>
+            <el-input class="activeInput" type="password" v-model="activeForm.passwordCheck" placeholder="确认密码" clearable></el-input>
           </el-form-item>
         </el-form>
       </el-main>
