@@ -10,9 +10,8 @@ import ForgetPsw from '@/components/LoginPart/forgetPsw'
 import roundSeting from '@/components/SeminarTeacher/roundSeting'
 import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
 import teacherCourseSeminar from '@/components/SeminarTeacher/teacherCourseSeminar'
-import teacherSeminarFinished from '@/components/SeminarTeacher/teacherSeminarFinished'
 import seminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
-import teacherSeminarRunning from '@/components/SeminarTeacher/teacherSeminarRunning'
+import teacherSeminarIndex from '@/components/SeminarTeacher/teacherSeminarIndex'
 import teacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
@@ -51,7 +50,7 @@ import BacklogPage from '@/components/TeacherPersonal/backlogPage'
 import classmessage from '@/components/TeacherPersonal/classmessage'
 import courseManage from '@/components/TeacherPersonal/courseManage'
 import createClass from '@/components/TeacherPersonal/createClass'
-
+import teaPersonalCenter from '@/components/TeacherPersonal/teaPersonalCenter'
 import createCourse from '@/components/TeacherPersonal/createCourse'
 import newShare from '@/components/TeacherPersonal/newShare'
 import shareSeting from '@/components/TeacherPersonal/shareSeting'
@@ -143,14 +142,10 @@ export default new Router({
       path: '/teacherSeminar',
       name: 'teacherSeminar',
       component: teacherSeminar
-    }, {
-      path: '/teacherSeminarFinished',
-      name: 'teacherSeminarFinished',
-      component: teacherSeminarFinished
-    }, {
-      path: '/teacherSeminarRunning',
-      name: 'teacherSeminarRunning',
-      component: teacherSeminarRunning
+    },  {
+      path: '/teacherSeminarIndex',
+      name: 'teacherSeminarIndex',
+      component: teacherSeminarIndex
     }, {
       path: '/modifySeminar',
       name: 'modifySeminar',
@@ -339,14 +334,14 @@ export default new Router({
       component:teacherSetting
     },
     {
+      path: '/teaPersonalCenter',
+      name: 'teaPersonalCenter',
+      component:teaPersonalCenter
+    },
+    {
       path: '/BacklogPage',
       name: 'BacklogPage',
       component: BacklogPage
-    },
-    {
-      path:'/TeaPersonCenter',
-      name:'TeaPersonCenter',
-      component:TeaPersonCenter
     },
     //TeacherPersonal
     {
