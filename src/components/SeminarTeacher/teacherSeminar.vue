@@ -12,30 +12,21 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <div style="border:1px solid #f7f7f7;">
-        <el-row >
-          <el-button class="el-icon-tickets"></el-button>
-          <p>{{class1}}</p>
-        </el-row>
-      </div>
-      <div style=" border:1px solid #f7f7f7;">
-        <el-row>
-          <el-button  styel="float:left" class="el-icon-tickets"></el-button>
-          <p>{{class2}}</p>
-        </el-row>
-      </div>
-      <br>
-      <br>
-      <br>
-      <el-form>
-        <el-form-item style="padding-bottom:20%;float:right;">
-          &nbsp;&nbsp;
-
-          <span style="background-color:red;color:white;"size="small" @click="" >正在进行讨论课
-          </span>
-          <el-button style="background-color:red;color:white;" size="small" v-if="status" @click="">{{message}}</el-button>
-        </el-form-item>
-      </el-form>
+      <el-table :data="courseData"  >
+        <el-table-column label="当前课程">
+          <template slot-scope="scope">
+            <i class="el-icon-document"></i>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="courseName">
+        </el-table-column>
+        <el-table-column >
+          <template slot-scope="scope">
+            <el-button size="small" @click="goCourseSeminar(scope.$index, scope.row)">进入</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-main>
   </el-container>
 </template>
@@ -46,39 +37,49 @@
     data(){
       return{
         headerLocation: "讨论课",
-        class1:"OOAD(主)",
-        class2:"J2EE",
-        message:"正在进行讨论课",
-        status:"正在进行",
+        teacherId:'',
+        courseData:[],
       }
     },
+    created(){
+      this.seminar();
+    },
     methods:{
-      teacherSeminar(){
-        var that=this;
+      seminar() {
+        var _this = this;
         this.$axios({
-          method:'get',
-          url:"/",
-          data:{
-            status:this.status,
+          method: 'get',
+          url: "http://ghctcourse.natapp1.cc/getCourse/teacher",
+          params:{
+            teacherId:3
           }
-    })
-  }}
+        }).then(function (response) {
+          console.log(response.data);
+          _this.courseData=response.data;
+        })
+      },
+      goCourseSeminar(index,row){
+        console.log(index, row);
+        this.$router.push({path:"/teacherCouseSeminar",
+          query:{
+           courseId:row.courseId,
+            courseName:row.courseName
+          }})
+      }
+  },
   }
 </script>
-<style>
-  .el-main .el-icon-tickets{
-    float:left;
-    border-color: white;
-
+<style scoped>
+  .el-container {
+    margin-bottom: 40px;
+    color: #333;
+    background-color:white;
   }
-  .el-main.p {
-    display: inline-block;
-  }
-  .el-main.el-row{
-    width:100px;
-    height:10px;
-    text-align:center;
-    line-height:50px;
+  .el-col{
+    font-size:100%;
+    width:30%;
+    height: 400%;
+    line-height: 200%;
   }
   .el-input__inner{
     height: 50px;

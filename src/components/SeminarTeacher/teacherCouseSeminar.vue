@@ -1,8 +1,8 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
-      <p>{{headerLocation}}</p>
+      <el-button class="el-icon-back" @click="back" ></el-button>
+      <p>{{courseName}}</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
@@ -12,29 +12,25 @@
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
-    <el-collapse v-model="activeNames" @change="handleChange">
-      <el-collapse-item title="第一轮" name="1">
-        <div style="margin-right:80%;border-bottom:1px solid #eaedf4"><i class="el-icon-setting"></i> &nbsp;该轮轮次设置</div>
-        <el-collapse-item style="padding-left:5%; font-size:150%;" title="业务流程分析" name="1-1">
-          <router-link to="">
-            <div style="padding-left:10%">2016-1 &nbsp;&nbsp;&nbsp;
-              <i class="el-icon-edit"></i>
-            </div>
-          </router-link>
-          <div style="padding-left:10%">2016-2 &nbsp;&nbsp;&nbsp;
-            <i class="el-icon-edit"></i>
-          </div >
-          <div style="padding-left:10%">2016-3  &nbsp;&nbsp;&nbsp;
-            <i class="el-icon-edit"></i>
+    <el-collapse v-model="activeNames" @change="handleChange" size="large">
+      <el-collapse-item  v-for="round in rounds">
+        <template slot="title" class="title">
+          <div class="collapseDiv"  @click="getSeminar(round,index)">
+             第{{round.roundSerial}}轮
           </div>
+        </template>
+        <div style="float:left"><i class="el-icon-setting"></i>该轮轮次设置</div>
+        <br>
+        <el-collapse-item  v-for="seminar in seminars">
+          <template slot="title" class="title">
+            <div class="collapseDiv"  @click="">
+              {{seminar.topic}}
+            </div>
+          </template>
         </el-collapse-item>
-
-        <el-collapse-item style="padding-left:5%" title="界面原型设计" name="1-2"></el-collapse-item>
-
       </el-collapse-item>
-      <el-collapse-item title="第二轮" name="2">
 
-      </el-collapse-item>
+
     </el-collapse>
     <br>
     <br>
@@ -47,19 +43,76 @@
 </template>
 <script>
   export default {
+    name:"teacherCouseSeminar",
     data() {
       return {
-        headerLocation: "OOAD",
+        activeNames: ['1'],
+        courseName:'',
+        courseId:'',
+        rounds:[],
+        seminars:[],
+        roundId:'',
       };
+    },
+    created(){
+      this.getParams()
+      this.getRound()
+      this.getSeminar()
     },
     methods: {
       handleChange(val) {
         console.log(val);
+      },
+      back() {
+        this.$router.go(-1);
+      },
+      getParams () {
+        const iid = this.$route.query.courseId
+        const nam = this.$route.query.courseName
+        this.courseId=iid
+        this.courseName = nam
+      },
+      getRound(round){
+        let _this=this;
+        this.$axios({
+          method:'get',
+          url:'http://ghctcourse.natapp1.cc/course/'+this.courseId+'/round'
+        }).then(response=>{
+          _this.rounds=response.data;
+        })
+      },
+      getSeminar(round,index){
+        let _this=this;
+        console.log(round.roundId)
+        this.$axios({
+          method:'get',
+          url:'http://ghctcourse.natapp1.cc/round/'+round.roundId+'/seminar'
+        }).then(response=>{
+          _this.seminars=response.data;
+        })
       }
     }
   }
 </script>
 <style scoped>
+  .collapseDiv{
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    padding-left: 5%;
+    text-align: left;
+  }
+  .el-container {
+    margin-bottom: 40px;
+    color: #333;
+    background-color:white;
+  }
+  .el-col{
+    font-size:100%;
+    width:30%;
+    height: 400%;
+    line-height: 200%;
+  }
   .el-input__inner{
     height: 50px;
     font-size: 15px;
@@ -117,6 +170,5 @@
     line-height: 55px;
     text-align: center;
   }
-
 </style>
 
