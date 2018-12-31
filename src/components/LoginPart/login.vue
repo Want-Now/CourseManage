@@ -2,7 +2,7 @@
   <div id="app-login">
     <el-main>
     <el-row type="flex">
-      <el-col :span="24" Typography:微软雅黑 >
+      <el-col :span="24">
         <p style="color: #494e8f;font-size: 1.6rem;">欢迎登录课程管理系统</p>
       </el-col>
     </el-row>
@@ -11,16 +11,13 @@
         <img src="../../assets/XMU.png" style="width: 8rem">
       </el-col>
     </el-row>
-    <el-form :model="form" ref="form" :rules="rules"><!---->
+
+    <el-form ref="form" :rules="rules" :model="form" method="post"><!---->
       <el-form-item prop="user">
-        <el-input class="activeInput" placeholder="请输入学号/教工号/管理员账号" v-model="form.user" clearable></el-input>
+        <el-input class="activeInput" placeholder="请输入账号" v-model="form.user" clearable></el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input class="activeInput" type="password" placeholder="请输入密码" v-model="form.password" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-radio v-model="form.identity" label="1">教师</el-radio>
-        <el-radio v-model="form.identity" label="0">学生</el-radio>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="login-button" @click="sendUserInfo('form')">登录</el-button>
@@ -52,10 +49,12 @@
           }
         };
           return{
+            account:'',
+            password:'',
             form:{
               user:'',
               password:'',
-              identity:'1',
+              // identity:'1',
             },
             rules:{
               user:[
@@ -67,57 +66,124 @@
             },
           }
         },
+      computed:{
+        role (){
+          return this.$store.state.role
+        },
+      },
       methods: {
-        sendUserInfo(formName){
-          var that=this;
-          this.$refs[formName].validate((valid)=>{
-            if(valid){
+        sendUserInfo(formName) {
+          var _this = this;
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
               this.$axios({
-                method:'post',      //传输方法
-                url:"http://ghctcourse.natapp1.cc/user/login",   //路径
-                data:{                                //传给后端的数据（后端数据名：……）
-                  account:this.form.user,
-                  password:this.form.password,
-                  type:parseInt(this.form.identity),
+                method: 'post',      //传输方法
+                url: "/user/login",   //路径
+                data: {                                //传给后端的数据（后端数据名：……）
+                  account: this.form.user,
+                  password: this.form.password,
+                  // type: parseInt(this.form.identity),
                 }
               })
-                .then(                //成功后的操作
-                  function (response) {
-                    if(response.data.message===0)
-                    {
-                      if(that.form.identity==='1'){
-                        that.$router.push({path:"/ActiveTeacher",query:{account:that.form.user}});
-                      }
-                      else if(that.form.identity==='0'){
-                        that.$router.push("/ActiveStudent");
-                      }
-                      else{
-                        console.log('Error');
-                      }
-                    }
-                    else if(response.data.message===1)
-                    {
-                      that.$router.push("/");
-                      //跳转页面没写
-                    }
-                    else{
-                      alert("登录失败！");
-                    }
-                  })
-                .catch(function(error){
+                .then(response=>{
+                  _this.$store.commit("SET_AUTH",response);
+                  if(_this.role==="teacher"){
+                    if(response.active===0) _this.$router.push('/ActiveTeacher');
+                    else if(response.active===1) _this.$router.push('/TeaPersonCenter');
+                    else alert("Error!");
+                  } else if(_this.role==="student"){
+                      if(response.active===0) _this.$router.push('/ActiveStudent');
+                      else if(response.active===1) _this.$router.push('/StuPersonCenter');
+                      else alert("Error!");
+                  }
+                })
+                .catch(function (error) {
                   console.log(error);
                 });
-            }else{
+            } else {
               console.log('error submit!!');
               return false;
             }
           });
-
         },
-        forgetPsw(){
+
+        // onLogin() {
+        //   const { username, password } = this
+        //   const data = {
+        //     username,
+        //     password
+        //   }
+        //
+        //   this.$http.post('/user/login', data)
+        //     .then(res => {
+        //       // 登录成功
+        //       if(res.token) {
+        //         // 储存 token
+        //         localStorage.token = res.token
+        //       }
+        //     })
+        //     .catch(error => {
+        //       // 登录失败
+        //       // 验证后端返回的错误字段，如果匹配，提示用户
+        //       // axios 配置里必须要 return Promise.reject(error.response.data) 才能拿到错误字段
+        //
+        //     })
+        // },
+
+        // sendUserInfo(formName){
+        //   var that=this;
+        //   this.$refs[formName].validate((valid)=>{
+        //     if(valid){
+        //       const data={
+        //         user,
+        //         password
+        //       }
+
+        // this.$axios({
+        //   method:'post',      //传输方法
+        //   url:"/login",   //路径
+        //   data:{                                //传给后端的数据（后端数据名：……）
+        //     account:this.form.user,
+        //     password:this.form.password,
+        //   }
+        // })
+        //   .then(                //成功后的操作
+        //     function (response) {
+        //       if(response.data.message===0)
+        //       {
+        //         if(that.form.identity==='1'){
+        //           that.$router.push({path:"/ActiveTeacher",query:{account:that.form.user}});
+        //         }
+        //         else if(that.form.identity==='0'){
+        //           that.$router.push("/ActiveStudent");
+        //         }
+        //         else{
+        //           console.log('Error');
+        //         }
+        //       }
+        //       else if(response.data.message===1)
+        //       {
+        //         that.$router.push("/");
+        //         //跳转页面没写
+        //       }
+        //       else{
+        //         alert("登录失败！");
+        //       }
+        //     })
+        //   .catch(function(error){
+        //     console.log(error);
+        //   });
+        //   }else{
+        //     console.log('error submit!!');
+        //     return false;
+        //   }
+        // });
+
+        forgetPsw() {
           this.$router.push('/ForgetPsw')
         }
-      }}
+        }
+      }
 </script>
 
 <style scoped>
@@ -134,16 +200,25 @@
     margin: 1rem 0rem;
   }
 
-  .row-height{
-    margin-bottom: 2vh;
-  }
 
+  .login-input{
+    border-radius: 5px;
+    padding:5px 10px;
+    margin: 2vw 0;
+    font-size: 18px;
+    height: 30px;
+    width: 75vw;
+    border:solid 1px #C0C4CC;
+  }
   .login-button{
     width: 80vw;
     height: 50px;
     font-size: 20px;
     background-color: #494e8f;
     border-color: #494e8f;
+    color: white;
+    border-radius: 5px;
+    margin: 20px 0px;
   }
   .login-button:hover{
     background-color: #8084b1;
@@ -153,7 +228,6 @@
     background-color: #8084b1;
     border-color: #8084b1;
   }
-
   .el-radio{
     font-size: 25px;
   }

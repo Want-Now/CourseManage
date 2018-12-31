@@ -7,13 +7,14 @@ import PswSetting from '@/components/LoginPart/pswSetting'
 import MailSetting from '@/components/LoginPart/mailSetting'
 import ForgetPsw from '@/components/LoginPart/forgetPsw'
 //LoginPart
+
 import roundSeting from '@/components/SeminarTeacher/roundSeting'
 import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
-import teacherCourseSeminar from '@/components/SeminarTeacher/teacherCourseSeminar'
+import teacherCourseSeminar from '@/components/SeminarTeacher/teacherCouseSeminar'
 import teacherSeminarFinished from '@/components/SeminarTeacher/teacherSeminarFinished'
 import seminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import teacherSeminarRunning from '@/components/SeminarTeacher/teacherSeminarRunning'
-import teacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
+import TeacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
 import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
 import ChangeReportScore from '@/components/SeminarTeacher/changeReportScore'
@@ -46,6 +47,7 @@ import MemberTeam from '@/components/StudentPersonal/memberTeam'
 import StudentSetting from '@/components/StudentPersonal/studentSetting'
 //StudentPersonal
 
+import TeaPersonCenter from '@/components/TeacherPersonal/teaPersonalCenter'
 import TeacherSetting from '@/components/TeacherPersonal/teacherSetting'
 import BacklogPage from '@/components/TeacherPersonal/backlogPage'
 import classmessage from '@/components/TeacherPersonal/classmessage'
@@ -134,16 +136,20 @@ export default new Router({
       path: '/Seminarppt',
       name: 'Seminarppt',
       component: Seminarppt
-    }, {
+    },
+    {
+      path: '/TeacherSeminar',
+      name: 'TeacherSeminar',
+      component: TeacherSeminar
+
+    },
+    {
       path: '/roundSeting',
       name: 'roundSeting',
       component: roundSeting
 
-    }, {
-      path: '/teacherSeminar',
-      name: 'teacherSeminar',
-      component: teacherSeminar
-    }, {
+    },
+    {
       path: '/teacherSeminarFinished',
       name: 'teacherSeminarFinished',
       component: teacherSeminarFinished
@@ -169,11 +175,6 @@ export default new Router({
       path: '/ViewScore',
       name: 'viewScore',
       component: ViewScore
-    },
-    {
-      path:'/teacherSeminar',
-      name:'teacherSeminar',
-      component:teacherSeminar
     },
     {
       path:'/teacherCourseSeminar',
