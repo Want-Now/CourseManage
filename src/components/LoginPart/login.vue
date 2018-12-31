@@ -87,7 +87,6 @@
               })
                 .then(response=>{
                   _this.$store.commit("SET_AUTH",response);
-                  console.log(_this.$store.state.token);
                   if(_this.role==="teacher"){
                     if(response.active===0) _this.$router.push('/ActiveTeacher');
                     else if(response.active===1) _this.$router.push('/TeaPersonCenter');
