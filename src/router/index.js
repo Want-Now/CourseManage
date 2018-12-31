@@ -15,7 +15,8 @@ import ChangeReportScore from '@/components/SeminarTeacher/changeReportScore'
 import SeminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import ViewReportScore from '@/components/SeminarTeacher/viewReportScore'
 import ViewScore from '@/components/SeminarTeacher/viewScore'
-
+import TeacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
+import TeacherCourseSeminar from '@/components/SeminarTeacher/teacherCouseSeminar'
 //SeminarTeacher
 import seminarFinishedSigned from '@/components/studentSeminar/seminarFinishedSigned'
 import seminarUnstartUnsigned from '@/components/studentSeminar/seminarUnstartUnsigned '
@@ -134,6 +135,16 @@ export default new Router({
       path: '/ViewScore',
       name: 'viewScore',
       component: ViewScore
+    },
+    {
+      path:'/TeacherSeminar',
+      name:'TeacherSeminar',
+      component:TeacherSeminar
+    },
+    {
+      path:'/TeacherCourseSeminar',
+      name:'TeacherCourseSeminar',
+      component:TeacherCourseSeminar
     },
     //SeminarTeacher
     {
