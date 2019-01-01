@@ -1,10 +1,10 @@
 <template>
   <el-container>
-    <el-header id="header">
-      <p>翻转课堂管理平台
-        <el-button style="float:right;background-color:#494e8d;border:none;"><i class="el-icon-circle-close-outline" style="color:white;border-color:#494e8c"></i></el-button>
-      </p>
+    <el-header class="header" style="background-color:#efefef">
+      <span>翻转课堂综合管理平台</span>
+      <button class="el-icon-circle-close-outline exitButt" style="background-color:#efefef">&nbsp;退出系统</button>
     </el-header>
+    <br>
     <el-main>
       <el-row>
         <div style="float:left;font-family:Calibri;font-size:120%;font-weight:bold;color:#409dfe;">
@@ -283,7 +283,7 @@
         })
       },
       edit(index, row){
-        console.log(index, row);
+       // console.log(index, row);
         this.$router.push({path:"/modeifyTeacherMessage",
           query:{
             id:row.id,
@@ -388,15 +388,22 @@
 
   .box-card {
     width: 100%;
-  }  .el-header{
-       margin: 0px;
-       padding: 0px;
-       background-color: #494e8e;
-       color:white;
-       font-size: 20px;
-       line-height: 22px;
-       text-align: center;
-     }
+  }
+  .header{
+    height: 60px;
+    line-height: 60px;
+    font-size: 25px;
+    color: #409EFF;
+    text-align: left;
+  }
+  .exitButt{
+    position: absolute;
+    border: none;
+    color: #409EFF;
+    font-size: 15px;
+    height: 60px;
+    right: 50px;
+  }
 
 </style>
 
