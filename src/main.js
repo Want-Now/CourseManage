@@ -23,9 +23,27 @@ Vue.use(VueRouter)
 // Vue.prototype.$axios = axios
 /* eslint-disable no-new */
 Vue.prototype.$axios = axios
+
+
 Vue.prototype.back=function () {
   this.$router.go(-1);
 }
+Vue.prototype.stuSeminar=function () {
+  this.$router.push('/StudentSeminar');
+}
+Vue.prototype.stuCenter=function () {
+  this.$router.push('/StuPersonalCenter');
+}
+Vue.prototype.teaSeminar=function () {
+  this.$router.push('/TeacherSeminar');
+}
+Vue.prototype.teaCenter=function () {
+  this.$router.push('/TeaPersonCenter');
+}
+Vue.prototype.backlogPage=function () {
+  this.$router.push('/BacklogPage');
+}
+
 
 new Vue({
   el: '#app',
