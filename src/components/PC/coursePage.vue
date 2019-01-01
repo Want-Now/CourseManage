@@ -1,6 +1,6 @@
 <template>
   <div id="page">
-    <div class="header" style="background-color:#efefef">
+    <div class="header">
       <span>个人信息综合管理平台</span>
       <button class="el-icon-circle-close-outline exitButt">&nbsp;退出系统</button>
     </div>
@@ -70,6 +70,7 @@
     line-height: 100px;
     font-size: 30px;
     color: #409EFF;
+    background-color:#efefef;
     text-align: left;
   }
   .exitButt{
@@ -79,6 +80,7 @@
     font-size: 20px;
     height: 50px;
     top: 30px;
+    background-color:#efefef;
     right: 50px;
   }
   .main{
