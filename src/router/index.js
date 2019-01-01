@@ -69,6 +69,7 @@ import createTeacherAccount from '@/components/PC/PCManager/createTeacherAccount
 import modeifyStudentMessage from '@/components/PC/PCManager/modeifyStudentMessage'
 import modeifyTeacherMessage from '@/components/PC/PCManager/modifyTeacherMessage'
 import ManagerIndex from '@/components/PC/PCManager/index'
+import PCseminarIndex from '@/components/PC/TeacherPart/PCseminarIndex'
 //PC
 Vue.use(Router)
 
@@ -383,6 +384,16 @@ export default new Router({
       path:'/modeifyTeacherMessage',
       name:'modeifyTeacherMessage',
       component:modeifyTeacherMessage
+    },
+    {
+      path:'/modeifyTeacherMessage',
+      name:'modeifyTeacherMessage',
+      component:modeifyTeacherMessage
+    },
+    {
+      path:'/PCseminarIndex',
+      name:'PCseminarIndex',
+      component:PCseminarIndex
     },
     //PC
   ]

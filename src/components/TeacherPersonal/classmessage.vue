@@ -1,31 +1,31 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
-      <p>班级信息</p>
+      <el-button @click="back()" class="el-icon-back" ></el-button>
+      <p>班级管理</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>代办</el-dropdown-item>
-          <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
+          <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
+          <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
     <el-main>
-      <el-card class="box-card" size="small" v-for="klass in classes" :key="klass.id">
+      <el-card class="box-card" size="small" v-for="klass in klasses" :key="klass.klassId">
         <div slot="header" class="clearfix">
-          <span>{{klass.num}}</span>
+          <span>{{klass.grade}}-{{klass.klassSerial}}</span>
         </div>
         <div>
           <el-row size="small">
             <el-col :span="12">讨论课时间：</el-col>
-            <el-col :span="12" >{{klass.time}}</el-col>
+            <el-col :span="12" >{{klass.klassTime}}</el-col>
           </el-row>
           <br>
           <el-row>
             <el-col :span="12">讨论课地点：</el-col>
-            <el-col :span="12">{{klass.position}}</el-col>
+            <el-col :span="12">{{klass.klassLocation}}</el-col>
           </el-row>
           <br>
           <el-row>
@@ -48,31 +48,77 @@
           </el-row>
           <div class="buttonDiv">
             <el-button>提交</el-button>
-            <el-button type="danger">删除</el-button>
+            <el-button type="danger" @click="del(klass)">删除</el-button>
           </div>
-
         </div>
       </el-card>
+      <el-dialog
+      width="80%"
+      title="提示"
+      :show-close=false
+      :visible.sync="fail">
+      <span style="font-size: 120%">删除失败</span>
+      <span slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="fail=false ">确 定</el-button>
+            </span>
+    </el-dialog>
+      <el-dialog
+        width="80%"
+        title="提示"
+        :show-close=false
+        :visible.sync="sucess">
+        <span style="font-size: 120%">删除成功</span>
+        <span slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="refresh() ">确 定</el-button>
+            </span>
+      </el-dialog>
     </el-main>
-
     <el-footer>
-      <el-button class="bottomButt"><i class="el-icon-plus"></i>&nbsp;新建班级</el-button>
+      <el-button class="bottomButt" @click="creatclass"><i class="el-icon-plus"></i>&nbsp;新建班级</el-button>
     </el-footer>
-
   </el-container>
 </template>
 <script>
   export default {
     data() {
       return {
+        courseId:'',
         fileList: [],
         activeNames: ['1'],
-        classes:[
+        klasses:[
           {}
-        ]
+        ],
+        fail:false,
+        sucess:false,
       };
     },
+    created(){
+      var _this=this;
+      this.$axios({
+        method:'get',
+        url:'/course/'+this.$route.query.courseId+'/klass'
+      }).then(response=>{
+        _this.klasses=response;
+      })
+    },
     methods: {
+      refresh(){
+        location.reload()
+        this.$router.go(0)
+      },
+      del(klass){
+        var that=this;
+          this.$axios({
+            method: 'delete',
+            url: 'course/class/' + klass.klassId,
+          }).then(function (response) {
+            if (response === true) {
+              that.sucess = true
+            } else {
+              that.fail = true
+            }
+          })
+        },
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
@@ -84,8 +130,15 @@
       },
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${ file.name }？`);
-      }
-    }
+      },
+      creatclass(){
+        this.$router.push({path:"/createClass",
+          query:{
+            courseId:this.$route.query.courseId,
+          }})
+      },
+
+    },
   }
 </script>
 <style>

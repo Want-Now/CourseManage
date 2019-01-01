@@ -15,7 +15,6 @@ import store from './vuex/store'
 
 
 
-
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 // Vue.use(VueAxios, axios)
