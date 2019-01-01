@@ -1,29 +1,35 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
+      <el-button class="el-icon-back" @click="back()"></el-button>
       <p>学生成绩</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>代办</el-dropdown-item>
-          <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
+          <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
+          <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
     <el-main>
       <el-collapse accordion>
-        <el-collapse-item v-for="round in rounds" :key="round.id">
-          <template slot="title">{{round.title}}</template>
-          <el-collapse v-for="team in teams" :key="team.id">
+        <el-collapse-item v-for="round in rounds" >
+          <template slot="title">
+            <div class="titleDiv">第{{round.roundSerial}}轮</div>
+          </template>
+          <el-collapse v-for="team in round.teams" >
             <el-collapse-item>
-              <template slot="title">{{team.teamName}}<span style="margin-left: 30px;">{{team.teamScore}}</span></template>
-              <div class="scoreDiv" v-for="seminar in seminars" :key="seminar.id">
-                <p class="seminarName">{{seminar.name}}</p>
+              <template slot="title">
+                  <span class="teamName">{{team.klassSerial}}-{{team.teamSerial}}</span>
+                  <span class="teamScore">{{team.totalScore}}</span>
+              </template>
+              <div class="scoreDiv" v-for="seminar in team.seminars">
+                <p class="seminarName">{{seminar.seminarName}}</p>
                 <span>展示：</span><span class="scoreFont">{{seminar.presentationScore}}</span>
                 <span>提问：</span><span class="scoreFont">{{seminar.questionScore}}</span>
                 <span>书面报告：</span><span class="scoreFont">{{seminar.reportScore}}</span>
+                <el-button class="changeButt" size="mini">修改成绩</el-button>
               </div>
               <div class="scoreDiv">
                 <p class="seminarName">总成绩</p>
@@ -51,6 +57,65 @@
         teams:[],
         seminars:[],
       }
+    },
+    created(){
+      this.getRound();
+
+
+    },
+    methods:{
+      getRound(){
+        let _this=this;
+        this.$axios({
+          method:'get',
+          url:'/course/'+this.$route.query.courseId+'/round'
+        }).then(response=>{
+          for(var index=0;index<response.length;index++)
+          {
+            _this.rounds.push({
+              roundId:response[index].roundId,
+              roundSerial:response[index].roundSerial,
+              teams:[]
+            });
+            // console.log(_this.rounds[index]);
+            _this.getTeam(_this.rounds[index]);
+          }
+        });
+      },
+      getTeam(round){
+        let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/course/round/'+round.roundId
+          }).then(
+            response=> {
+              for (var i=0; i < response.length; i++) {
+                round.teams.push({
+                  teamId: response[i].teamId,
+                  klassSerial: response[i].klassSerial,
+                  teamSerial: response[i].teamSerial,
+                  totalScore: response[i].totalScore,
+                  presentationScore: response[i].presentationScore,
+                  questionScore: response[i].questionScore,
+                  reportScore: response[i].reportScore,
+                  seminars: []
+                });
+                _this.getSeminar(round,round.teams[i])
+                // console.log(round.teams);
+                // _this.getSeminars(rounds[i].teams,rounds[i].roundId);
+              }
+            }
+          )
+        },
+      getSeminar(round,team) {
+        this.$axios({
+          method:'get',
+          url:'/course/round/'+round.roundId+'/'+team.teamId
+        }).then(
+          res=>{
+           team.seminars=res;
+          });
+      }
     }
   }
 </script>
@@ -58,9 +123,21 @@
   .el-container {
     height: 98vh;
   }
-
-  .el-collapse-item{
+  .changeButt{
+    margin: 10px;
+  }
+  .teamName{
+    display: inline-block;
+    width: 20%;
+    padding-left: 10px;
     font-size: 15px;
+  }
+  .teamScore{
+    display: inline-block;
+    width: 65%;
+    font-size: 15px;
+    text-align: right;
+    color: #494E8F;
   }
   .scoreDiv{
     border-bottom: solid 1px #595959;
@@ -69,6 +146,14 @@
     font-size: 18px;
     color: #494E8F;
     margin-right: 20px;
+  }
+  .titleDiv{
+    width: 100%;
+    height: 100%;
+    font-size: 18px;
+    color:  #494e8f;
+    text-align: left;
+
   }
   .el-collapse-item__header{
     text-align: center;

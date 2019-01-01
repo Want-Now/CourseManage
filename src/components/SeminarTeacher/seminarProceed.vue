@@ -2,10 +2,11 @@
     <el-container>
       <el-header>
         <el-button class="el-icon-back" @click="back()"></el-button>
-        <p>{{topic}}</p>
-        <el-button class="el-icon-menu" ></el-button>
+        <p>{{courseName}}</p>
+        <el-button class="el-icon-menu"></el-button>
       </el-header>
       <el-main>
+        <p class="seminarName">{{seminarName}}</p>
         <el-tabs tab-position="left" @tab-click="handleClick">
           <el-tab-pane v-for="item in seminarInfos" :label="item.preTeam" :key="item.id">
             <div class="info">
@@ -34,17 +35,24 @@
 
       data(){
         return{
-          topic:"业务流程分析",
-          seminarInfos:[
-            {
-              id:'',
-              preTeam:'',
-              questionNum:'',
-              presentationScore:'',
-            },
-          ]
+          courseName:"",
+          seminarName:'',
+          seminarInfos:[],
 
         }
+      },
+      created(){
+        let _this=this;
+        this.courseName=this.$route.query.courseName;
+        this.seminarName=this.$route.query.seminarName;
+        this.$axios({
+          method:'get',
+          url:'/presentation/'+this.$route.query.klassSeminarId
+        }).then(
+          response=>{
+            _this.seminarInfos=response.attendanceList;
+          }
+        )
       },
       methods: {
         back(){
@@ -62,6 +70,11 @@
 </script>
 
 <style scoped>
+  .seminarName{
+    margin-top: 0px;
+    font-size: 18px;
+    color: #494e8f;
+  }
   .el-tabs{
     position: absolute;
     height: 75%;

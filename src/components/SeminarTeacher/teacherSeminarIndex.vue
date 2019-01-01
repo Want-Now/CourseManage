@@ -87,13 +87,14 @@
           query:{
             courseName:this.courseName,
             seminarName:this.seminarName,
-            klassSeminarId:this.klassSeminarId
+            klassSeminarId:this.$route.query.klassSeminarId,
+            status:this.status
           }})
       },
       enterSe(){
         this.$router.push({path:"/SeminarProceed",
           query:{
-            klassSeminarId:this.klassSeminarId,
+            klassSeminarId:this.$route.query.klassSeminarId,
             seminarName:this.seminarName,
             courseName:this.courseName,
           }})
@@ -101,12 +102,16 @@
       starSe(){
         var that=this;
         this.$axios({
-          method:'post',
-          url:"/presentation/{klassSeminarId}",
-          data:{
-            klassSeminarId:this.klassSeminarId,
+          method:'put',
+          url:'/presentation/'+this.$route.query.klassSeminarId+'/status',
+          params:{
+            status:1
           }
-        }).then()
+        }).then(
+          response=>{
+            console.log(response);
+          }
+        )
         {
           this.$router.push({path:"/SeminarProceed",
             query:{

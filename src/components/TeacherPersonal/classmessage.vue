@@ -59,7 +59,7 @@
       :visible.sync="fail">
       <span style="font-size: 120%">删除失败</span>
       <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="fail=false ">确 定</el-button>
+              <el-button type="primary" @click="fail=false">确 定</el-button>
             </span>
     </el-dialog>
       <el-dialog
@@ -69,7 +69,7 @@
         :visible.sync="sucess">
         <span style="font-size: 120%">删除成功</span>
         <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="refresh() ">确 定</el-button>
+              <el-button type="primary" @click="refresh()">确 定</el-button>
             </span>
       </el-dialog>
     </el-main>
@@ -168,9 +168,6 @@
     clear: both
   }
 
-  .box-card {
-    width: 100%px;
-  }
   .el-header{
     margin: 0px;
     padding: 0px;

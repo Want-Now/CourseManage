@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
+      <el-button class="el-icon-back" @click="back()"></el-button>
       <p>{{headerLocation}}</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
@@ -116,6 +116,7 @@
             seminarId:seminar.id,
             klassId:klass.klassId,
             courseName:this.$route.query.courseName,
+            klassSeminarId:klass.klassSeminarId
 
           }
         })

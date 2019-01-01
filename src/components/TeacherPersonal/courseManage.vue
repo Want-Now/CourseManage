@@ -77,7 +77,7 @@
         console.log(val);
       },
       goStudentScore(item){
-
+        this.$router.push({path:'/StudentScore',query:{courseId:item.courseId}});
       },
       goTeamPage(item){
         // console.log(item.courseId);
