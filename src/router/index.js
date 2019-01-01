@@ -66,8 +66,8 @@ import TeaDownloadPagePC from '@/components/PC/TeacherPart/downloadPage'
 import TeaDownloadBatchPC from '@/components/PC/TeacherPart/downloadBatch'
 import StuViewScorePC from '@/components/PC/StudentPart/stuViewScore'
 import createTeacherAccount from '@/components/PC/PCManager/createTeacherAccount'
-import modeifyStudentMessage from '@/components/PC/PCManager/modeifyStudentMessage'
-import modeifyTeacherMessage from '@/components/PC/PCManager/modifyTeacherMessage'
+import ModeifyStudentMessage from '@/components/PC/PCManager/modeifyStudentMessage'
+import ModeifyTeacherMessage from '@/components/PC/PCManager/modifyTeacherMessage'
 import ManagerIndex from '@/components/PC/PCManager/index'
 import PCseminarIndex from '@/components/PC/TeacherPart/PCseminarIndex'
 //PC
@@ -376,19 +376,14 @@ export default new Router({
       component:createTeacherAccount
     },
     {
-      path:'/modeifyStudentMessage',
-      name:'modeifyStudentMeeeage',
-      component:modeifyStudentMessage
+      path:'/ModeifyStudentMessage',
+      name:'ModeifyStudentMeeeage',
+      component:ModeifyStudentMessage
     },
     {
-      path:'/modeifyTeacherMessage',
-      name:'modeifyTeacherMessage',
-      component:modeifyTeacherMessage
-    },
-    {
-      path:'/modeifyTeacherMessage',
-      name:'modeifyTeacherMessage',
-      component:modeifyTeacherMessage
+      path:'/ModeifyTeacherMessage',
+      name:'ModeifyTeacherMessage',
+      component:ModeifyTeacherMessage
     },
     {
       path:'/PCseminarIndex',
