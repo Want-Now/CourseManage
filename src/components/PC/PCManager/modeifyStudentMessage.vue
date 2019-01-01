@@ -8,7 +8,7 @@
       <el-main>
         <el-form>
           <el-form-item>
-            <div style="font-family:Calibri;font-size:120%;font-weight:bold;width:100%;background-color:white;border:1px solid #dfdfdf;color:#62bab1;">修改教师信息</div>
+            <div style="font-family:Calibri;font-size:120%;font-weight:bold;width:100%;background-color:white;border:1px solid #dfdfdf;color:#409dfe;">修改教师信息</div>
           </el-form-item>
           <el-form-item style="border:1px solid #dfdfdf;">
             <br>
@@ -79,7 +79,7 @@
         var that=this;
         this.$axios({
           method:'put',
-          url:"http://ghctcourse.natapp1.cc/student/"+this.id+"/information",
+          url:"/student/"+this.id+"/information",
           data:{
             studentId:this.id,
             newStudentAccount:this.account,
@@ -88,11 +88,11 @@
             type:0,
           }
         }).then(function (response) {
-          if(response.data===true){
+          if(response===true){
             that.$message({
               message:'修改成功',
               type:'success',
-              duration:800
+              duration:800,
             });
           } else{
             that.$message({
@@ -106,7 +106,7 @@
     },
   }
 </script>
-<style>
+<style scoped>
   .el-header .el-icon-back{
     position: absolute;
     width: 60px;
@@ -119,6 +119,14 @@
   }
   .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
   .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
-
+  .el-header{
+    margin: 0px;
+    padding: 0px;
+    background-color: #494e8f;
+    color:white;
+    font-size: 20px;
+    line-height: 22px;
+    text-align: center;
+  }
 </style>
 
