@@ -47,27 +47,27 @@
             },
           }
       },
+      computed:{
+        role (){
+          return this.$store.state.role
+        },
+      },
       methods:{
           login(){
             var _this=this;
             this.$axios({
               method:'post',
-              url:'http://ghctcourse.natapp1.cc/user/login',
+              url:'/user/login',
               data:{
                 account:this.pcLoginData.username,
                 password:this.pcLoginData.password,
-                type:parseInt(this.pcLoginData.identity)
               }
             }).then(function (response) {
-                if(response.data.message===1||response.data.message===0){
+              _this.$store.commit("SET_AUTH",response);
                   alert("登录成功！");
-                  if(_this.pcLoginData.identity==='2') _this.$router.push("/ManagerIndex");
-                  else if(_this.pcLoginData.identity==='1'||_this.pcLoginData.identity==='0')  _this.$router.push("/CoursePagePC");
+                  if(_this.role==="admin") _this.$router.push("/ManagerIndex");
+                  else if(_this.role==="teacher"||_this.role==="student")  _this.$router.push("/CoursePagePC");
                   else console.log("error");
-                }
-                else{
-                  alert("登录失败!");
-                }
               })
               .catch(error=>{console.log(error);});
           }
