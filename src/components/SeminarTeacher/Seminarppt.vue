@@ -13,7 +13,6 @@
       </el-dropdown>
     </el-header>
     <el-main>
-
       <el-table :data="tableData">
         <el-table-column prop="team" label="组别" width="100%">
         </el-table-column>
@@ -21,11 +20,9 @@
         </el-table-column>
       </el-table>
     </el-main>
-    <el-form>
-      <el-form-item style="padding-bottom: 20px;">
-        <el-button style="width:100%;margin-top:2%;width:100%;background-color:#494e8e" type="primary">批量下载</el-button>
-      </el-form-item>
-    </el-form>
+    <el-footer>
+        <el-button class="bottomButt">批量下载</el-button>
+    </el-footer>
   </el-container>
 </template>
 
@@ -53,14 +50,9 @@
 </script>
 <style>
   .el-container {
-    margin-bottom: 40px;
-    color: #333;
-    background-color:white;
+    height: 90vh;
   }
-  .el-input__inner{
-    height: 50px;
-    font-size: 15px;
-  }
+
 
   .el-header{
     margin: 0px;

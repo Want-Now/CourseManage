@@ -66,7 +66,7 @@
         this.$router.push('/StudentCourse');
       },
       goSeminarPage(){
-        this.$router.push('/');
+        this.$router.push('/StudentSeminar');
       }
 
     }

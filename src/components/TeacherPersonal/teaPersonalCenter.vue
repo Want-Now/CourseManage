@@ -49,7 +49,8 @@
         method:'get',
         url:'/user/index',               //url
       }).then(function (response) {
-        _this.teacherName=response.data;
+        _this.teacherName=response.name;
+        _this.teacherId=response.account;
         // _this.studentId=response.data.account;
       })
         .catch(
@@ -63,7 +64,7 @@
         this.$router.push('/StuSetting');
       },
       goCoursePage(){
-        this.$router.push('/');
+        this.$router.push('/CourseManage');
       },
       goSeminarPage(){
         this.$router.push('/');

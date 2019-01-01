@@ -12,8 +12,10 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <el-table :data="courseData"  >
-        <el-table-column label="当前课程">
+      <el-table
+        :data="courseData"
+        :row-style="{'font-size':'18px'}">
+        <el-table-column width="40px">
           <template slot-scope="scope">
             <i class="el-icon-document"></i>
           </template>
@@ -21,7 +23,7 @@
         <el-table-column
           prop="courseName">
         </el-table-column>
-        <el-table-column >
+        <el-table-column width="70px">
           <template slot-scope="scope">
             <el-button size="small" @click="goCourseSeminar(scope.$index, scope.row)">进入</el-button>
           </template>
@@ -49,13 +51,9 @@
         var _this = this;
         this.$axios({
           method: 'get',
-          url: "http://ghctcourse.natapp1.cc/getCourse/teacher",
-          params:{
-            teacherId:3
-          }
+          url: "/getCourse/teacher",
         }).then(function (response) {
-          console.log(response.data);
-          _this.courseData=response.data;
+          _this.courseData=response;
         })
       },
       goCourseSeminar(index,row){
@@ -70,11 +68,6 @@
   }
 </script>
 <style scoped>
-  .el-container {
-    margin-bottom: 40px;
-    color: #333;
-    background-color:white;
-  }
   .el-col{
     font-size:100%;
     width:30%;
@@ -85,7 +78,13 @@
     height: 50px;
     font-size: 15px;
   }
-
+  .el-icon-document{
+    font-size: 18px;
+  }
+  .el-table{
+    position: relative;
+    top: -50px;
+  }
   .el-header{
     margin: 0px;
     padding: 0px;

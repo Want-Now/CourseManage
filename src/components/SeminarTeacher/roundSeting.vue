@@ -15,129 +15,101 @@
     <el-main>
       <el-card class="box-card">
         <div slot="header" class="clearfix" >
-          <span style="float:left;font-size:120%">讨论课：</span>
+          <span style="float:left;font-size:20px;color:#494e8f;">讨论课：</span>
         </div>
-        <div class="text item">
-          {{class1}}
-        </div>
-        <div  class="text item">
-          {{class2}}
-        </div>
-      </el-card>
-      <br>
-      <el-card class="box-card">
-        <div slot="header" class="clearfix" >
-          <span style="float:left;font-size:120%">成绩设置：</span>
-        </div>
-        <div  class="text item">
-          展示：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <el-select v-model="region3" placeholder="请选择">
-            <el-option label="最高分" value="1"></el-option>
-            <el-option label="平均分" value="2"></el-option>
-          </el-select>
-        </div>
-        <br>
-        <div  class="text item">
-          提问：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <el-select v-model="region2" placeholder="请选择">
-            <el-option label="最高分" value="1"></el-option>
-            <el-option label="平均分" value="2"></el-option>
-          </el-select>
-        </div>
-        <br>
-        <div  class="text item">
-          报告：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <el-select v-model="region2" placeholder="请选择">
-            <el-option label="最高分" value="1"></el-option>
-            <el-option label="平均分" value="2"></el-option>
-          </el-select>
+        <div class="text item" v-for="seminar in seminars" :key="seminar.id">
+          {{seminar.topic}}
         </div>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix" >
-          <span style="float:left;font-size:120%">本轮讨论课报名次数：</span>
+          <span style="float:left;font-size:20px;color:#494e8f;">成绩设置：</span>
         </div>
-        <div  class="text item">
-          一班：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <el-select v-model="region1" placeholder="请选择">
-            <el-option label="1" value="1"></el-option>
-            <el-option label="2" value="2"></el-option>
-          </el-select>
+        <el-form :rules="rule">
+          <el-form-item prop="preMethod">
+            <span>展示：</span>
+            <el-select v-model="preMethod" placeholder="请选择">
+              <el-option label="最高分" value="1"></el-option>
+              <el-option label="平均分" value="2"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="quesMethod">
+            <span>提问：</span>
+            <el-select v-model="quesMethod" placeholder="请选择">
+              <el-option label="最高分" value="1"></el-option>
+              <el-option label="平均分" value="2"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="repoMethod">
+            <span>报告：</span>
+            <el-select v-model="repoMethod" placeholder="请选择">
+              <el-option label="最高分" value="1"></el-option>
+              <el-option label="平均分" value="2"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </el-card>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix" >
+          <span style="float:left;font-size:20px;color:#494e8f;">本轮讨论课报名次数：</span>
         </div>
-        <br>
-        <div  class="text item">
-          二班：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <el-select v-model="region2" placeholder="请选择">
-            <el-option label="1" value="1"></el-option>
-            <el-option label="2" value="2"></el-option>
-          </el-select>
-        </div>
-        <br>
-        <div  class="text item">
-          三班：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <el-select v-model="region3" placeholder="请选择">
+        <div class="text item" v-for="klass in klasses">
+          <span>{{klass.klassSerial}}</span>
+          <el-select value="applyTime" placeholder="请选择">
             <el-option label="1" value="1"></el-option>
             <el-option label="2" value="2"></el-option>
           </el-select>
         </div>
       </el-card>
-      <br>
-      <br>
-      <el-form>
-        <el-button style="width:100%;background-color:#494e8e;font-size:120%" type="primary" @click="">保存修改</el-button>
-      </el-form>
     </el-main>
+    <el-footer>
+      <el-button class="bottomButt">确认修改</el-button>
+    </el-footer>
   </el-container>
 </template>
 <script>
   export default {
     data() {
       return {
-        headerLocation:"第一轮",
-        class1:"业务流程分析",
-        class2:"界面原型设计",
-
+        headerLocation:"",
+        preMethod: '',
+        repoMethod: '',
+        quesMethod: '',
+        seminars:'',
+        rule: {
+          repoMethod: [
+            { required: true, message: '请选择', trigger: 'change' }
+          ],
+          quesMethod: [
+            { required: true, message: '请选择', trigger: 'change' }
+          ],
+          preMethod: [
+            { required: true, message: '请选择', trigger: 'change' }
+          ],
+        },
       };
     },
-    rules: {
-      region1: [
-        { required: true, message: '请选择', trigger: 'change' }
-      ],
-      region2: [
-        { required: true, message: '请选择', trigger: 'change' }
-      ],
-      region3: [
-        { required: true, message: '请选择', trigger: 'change' }
-      ],},
+
+    created(){
+      let _this=this;
+      this.$axios({
+        method:'get',
+        url:'/round/'+this.$route.query.roundId
+      }).then(
+        response=>{
+          _this.seminars=_this.$route.query.seminars;
+          
+        }
+      )
+    },
     methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      }
+
     }
   }
 </script>
 <style>
   .el-container {
-    margin-bottom: 40px;
-    color: #333;
-    background-color:white;
-  }
-  .text {
-    font-size: 14px;
-  }
-
-  .item {
-    font-size:100%;
+    height: 98vh;
   }
 
   .clearfix:before,
@@ -151,5 +123,57 @@
 
   .box-card {
     width: 100%;
+  }
+  .el-header{
+    margin: 0px;
+    padding: 0px;
+    background-color: #494e8f;
+    color:white;
+    font-size: 20px;
+    line-height: 22px;
+    text-align: center;
+  }
+
+  .el-header p{
+    display: inline-block;
+  }
+
+  .el-header .el-icon-back{
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
+    left: 10px;
+    top: 10px;
+  }
+
+  .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
+
+  .el-header .el-icon-menu{
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
+    right: 10px;
+    top: 10px;
+  }
+  .el-header .el-icon-menu:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-menu:focus{background-color: #494e8f;border-color: #494e8f;}
+
+  .el-header .el-dropdown{
+    position: absolute;
+    margin: 0px;
+    width: 60px;
+    height: 55px;
+    color: white;
+    right: 0px;
+    top: 0px;
+    line-height: 55px;
+    text-align: center;
   }
 </style>

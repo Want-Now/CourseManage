@@ -54,7 +54,7 @@
       </div>
     </el-main>
     <el-footer>
-      <el-button class="buttomButton">确认提交</el-button>
+      <el-button class="bottomButt">确认提交</el-button>
     </el-footer>
   </el-container>
 </template>

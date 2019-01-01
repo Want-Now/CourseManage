@@ -6,9 +6,9 @@
     </el-header>
     <el-main>
       <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" class="demo-ruleForm">
-        <el-form-item prop="pass">
-          <el-input type="password" v-model="ruleForm2.oldpass" autocomplete="off" class="pswInput" placeholder="填写原密码"></el-input>
-        </el-form-item>
+        <!--<el-form-item prop="oldpass">-->
+          <!--<el-input type="password" v-model="ruleForm2.oldpass" autocomplete="off" class="pswInput" placeholder="填写原密码"></el-input>-->
+        <!--</el-form-item>-->
         <el-form-item prop="pass">
           <el-input type="password" v-model="ruleForm2.pass" autocomplete="off" class="pswInput" placeholder="填写新密码"></el-input>
         </el-form-item>
@@ -38,13 +38,10 @@
             if(!reg.test(value)){
               callback(new Error('请输入有效的密码'));
             }
-          } else{
-            if (this.ruleForm2.checkPass !== '') {
-              this.$refs.ruleForm2.validateField('checkPass');
-            }
+          else{
             callback();
           }
-        };
+        }};
         var validatePass2 = (rule, value, callback) => {
           if (value === '') {
             callback(new Error('请再次输入密码'));
@@ -54,17 +51,24 @@
             callback();
           }
         };
+        // var validOldPass=(rule, value, callback) => {
+        //   if (value <6) {
+        //     callback(new Error('密码不合格！'));
+        //   } else {
+        //     callback();
+        //   }
+        // };
         return{
           headerLocation:'账户密码',
           ruleForm2: {
-            oldpass:'',
+            // oldpass:'',
             pass: '',
             checkPass: ''
           },
           rules2: {
-            oldpass:[
-              {}
-            ],
+            // oldpass:[
+            //   { validator: validOldPass, trigger: 'blur' }
+            // ],
             pass: [
               { validator: validatePass, trigger: 'blur' }
             ],
@@ -86,7 +90,7 @@
                 method:'put',
                 url:'/user/password',
                 data:{
-                  password:_this.form.password
+                  password:this.ruleForm2.pass
                 }
               }).then(function (response) {
                 if(response===true){
@@ -95,6 +99,7 @@
                     type:'success',
                     duration:800
                   });
+                  _this.$router.push('/');
                 } else{
                   _this.$message({
                     message:'修改邮箱失败',

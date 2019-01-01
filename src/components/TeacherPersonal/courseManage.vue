@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
+      <el-button class="el-icon-back" @click="back()"></el-button>
       <p>课程管理</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
@@ -39,7 +39,7 @@
       </el-menu>
     </el-main>
     <el-footer>
-      <el-button class="bottomButt"><i class="el-icon-plus"></i>新建课程</el-button>
+      <el-button class="bottomButt" v-if="role==='student'"><i class="el-icon-plus"></i>新建课程</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -52,21 +52,26 @@
         ],
       };
     },
+    computed:{
+      role(){
+        return this.$store.state.role
+      }
+    },
     created(){
       var _this=this;
       this.$axios({
         method:'get',
         url:'/getCourse/teacher',
-        params:{
-          teacherId:3
-        }
       }).then(function (response) {
-        _this.courseList=response.data;
+        _this.courseList=response;
       }).catch(error=>{
         console.log(error);
       });
     },
     methods: {
+      back(){
+        this.$router.go(-1);
+      },
       handleChange(val) {
         console.log(val);
       },

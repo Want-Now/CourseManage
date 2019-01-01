@@ -33,8 +33,8 @@
           var that=this;
           this.$axios({
             method:'get',
-            url:"/user/password",
-            data:{
+            url:"/user/forgetpassword",
+            params:{
               account:this.account,
             }
           }).then(function (response) {
@@ -44,6 +44,7 @@
                 type:'success',
                 duration:800
               });
+              that.$router.push('/');
             }else{
               that.$message({
                 message:'发送密码到邮箱失败',

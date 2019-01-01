@@ -12,50 +12,33 @@
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
-    <el-main style="background-color: #ffffff;border-bottom:1px solid #000">
-      <el-row style="background-color:#f1f1f1;">
-        <div style="float:left;padding-left:2%;">轮次：</div>
-        <div style="color:#95c764">第{{roundSerial}}轮</div>
-      </el-row>
-      <el-row>
-        <div style="float:left;padding-left:2%">主题：</div>
-        <div>{{seminarName}}</div>
-      </el-row>
-      <el-row style="background-color:#f1f1f1">
-        <div style="float:left;padding-left:2%;">课次序号：</div>
-        <div>{{seminarSerial}}</div>
-      </el-row>
-      <el-row style="height:auto;margin:0 auto;">
-        <div style="float:left;padding-left:2%">要求：</div>
-        <div style="width:80%;float:right">{{introduction}}</div>
-      </el-row>
-      <el-row style="background-color:#f1f1f1;">
-        <div style="float:right;color:#95c764;" @click="viewD"><u>查看信息</u></div>
-        <div style="float:left;padding-left:2%">课程情况：</div>
-        <div v-if="status=='0'"> 未开始</div>
-        <div v-if="status=='1'">正在进行</div>
-        <div v-if="status=='2'">已完成</div>
-      </el-row>
+    <el-main>
+      <div class="rowP"><p class="title">轮次:</p><p class="content">第{{roundSerial}}轮</p></div>
+      <div class="rowP"><p class="title">主题:</p><p class="content">{{seminarName}}</p></div>
+      <div class="rowP"><p class="title">课次序号:</p><p class="content">{{seminarSerial}}</p></div>
+      <div class="rowP"><p class="title1">要求:</p><p class="content1">{{introduction}}</p></div>
+      <div class="rowP"><p class="title">课程情况：</p>
+        <p class="content2" v-if="status=='0'">未开始</p>
+        <p class="content2" v-if="status=='1'">正在进行</p>
+        <p class="content2" v-if="status=='2'">已完成</p>
+        <p class="viewInfo" @click="viewD()">查看信息</p>
+      </div>
+
     </el-main>
-    <br>
-    <br>
-    <el-form v-if="status=='2'">
-      <el-form-item style="padding-bottom: 20px;">
-        <el-button style="width:100%;background-color:#494e8e" type="primary" @click="Report" >书面报告</el-button>
-        <el-button style="width:100%" @click="checkScore" >查看成绩</el-button>
-      </el-form-item>
-    </el-form>
-    <el-form v-else-if="status=='0'">
-      <el-form-item style="padding-bottom: 20px;">
-        <el-button style="width:100%;background-color:#494e8e" type="primary" @click="starSe">开始讨论课</el-button>
-        <el-button style="width:100%"@click="modify">修改讨论课</el-button>
-      </el-form-item>
-    </el-form>
-    <el-form v-else-if="status=='1'">
-      <el-form-item style="padding-bottom: 20px;">
-        <el-button style="width:100%;background-color:#494e8e" type="primary" @click="enterSe">进入讨论课</el-button>
-      </el-form-item>
-    </el-form>
+    <el-footer>
+      <div v-if="status=='2'">
+        <p><el-button class="bottButt" @click="checkScore">查看成绩</el-button></p>
+        <p><el-button class="bottButt" type="primary" @click="Report" >书面报告</el-button></p>
+      </div>
+
+      <div v-else-if="status=='0'">
+        <p><el-button class="bottButt" type="primary" @click="starSe">开始讨论课</el-button></p>
+        <p><el-button class="bottButt" @click="modify">修改讨论课</el-button></p>
+      </div>
+      <div v-else-if="status=='1'">
+        <el-button class="bottButt" type="primary" @click="enterSe">进入讨论课</el-button>
+      </div>
+    </el-footer>
   </el-container>
 </template>
 <script>
@@ -74,7 +57,7 @@
         courseName:'',
       }
     },
-    mounted() {
+    created() {
       this.changeIcon()
       this.getParams ()
     },
@@ -90,6 +73,7 @@
         this.seminarId = sid
         this.klassId = kcla
         this.courseName = kln
+        this.roundSerial=this.$route.query.roundSerial
       },
       modify(){
         this.$router.push({path:"/modifySeminar",
@@ -153,47 +137,89 @@
         var that = this;
         this.$axios({
           method: 'get',
-          url: "http://ghctcourse.natapp1.cc/seminar/5/klass/21",
-          data: {
-          }
+          url: "/seminar/"+this.$route.query.seminarId+"/klass/"+this.$route.query.klassId,
         }).then(function (response) {
-          that.seminarSerial = response.data.seminarSerial,
-            that.introduction = response.data.introduction,
-            that.seminarName = response.data.seminarName,
-            that.status = response.data.status
+          that.seminarSerial = response.seminarSerial,
+            that.introduction = response.introduction,
+            that.seminarName = response.seminarName,
+            that.status = response.status
         })
       }
     }
   }
 </script>
 <style scoped>
-  .el-container {
-    margin-bottom: 40px;
-    color: #333;
-    background-color:white;
+  .el-container{
+    height: 90vh;
   }
-  .el-main{
-
-    font-size:100%;
-
+  .bottButt{
+    height: 40%;
+    width: 85vw;
+    font-size: 18px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
   }
-  .el-row{
-    height:auto;
-    margin:0 auto;
-    height:30px;
-    line-height:30px;
+  .bottButt:hover{
+    background-color: #8084b1;
+    border-color: #8084b1;
+    color: white;
   }
-  .el-col{
-    font-size:100%;
-    width:30%;
-
-    line-height: 200%;
+  .bottButt:focus{
+    background-color: #8084b1;
+    border-color: #8084b1;
+    color: white;
   }
-  .el-input__inner{
-    height: 50px;
-    font-size: 15px;
+  .rowP{
+    border-top: solid 1px #C0C4CC;
+    vertical-align: middle;
+    text-align: left;
   }
-
+  .title{
+    height: 100%;
+    display: inline-block;
+    width: 30%;
+    font-size: 18px;
+    color: #494e8f;
+    text-align: left;
+    line-height: 100%;
+    margin: 0px;
+  }
+  .title1{
+    height: 100%;
+    width: 30%;
+    font-size: 18px;
+    color: #494e8f;
+    text-align: left;
+    line-height: 100%;
+  }
+  .content{
+    display: inline-block;
+    width: 70%;
+    font-size: 18px;
+    vertical-align: middle;
+    text-align: center;
+  }
+  .content1{
+    display: inline-block;
+    font-size: 18px;
+    vertical-align: middle;
+    margin-top: 0;
+  }
+  .content2{
+    display: inline-block;
+    width: 30%;
+    font-size: 18px;
+    vertical-align: middle;
+  }
+  .viewInfo{
+    display: inline-block;
+    color: #494e8f;
+    width: 30%;
+    font-size: 18px;
+    text-align: right;
+    text-decoration: underline;
+  }
   .el-header{
     margin: 0px;
     padding: 0px;

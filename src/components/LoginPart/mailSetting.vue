@@ -50,9 +50,6 @@
           }
       },
       methods:{
-        back(){
-          this.$router.go(-1);
-        },
         submitEmail(formName){
           var _this=this;
           this.$refs[formName].validate((valid)=>{
@@ -70,6 +67,7 @@
                     type:'success',
                     duration:800
                   });
+                  _this.$router.go(-1);
                 } else{
                   _this.$message({
                     message:'修改邮箱失败',
