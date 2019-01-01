@@ -6,71 +6,44 @@
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>代办</el-dropdown-item>
-          <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
+          <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
+          <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
-
     <el-main>
-      <div style="background-color: #ffffff;text-align: center;">新建讨论课</div>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="35%" class="demo-ruleForm" size="mini">
-        <el-form-item label="讨论课主题" prop="name" >
-          <el-input v-model="ruleForm.name"></el-input>
+      <p class="title">新建讨论课</p>
+      <el-form :model="seminarForm" :rules="rules" ref="seminarForm" label-width="110px">
+        <el-form-item label="讨论课主题" prop="topic" >
+          <el-input class="inputCss" v-model="seminarForm.topic"></el-input>
         </el-form-item>
-        <el-form-item label="讨论课内容" prop="desc">
-          <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+        <el-form-item label="讨论课内容" prop="introduction">
+          <el-input type="textarea" v-model="seminarForm.introduction"></el-input>
         </el-form-item>
-        <el-form-item label="讨论课次序号" prop="region">
-          <el-select v-model="ruleForm.region" placeholder="请选择"  style="float:right">
-            <el-option label="1" value="1"></el-option>
-            <el-option label="2" value="2"></el-option>
+        <el-form-item label="开始报名时间" prop="preApplyStartDate">
+          <el-date-picker  type="datetime" placeholder="选择日期时间" default-time="12:00:00" v-model="seminarForm.preApplyStartDate"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="结束报名时间" prop="preApplyEndDate">
+          <el-date-picker  type="datetime" placeholder="选择日期时间" default-time="12:00:00" v-model="seminarForm.preApplyEndDate"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="报名小组数" prop="applyNum">
+          <el-input-number v-model="seminarForm.applyNum" :min="1"></el-input-number>
+        </el-form-item>
+        <el-form-item label="所属Round" prop="round">
+          <el-select v-model="seminarForm.round" placeholder="无(默认新建Round)">
+            <el-option value="0" label="无(默认新建Round)"></el-option>
+            <el-option v-for="roundItem in rounds" :key="roundItem.roundId" :value="roundItem.roundId" :label="roundItem.roundSerial"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="讨论课可见" prop="delivery" >
-          <el-switch v-model="ruleForm.delivery" style="float:right"></el-switch>
-        </el-form-item>
-      </el-form>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="35%" class="demo-ruleForm" size="mini">
-        <el-form-item label="开始报名时间" required style="margin-left: 0%">
-          <el-col :span="11" style="margin-right-: 1%">
-            <el-form-item prop="date1" style="width:20px;">
-              <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1"></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="结束报名时间" required>
-          <el-col :span="11" style="margin-right:1%">
-            <el-form-item prop="date2">
-              <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date2"></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="报告截止时间" required>
-          <el-col :span="11" style="margin-right:1%">
-            <el-form-item prop="date3">
-              <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date3"></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="报名小组数" prop="region2">
-          <el-select v-model="ruleForm.region2" placeholder="请选择" style="margin-right: 0%">
-            <el-option label="1" value="1"></el-option>
-            <el-option label="2" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所属Round" prop="region3">
-          <el-select v-model="ruleForm.region3" placeholder="无(默认新建Round)"  style="margin-right: 0%">
-            <el-option label="1" value="1"></el-option>
-            <el-option label="2" value="2"></el-option>
-          </el-select>
+        <el-form-item label="讨论课可见" prop="isViewed" >
+          <el-switch v-model="seminarForm.isViewed" active-text="可见" inactive-text="不可见"></el-switch>
         </el-form-item>
       </el-form>
 
     </el-main>
     <el-footer>
-      <el-button class="bootomButt">发布</el-button>
+      <el-button class="bottomButt" @click="uploadSeminar('seminarForm')">发布</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -79,51 +52,126 @@
     data() {
       return {
         headerLocation:"OOAD",
-        ruleForm: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          date3: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+        seminarForm: {
+          topic: '',
+          introduction: '',
+          isViewed: true,
+          preApplyStartDate: '',
+          preApplyEndDate: '',
+          applyNum: '',
+          round:'0',
         },
+        rounds:[],
         rules: {
-          name: [
+          topic: [
             { required: true, message: '请输入讨论课主题', trigger: 'blur' },
           ],
-          region1: [
-            { required: true, message: '请选择', trigger: 'change' }
+          introduction:[
+            { required: true, message: '请输入讨论课要求', trigger: 'blur' },
           ],
-          region2: [
-            { required: true, message: '请选择', trigger: 'change' }
+          preApplyStartDate:[
+            { required: true, message: '请输入报名开始时间', trigger: 'blur' },
           ],
-          region3: [
-            { required: true, message: '请选择', trigger: 'change' }
+          preApplyEndDate:[
+            { required: true, message: '请输入报名结束时间', trigger: 'blur' },
           ],
-          date1: [
-            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-          ],
-          date2: [
-            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-          ],
-          date3: [
-            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-          ],
-          desc: [
-            { required: true, message: '请输入讨论课内容', trigger: 'blur' }
-          ]
         }
       };
     },
+    created(){
+      this.rounds=this.$route.query.rounds;
+    },
     methods: {
+      uploadSeminar(form)
+      {
+        let _this=this;
+        this.$refs[form].validate((valid) => {
+          if (valid) {
+            this.$axios({
+              method:'post',
+              url:'/course/'+this.$route.query.courseId+'/seminar/creatSeminar',
+              data:{
+                roundId:this.seminarForm.round,
+                seminarName:this.seminarForm.topic,
+                introduction:this.seminarForm.introduction,
+                maxTeam:parseInt(this.seminarForm.applyNum),
+                visible:this.boolToInt(this.seminarForm.isViewed),
+                enrollStartTime:this.getDate(this.seminarForm.preApplyStartDate),
+                enrollEndTime:this.getDate(this.seminarForm.preApplyEndDate),
+                seminarSerial:10
+              }
+            }).then(
+              response=>{
+                if(response===true){
+                  _this.$message({
+                    message:'创建讨论课成功',
+                    type:'success',
+                    duration:800
+                  });
+                  _this.$router.go(-1);
+                }else{
+                  _this.$message({
+                    message:'创建讨论课失败',
+                    type:'error',
+                    duration:800
+                  });
+                }
+              }
+            )
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      boolToInt(value){
+        if(value===true){
+          return 1;
+        }
+        else if(value===false){
+          return 0;
+        }
+      },
+      getDate(date) {
+        var seperator1 = "-";
+        var seperator2 = ":";
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+          month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = "0" + strDate;
+        }
+        var Hours = date.getHours();
+        var Minutes = date.getMinutes();
+        var Seconds = date.getSeconds();
+
+        if (Hours >= 0 && Hours <= 9) {
+          Hours = "0" + Hours;
+        }
+        if (Minutes >= 0 && Minutes <= 9) {
+          Minutes = "0" + Minutes;
+        }
+        if (Seconds >= 0 && Seconds <= 9) {
+          Seconds = "0" + Seconds;
+        }
+        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+          + " " + Hours + seperator2 + Minutes
+          + seperator2 + Seconds;
+        return currentdate;
+      }
 
     }
   }
 </script>
 <style scoped>
+  .title{
+    margin-top: 0px;
+    color: #494e8f;
+    font-size: 18px;
+  }
+
   .el-container{
     height: 98vh;
   }
@@ -180,4 +228,10 @@
     text-align: center;
   }
 
+</style>
+<style>
+  .inputCss .el-input__inner{
+    height: 40px;
+    font-size: 18px;
+  }
 </style>

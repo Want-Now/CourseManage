@@ -47,7 +47,7 @@
 
     </el-main>
     <el-footer>
-      <el-button class="bottomButt" @click="newSeminar()">新建讨论课</el-button>
+      <el-button class="bottomButt" @click="newSeminar(rounds)">新建讨论课</el-button>
     </el-footer>
 
   </el-container>
@@ -119,6 +119,12 @@
 
           }
         })
+      },
+      newSeminar(rounds){
+        this.$router.push({
+          path:'/CreatSeminar',
+          query:{courseId:this.$route.query.courseId,rounds:rounds}
+        });
       }
     }
   }

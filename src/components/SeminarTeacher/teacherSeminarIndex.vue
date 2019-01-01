@@ -102,7 +102,7 @@
         var that=this;
         this.$axios({
           method:'post',
-          url:"http://ghctcourse.natapp1.cc/presentation/{klassSeminarId}",
+          url:"/presentation/{klassSeminarId}",
           data:{
             klassSeminarId:this.klassSeminarId,
           }

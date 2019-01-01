@@ -87,13 +87,13 @@
         this.$router.push({path:'/CourseInfo',query:{courseId:item.courseId,courseName:item.courseName}});
       },
       goKlassInfo(item){
-
+        this.$router.push({path:'/ClassMessage',query:{courseId:item.courseId,courseName:item.courseName}});
       },
       goSeminarSetting(item){
-
+        this.$router.push({path:'/TeacherCourseSeminar',query:{courseId:item.courseId,courseName:item.courseName}})
       },
       goShareSetting(item){
-
+        this.$router.push({path:'/ShareSeting',query:{courseId:item.courseId,courseName:item.courseName}})
       }
     }
   }

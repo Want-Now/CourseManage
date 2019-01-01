@@ -1,14 +1,14 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
+      <el-button class="el-icon-back" @click="back()"></el-button>
       <p>{{headerLocation}}</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>代办</el-dropdown-item>
-          <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
+          <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
+          <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
@@ -29,22 +29,22 @@
           <el-form-item prop="preMethod">
             <span>展示：</span>
             <el-select v-model="preMethod" placeholder="请选择">
-              <el-option label="最高分" value="1"></el-option>
-              <el-option label="平均分" value="2"></el-option>
+              <el-option label="最高分" :value="1"></el-option>
+              <el-option label="平均分" :value="0"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="quesMethod">
             <span>提问：</span>
             <el-select v-model="quesMethod" placeholder="请选择">
-              <el-option label="最高分" value="1"></el-option>
-              <el-option label="平均分" value="2"></el-option>
+              <el-option label="最高分" :value="1"></el-option>
+              <el-option label="平均分" :value="0"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="repoMethod">
             <span>报告：</span>
             <el-select v-model="repoMethod" placeholder="请选择">
-              <el-option label="最高分" value="1"></el-option>
-              <el-option label="平均分" value="2"></el-option>
+              <el-option label="最高分" :value="1"></el-option>
+              <el-option label="平均分" :value="0"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -53,12 +53,9 @@
         <div slot="header" class="clearfix" >
           <span style="float:left;font-size:20px;color:#494e8f;">本轮讨论课报名次数：</span>
         </div>
-        <div class="text item" v-for="klass in klasses">
-          <span>{{klass.klassSerial}}</span>
-          <el-select value="applyTime" placeholder="请选择">
-            <el-option label="1" value="1"></el-option>
-            <el-option label="2" value="2"></el-option>
-          </el-select>
+        <div class="klassItem" v-for="klass in klasses" :key="klass.klassId">
+          <span>{{klass.grade}}-({{klass.klassSerial}})</span>
+          <el-input-number v-model="klass.enroll"  :min="1" :max="2" label="申请次数"></el-input-number>
         </div>
       </el-card>
     </el-main>
@@ -76,34 +73,48 @@
         repoMethod: '',
         quesMethod: '',
         seminars:'',
+        klasses:[],
         rule: {
           repoMethod: [
-            { required: true, message: '请选择', trigger: 'change' }
+            { required: true, message: '请选择', trigger: 'blur' }
           ],
           quesMethod: [
-            { required: true, message: '请选择', trigger: 'change' }
+            { required: true, message: '请选择', trigger: 'blur' }
           ],
           preMethod: [
-            { required: true, message: '请选择', trigger: 'change' }
+            { required: true, message: '请选择', trigger: 'blur' }
           ],
         },
       };
     },
-
     created(){
       let _this=this;
       this.$axios({
         method:'get',
-        url:'/round/'+this.$route.query.roundId
+        url:'/round/'+this.$route.query.roundId,
+        params:{
+          courseId:this.$route.query.courseId
+        }
       }).then(
         response=>{
+          _this.headerLocation=_this.$route.query.courseName;
           _this.seminars=_this.$route.query.seminars;
-          
+          _this.preMethod=_this.getMethod(response.presentationScoreMethod);
+          _this.repoMethod=_this.getMethod(response.reportScoreMethod);
+          _this.quesMethod=_this.getMethod(response.questionScoreMethod);
+          _this.klasses=response.enrollNum;
         }
       )
     },
     methods: {
-
+      getMethod(a){
+        if(a==='平均分'){
+          return 0;
+        }
+        else if(a==='最高分'){
+          return 1;
+        }
+      },
     }
   }
 </script>
@@ -122,7 +133,10 @@
   }
 
   .box-card {
-    width: 100%;
+    margin-bottom: 20px;
+  }
+  .klassItem{
+    margin-bottom: 10px;
   }
   .el-header{
     margin: 0px;
