@@ -1,14 +1,14 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" @click="back()"></el-button>
+      <el-button class="el-icon-back" @click="concel()"></el-button>
       <p>翻转课堂管理平台</p>
     </el-header>
     <el-container>
       <el-main>
             <el-form>
               <el-form-item>
-                <div style="font-family:Calibri;font-size:120%;font-weight:bold;width:100%;background-color:white;border:1px solid #dfdfdf;color:#62bab1;">创建教师信息</div>
+                <div style="font-family:Calibri;font-size:120%;font-weight:bold;width:100%;background-color:white;border:1px solid #dfdfdf;color:#409dfe;">创建教师信息</div>
               </el-form-item>
               <el-form-item style="border:1px solid #dfdfdf;">
                 <br>
@@ -53,6 +53,7 @@
         email:'',
         account:'',
         password:'',
+        type:'1',
       }
     },
     created(){
@@ -72,17 +73,18 @@
         this.name = nam
         this.account = acc
       },
-      back(){
-        this.$router.go(-1);
-      },
       concel(){
-        this.$router.push({path:"/ManagerIndex"});
+        this.$router.push({path:'/ManagerIndex',
+          query:{
+            type:this.type,
+          }
+        })
       },
       create(){
         var that=this;
         this.$axios({
           method:'post',
-          url:"http://ghctcourse.natapp1.cc/teacher",
+          url:"/teacher",
           data:{
             account:this.account,
             password:this.password,
@@ -90,7 +92,7 @@
             email:this.email
           }
         }).then(function (response) {
-          if(response.data===true){
+          if(response===true){
             that.$message({
               message:'创建成功',
               type:'success',
@@ -121,6 +123,14 @@
   }
   .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
   .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
-
+  .el-header{
+    margin: 0px;
+    padding: 0px;
+    background-color: #494e8f;
+    color:white;
+    font-size: 20px;
+    line-height: 22px;
+    text-align: center;
+  }
 </style>
 
