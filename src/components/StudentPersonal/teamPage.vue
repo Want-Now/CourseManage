@@ -5,9 +5,14 @@
       <p>{{headerLocation}}</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click="goStudentSet">个人页面</el-dropdown-item>
-          <el-dropdown-item @click="goCoursePage">讨论课</el-dropdown-item>
+        <el-dropdown-menu slot="dropdown" v-if="role==='student'">
+          <el-dropdown-item @click.native="stuCenter">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="stuSeminar">讨论课</el-dropdown-item>
+        </el-dropdown-menu>
+        <el-dropdown-menu slot="dropdown" v-else-if="role==='teacher'">
+          <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
+          <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
@@ -63,8 +68,9 @@
         </el-collapse-item>
       </el-collapse>
     </el-main>
-    <el-footer v-if="seen">
-      <el-button class="bottomButt">创建小组<i class="el-icon-plus"></i></el-button>
+    <el-footer v-if="role==='student'">
+      <el-button class="bottomButt" @click="goCreateTeam()">创建小组<i class="el-icon-plus"></i></el-button>
+      <el-button class="bottomButt" @click="goMemberTeam()">我的小组</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -86,6 +92,11 @@
             loading:true
           }
       },
+      computed:{
+        role(){
+          return this.$store.state.role;
+        }
+      },
       created(){
           var _this=this;
           this.$axios({
@@ -93,7 +104,7 @@
             url:'/course/'+this.$route.query.courseId+'/team'
           }).then(response=>{
             _this.headerLocation=_this.$route.query.courseName;
-            _this.teams=response;
+            _this.teams=response.teams;
             _this.loading=false;
           })
 
@@ -136,6 +147,12 @@
             _this.loading2=false;
           })
         },
+        goCreateTeam(){
+          this.$router.push('CreateTeam');
+        },
+        goMemberTeam(){
+          this.$router.push({path:'/MemberTeam',query:{}});
+        }
       }
 
     }
