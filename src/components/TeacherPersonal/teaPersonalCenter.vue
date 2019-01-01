@@ -5,10 +5,9 @@
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>待办</el-dropdown-item>
-          <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
-        </el-dropdown-menu>
+          <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
+          <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>        </el-dropdown-menu>
       </el-dropdown>
     </el-header>
     <el-main>
@@ -24,7 +23,7 @@
           <i class="el-icon-document"></i>
           我的课程
         </el-menu-item>
-        <el-menu-item index="2" @click="goStudentSet()">
+        <el-menu-item index="2" @click="goTeacherSet()">
           <i class="el-icon-edit"></i>
           账户与设置
         </el-menu-item>
@@ -60,8 +59,8 @@
         );
     },
     methods:{
-      goStudentSet(){
-        this.$router.push('/StuSetting');
+      goTeacherSet(){
+        this.$router.push('/TeaSetting');
       },
       goCoursePage(){
         this.$router.push('/CourseManage');

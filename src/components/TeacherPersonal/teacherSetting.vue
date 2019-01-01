@@ -6,10 +6,9 @@
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>待办</el-dropdown-item>
-          <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
-        </el-dropdown-menu>
+          <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
+          <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>        </el-dropdown-menu>
       </el-dropdown>
     </el-header>
     <el-main>
@@ -35,7 +34,7 @@
       </el-menu>
     </el-main>
     <el-footer>
-      <el-button type="danger" class="buttomButton" @click="loginOut()">
+      <el-button class="bottomButt" @click="loginOut()">
         退出登录
       </el-button>
     </el-footer>
@@ -44,13 +43,13 @@
 
 <script>
     export default {
-        name: "studentSetting",
+        name: "teacherSetting",
       data(){
           return{
             headerLocation:'账户与设置',
-            teaName:'Mingming',
-            teaID:'24321324',
-            teaEmail:'3278dsadas947@qq.com',
+            teaName:'',
+            teaID:'',
+            teaEmail:'',
             adminEmail:'418471@qq.com'
 
           }
@@ -60,9 +59,10 @@
         this.$axios({
           method:'get',
           url:'/user/information',
-        }).then(res=>{_this.teaName=res.data.name;
-            _this.teaID=res.data.account;
-            _this.teaEmail=res.data.email;})
+        }).then(res=>{
+          _this.teaName=res.name;
+            _this.teaID=res.account;
+            _this.teaEmail=res.email;})
           .catch(error=>{console.log(error);});
 
       },
