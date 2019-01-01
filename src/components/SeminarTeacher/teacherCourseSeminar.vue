@@ -22,7 +22,7 @@
           </template>
 
           <el-menu>
-            <el-menu-item index="0" @click="goRoundSetting(round)">
+            <el-menu-item index="0" @click="goRoundSetting(round,seminars)">
               <i class="el-icon-setting"></i>
               <span style="font-size: 15px">该轮轮次设置</span>
             </el-menu-item>
@@ -47,7 +47,7 @@
 
     </el-main>
     <el-footer>
-      <el-button class="bottomButt">新建讨论课</el-button>
+      <el-button class="bottomButt" @click="newSeminar()">新建讨论课</el-button>
     </el-footer>
 
   </el-container>
@@ -99,8 +99,14 @@
           _this.klasses=response;
         })
       },
-      goRoundSetting(round){
-        this.$router.push({path:'/RoundSeting',query:{roundId:round.roundId}});
+      goRoundSetting(round,seminars){
+        this.$router.push({path:'/RoundSeting',
+          query:{
+          roundId:round.roundId,
+            courseId:this.$route.query.courseId,
+            courseName:this.$route.query.courseName,
+            seminars:seminars
+        }});
       },
       goSeminarIndex(round,seminar,klass){
         this.$router.push({
@@ -109,7 +115,8 @@
             roundSerial:round.roundSerial,
             seminarId:seminar.id,
             klassId:klass.klassId,
-            courseName:this.$route.query.courseName
+            courseName:this.$route.query.courseName,
+
           }
         })
       }
