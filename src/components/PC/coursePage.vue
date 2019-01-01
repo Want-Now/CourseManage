@@ -2,7 +2,7 @@
   <div id="page">
     <div class="header">
       <span>个人信息综合管理平台</span>
-      <button class="el-icon-circle-close-outline exitButt">&nbsp;退出系统</button>
+      <button class="el-icon-circle-close-outline exitButt" style="background-color:#efefef">&nbsp;退出系统</button>
     </div>
     <div class="main">
       <p class="title">选择课程</p>
@@ -18,7 +18,7 @@
           <template slot-scope="scope">
             <el-button
               type="primary"
-              @click="enter()">
+              @click="enter(scope.$index, scope.row)">
               进入
             </el-button>
           </template>
@@ -57,9 +57,14 @@
         }
       },
       methods:{
-        enter(){}
-      }
-
+        enter(index,row){
+         // console.log(index, row);
+          this.$router.push({path:"/",
+            query:{
+              courseId:row.courseId,
+            }})
+        },
+        }
     }
 </script>
 
