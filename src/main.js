@@ -23,6 +23,9 @@ Vue.use(VueRouter)
 // Vue.prototype.$axios = axios
 /* eslint-disable no-new */
 Vue.prototype.$axios = axios
+Vue.prototype.back=function () {
+  this.$router.go(-1);
+}
 
 new Vue({
   el: '#app',

@@ -40,7 +40,7 @@
       </el-menu>
     </el-main>
     <el-footer>
-      <el-button type="danger" class="buttomButton" @click="loginOut()">
+      <el-button type="danger" class="bottomButt" @click="loginOut()">
         退出登录
       </el-button>
     </el-footer>

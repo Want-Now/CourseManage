@@ -80,12 +80,12 @@
             url:'/course/'+this.$route.query.courseId
           }).then(
             function (response) {
-              var startDate=new Date(response.data.teamStartTime);
-              var endDate=new Date(response.data.teamEndTime);
-              _this.courseIntro=response.data.introduction;
-              _this.prePercent=response.data.presentationPercentage;
-              _this.quesPercent=response.data.questionPercentage;
-              _this.repoPercent=response.data.reportPercentage;
+              var startDate=new Date(response.teamStartTime);
+              var endDate=new Date(response.teamEndTime);
+              _this.courseIntro=response.introduction;
+              _this.prePercent=response.presentationPercentage;
+              _this.quesPercent=response.questionPercentage;
+              _this.repoPercent=response.reportPercentage;
               _this.teamStartTime=_this.toNormalDate(startDate);
               _this.teamEndTime=_this.toNormalDate(endDate);
             }

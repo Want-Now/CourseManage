@@ -45,16 +45,16 @@
       this.$axios({
         method:'get',
         url:'/getCourse/student',
-        params:{
-          studentId:103
-        }
       }).then(
         function(response){
-          console.log(response.data);
-          _this.courseList=response.data;
+          console.log(response);
+          _this.courseList=response;
         }).catch(error=>{console.log(error)});
     },
     methods:{
+      goback(){
+        this.$router.go(-1);
+      },
       goCourseInfo(item){
         this.$router.push({path:'/CourseInfo',query:{courseId:item.courseId,courseName:item.courseName}});
       },

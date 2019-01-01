@@ -93,7 +93,7 @@
             url:'/course/'+this.$route.query.courseId+'/team'
           }).then(response=>{
             _this.headerLocation=_this.$route.query.courseName;
-            _this.teams=response.data;
+            _this.teams=response;
             _this.loading=false;
           })
 
@@ -115,8 +115,8 @@
             url:'/team/'+team.teamId,
           }).then(response=>{
             _this.loading1=true;
-            var member=response.data.members;
-            var leader=response.data.teamLeader;
+            var member=response.members;
+            var leader=response.teamLeader;
             _this.teamMember=member.concat(leader).reverse();
             _this.teamMember[0].identity="组长";
             for(var i=1;i<_this.teamMember.length;i++)
@@ -132,7 +132,7 @@
             method: 'get',
             url:'/course/'+this.$route.query.courseId+'/noTeam'
           }).then(response=>{
-            _this.unteamMember=response.data;
+            _this.unteamMember=response;
             _this.loading2=false;
           })
         },
