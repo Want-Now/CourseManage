@@ -7,8 +7,7 @@
     <div class="main">
       <p class="title">选择课程</p>
       <el-table
-        :data="courses"
-       >
+        :data="courses">
         <el-table-column
           prop="courseName"
           align="center">
