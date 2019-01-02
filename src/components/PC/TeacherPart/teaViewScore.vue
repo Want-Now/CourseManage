@@ -1,14 +1,14 @@
 <template>
   <div id="page">
-    <div class="header">
-      <button class="el-icon-back backButt"></button>
+    <div class="header" style="background-color: #efefef">
+      <button style="background-color: #efefef" class="el-icon-back backButt" @click="back()"></button>
       <span>个人信息综合管理平台</span>
-      <button class="el-icon-menu courseButt">&nbsp;选择课程</button>
-      <button class="el-icon-circle-close-outline exitButt">&nbsp;退出系统</button>
+      <button style="background-color: #efefef" class="el-icon-menu courseButt" @click="chosecourse()">&nbsp;选择课程</button>
+      <button style="background-color: #efefef" class="el-icon-circle-close-outline exitButt">&nbsp;退出系统</button>
     </div>
     <teacherMenu></teacherMenu>
     <div class="main">
-      <p class="title">{{courseName}}——{{location}}</p>
+      <p class="title">{{courseName}}—查看成绩</p>
       <span class="roundSpan">轮数</span>
       <el-select v-model="value" placeholder="请选择" class="select">
         <el-option
@@ -71,7 +71,6 @@
       data(){
         return{
           courseName:'OOAD',
-          location:'查看成绩',
           options:[
             {
               value:1,

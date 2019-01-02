@@ -1,29 +1,34 @@
 <template>
   <div id="page">
     <div class="header" style="background-color: #efefef">
-      <button style="background-color: #efefef" class="el-icon-back backButt"></button>
+      <button style="background-color: #efefef" class="el-icon-back backButt" @click="back()"></button>
       <span>个人信息综合管理平台</span>
-      <button style="background-color: #efefef" class="el-icon-menu courseButt">&nbsp;选择课程</button>
+      <button style="background-color: #efefef" class="el-icon-menu courseButt" @click="chosecourse()">&nbsp;选择课程</button>
       <button style="background-color: #efefef" class="el-icon-circle-close-outline exitButt">&nbsp;退出系统</button>
     </div>
     <teacherMenu></teacherMenu>
-    <el-main style="margin-left:20%" >
+    <el-main style="margin-left:20%">
       <br>
-      <el-card class="box-card" size="large" v-for="round in rounds" :key="round.roundId">
+      <br>
+      <br>
+      <div style="padding-left:15%;">
+      <el-card class="box-card" size="large" style="padding-left:5%;" v-for="round in rounds" :key="round.roundId">
         <div slot="header" class="clearfix">
-          <span style="font-size:25px;color:#409dfe;font-weight:bold">第{{round.roundSerial}}轮讨论课</span>
+          <span style="font-size:25px;color:#409dfe;font-weight:bold;float: left; padding: 3px 0">第{{round[0].roundSerial}}轮讨论课</span>
         </div>
-        <div v-for="seminar in rounds" :key="seminar.id" >
-          <el-row>
-            <el-col :span="12">  <div style="font-size:20px">{{seminar.topic}}</div></el-col>
-            <el-col :span="12"> <el-button type="primary">进入</el-button></el-col>
+        <div>
+          <el-row v-for="o in length1":key="o" style="border-bottom: 1px solid #dddddd">
+          <el-col :span="12"><div style="font-size:20px;float:left;padding-left:60px;font-weight:bold;font-size:20px">{{round[o].seminarName}}</div></el-col>
+            <el-col :span="12" style="padding-left:100px;"><el-button @click="enter(round[o].seminarId)">进入</el-button></el-col>
           </el-row>
+          <br>
+          <br>
         </div>
       </el-card>
-  </el-main>
-    </div>
+      </div>
+    </el-main>
+  </div>
 </template>
-
 <script>
   import teacherMenu from './teacherMenu'
   export default {
@@ -33,28 +38,57 @@
     },
     data() {
       return {
-        rounds:[{
-        }]
+        rounds:[],
+        seminars:[],
+        courseName:'',
+        courseId:'',
+        length1:0,
+        o:1,
       }
     },
     created(){
-    this.getround()
-   },
-    methods:{
-      getround(){
-        var _this=this;
+      this.getround()
+    },
+    methods: {
+      getround() {
+        var _this = this;
         this.$axios({
-          method:'get',
-        //  url:'/course/'+16+'/PC'
-        }).then(response=>{
-          _this.rounds=response;
+          method: 'get',
+          url: '/course/'+this.$route.query.courseId+'/pc'
+        }).then(response => {
+          _this.rounds = response;
+          //console.log(_this.rounds);
+          _this.length1= response[0].length-1;
+          //console.log( _this.length1);
+        })
+      },
+      enter(seminarId){
+        this.$router.push({path:'/TeaOneSeminar',
+          query:{
+            seminarId:seminarId,
+            courseName:this.$route.query.courseName
+        }
         })
       },
     }
   }
 </script>
-
 <style scoped>
+.el-col{
+  height:50px;
+  line-height: 50px;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both
+}
+.box-card {
+  width: 80%;
+}
   .header{
     padding-left: 50px;
     height: 100px;
@@ -91,7 +125,7 @@
     font-size: 30px;
     height: 50px;
   }
-  .title{
+.title{
     font-weight: bold;
     color: #409EFF;
     font-size: 27px;
@@ -99,8 +133,7 @@
     text-align: left;
     border: solid 1px #DCDFE6;
   }
-
-  .roundSpan{
+.roundSpan{
     margin-right:20px;
     font-size: 22px;
   }
@@ -112,7 +145,6 @@
     width: 200px;
     height: 60px;
     font-size: 22px;
-
   }
 </style>
 <style>

@@ -110,7 +110,7 @@
         var that=this;
           this.$axios({
             method: 'delete',
-            url: 'course/class/' + klass.klassId,
+            url: 'course/class/'+klass.klassId,
           }).then(function (response) {
             if (response === true) {
               that.sucess = true

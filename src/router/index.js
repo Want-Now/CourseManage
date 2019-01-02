@@ -70,6 +70,7 @@ import ModeifyStudentMessage from '@/components/PC/PCManager/modeifyStudentMessa
 import ModeifyTeacherMessage from '@/components/PC/PCManager/modifyTeacherMessage'
 import ManagerIndex from '@/components/PC/PCManager/index'
 import PCseminarIndex from '@/components/PC/TeacherPart/PCseminarIndex'
+import TeaOneSeminar from '@/components/PC/TeacherPart/TeaOneSeminar'
 //PC
 Vue.use(Router)
 
@@ -389,6 +390,11 @@ export default new Router({
       path:'/PCseminarIndex',
       name:'PCseminarIndex',
       component:PCseminarIndex
+    },
+    {
+      path:'/TeaOneSeminar',
+      name:'TeaOneSeminar',
+      component:TeaOneSeminar
     },
     //PC
   ]
