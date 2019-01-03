@@ -7,12 +7,10 @@
     <div class="main">
       <p class="title">选择课程</p>
       <el-table
-        :data="courses"
-       >
+        :data="courses">
         <el-table-column
           prop="courseName"
           align="center">
-
         </el-table-column>
         <el-table-column align="center">
           <template slot-scope="scope">
@@ -22,7 +20,6 @@
               进入
             </el-button>
           </template>
-
         </el-table-column>
       </el-table>
     </div>
@@ -59,9 +56,10 @@
       methods:{
         enter(index,row){
          // console.log(index, row);
-          this.$router.push({path:"/",
+          this.$router.push({path:"/PCseminarIndex",
             query:{
               courseId:row.courseId,
+              courseName:row.courseName,
             }})
         },
         }
