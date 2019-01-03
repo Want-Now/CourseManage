@@ -116,8 +116,6 @@
             seminarId:seminar.id,
             klassId:klass.klassId,
             courseName:this.$route.query.courseName,
-            klassSeminarId:klass.klassSeminarId
-
           }
         })
       },

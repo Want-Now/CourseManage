@@ -13,18 +13,18 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <el-collapse accordion>
-        <el-collapse-item v-for="round in rounds" >
+      <el-collapse>
+        <el-collapse-item v-for="round in rounds" :key="round.roundId">
           <template slot="title">
             <div class="titleDiv">第{{round.roundSerial}}轮</div>
           </template>
-          <el-collapse v-for="team in round.teams" >
+          <el-collapse v-for="team in round.teams" :key="team.teamId">
             <el-collapse-item>
               <template slot="title">
                   <span class="teamName">{{team.klassSerial}}-{{team.teamSerial}}</span>
                   <span class="teamScore">{{team.totalScore}}</span>
               </template>
-              <div class="scoreDiv" v-for="seminar in team.seminars">
+              <div class="scoreDiv" v-for="seminar in team.seminars"  v-loading="loading">
                 <p class="seminarName">{{seminar.seminarName}}</p>
                 <span>展示：</span><span class="scoreFont">{{seminar.presentationScore}}</span>
                 <span>提问：</span><span class="scoreFont">{{seminar.questionScore}}</span>
@@ -56,6 +56,7 @@
         rounds:[],
         teams:[],
         seminars:[],
+        loading:true,
       }
     },
     created(){
@@ -114,8 +115,9 @@
         }).then(
           res=>{
            team.seminars=res;
+           this.loading=false;
           });
-      }
+      },
     }
   }
 </script>
