@@ -36,6 +36,7 @@
       return {
         myTeamAttendance:'',
         courseName: '',
+        loading:false,
         attendanceId:'',
         tableData:[
           {
@@ -98,7 +99,7 @@
         this.$axios({
           method: 'get',
           url: '/klassSeminar/attendance/'+this.attendanceId+'/modifyAttendance',
-          param:{
+          params:{
             teamOrder:parseInt(o),
             attendanceId:this.attendanceId
           },
@@ -109,7 +110,7 @@
               type: 'success',
               duration: 2000
             });
-            that.$router.push('/emptyPage');
+           that.$router.push('/emptyPage');
           }else {
             that.$message({
               message: '修改失败',

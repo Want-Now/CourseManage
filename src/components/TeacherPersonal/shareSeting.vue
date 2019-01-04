@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header id="header">
+    <el-header>
       <el-button class="el-icon-back" @click="back()"></el-button>
       <p>共享设置</p>
       <el-dropdown>
@@ -15,8 +15,8 @@
     <el-main>
       <el-card v-for="course in shareCourses" :key="course.courseId">
         <div slot="header">
-          {{course.courseName}}
-          ({{course.teacherName}})
+          {{course.otherCourseName}}
+          ({{course.otherTeacherName}}老师)
         </div>
         <el-row class="content-row">
           <el-col class="row-col">
@@ -26,19 +26,18 @@
             <span class="col-content">{{course.shareType}}</span>
           </el-col>
         </el-row>
+        <br>
         <el-row class="content-row">
           <el-col class="row-col">
             <span class="col-title">共享情况：</span>
           </el-col>
           <el-col class="row-col">
-            <span class="col-content">{{course.shareStatus}}</span>
+            <span class="col-content">{{course.myCourseType}}</span>
           </el-col>
         </el-row>
-        <el-button class="cancelShare" type="danger" size="mini">取消共享</el-button>
+        <el-button class="cancelShare" type="danger" size="mini" @click="concel(course.shareId,course.shareType)">取消共享</el-button>
       </el-card>
     </el-main>
-
-
     <el-footer>
       <el-button class="bottomButt" @click="goNewShare()">新增共享</el-button>
     </el-footer>
@@ -50,16 +49,53 @@
       return {
         shareCourses:[
           {}
-        ]
+        ],
+        type:'',
       };
     },
-
-    methods: {
-      goNewShare(){
-        this.$router.push('/newShare')
+    created() {
+      var _this = this;
+      this.$axios({
+        method: 'get',
+        url: '/share/successShare '
+        }).then(response => {
+          _this.shareCourses = response;
+        })
+      },
+      methods:{
+        goNewShare()
+        {
+          this.$router.push({path:'/newShare',query:{courseId:this.$route.query.courseId}})
+        },
+        concel(shareId,shareType) {
+          if (shareType=='共享分组') this.type=1;
+          else this.type=2;
+          var that=this;
+          this.$axios({
+            method: 'delete',
+            url:'/share/deleteShare/'+shareId,
+            params:{
+              shareType: that.type
+            }
+          }).then(function (response){
+            if(response===true){
+              that.$message({
+                message:'取消成功',
+                type:'success',
+                duration:2000
+              });
+              
+              //that.$router.push('/emptyPage');
+            } else {
+              that.$message({
+                message: '取消失败',
+                type: 'error',
+                duration: 2000
+              });
+            }})
+        }
       }
     }
-  }
 </script>
 <style>
   .el-container {
