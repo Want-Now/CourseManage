@@ -62,16 +62,6 @@ new Vue({
   el: '#app',
   router,
   store,
-  // created () {
-  //   this.$axios.defaults.withCredentials=true;
-  //   // this.$axios.defaults.baseURL='';
-  //   this.$axios.defaults.baseURL='http://ghctcourse.natapp1.cc';
-  //   this.$axios.interceptors.response.use(function (response) {
-  //     return response;
-  //   }, function (error) {
-  //     return Promise.reject(error);
-  //   });
-  // },
   components: { App },
   template: '<App/>'
 })

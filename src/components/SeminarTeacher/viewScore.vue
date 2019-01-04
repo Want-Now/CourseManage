@@ -34,13 +34,8 @@
       </el-table>
     </el-main>
     <el-footer>
-      <el-row type="flex" justify="center">
-        <el-button style="width: 80%;">确认</el-button>
-      </el-row>
-      <el-row type="flex" justify="center">
-        <el-button style="width: 80%;">修改</el-button>
-      </el-row>
-
+      <el-button class="bottomButt">确认</el-button>
+      <el-button class="bottomButt">修改</el-button>
     </el-footer>
   </el-container>
 </template>

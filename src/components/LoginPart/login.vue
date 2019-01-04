@@ -1,31 +1,23 @@
 <template>
-  <div id="app-login">
+  <el-container>
     <el-main>
-    <el-row type="flex">
-      <el-col :span="24">
-        <p style="color: #494e8f;font-size: 1.6rem;">欢迎登录课程管理系统</p>
-      </el-col>
-    </el-row>
-    <el-row type="flex" justify="center">
-      <el-col :span="12">
-        <img src="../../assets/XMU.png" style="width: 8rem">
-      </el-col>
-    </el-row>
+      <p style="color: #494e8f;font-size: 1.6rem;">欢迎登录课程管理系统</p>
+      <img src="../../assets/XMU.png" style="width: 8rem;margin: 20px">
 
-    <el-form ref="form" :rules="rules" :model="form" method="post"><!---->
-      <el-form-item prop="user">
-        <el-input class="activeInput" placeholder="请输入账号" v-model="form.user" clearable></el-input>
-      </el-form-item>
-      <el-form-item prop="password">
-        <el-input class="activeInput" type="password" placeholder="请输入密码" v-model="form.password" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" class="login-button" @click="sendUserInfo('form')">登录</el-button>
-      </el-form-item>
-    </el-form>
-    <span class="forgetPsw" @click="forgetPsw">忘记密码</span>
+      <el-form ref="form" :rules="rules" :model="form" method="post"><!---->
+        <el-form-item prop="user">
+          <el-input class="activeInput" placeholder="请输入账号" v-model="form.user" clearable></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input class="activeInput" type="password" placeholder="请输入密码" v-model="form.password" clearable></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" class="login-button" @click="sendUserInfo('form')">登录</el-button>
+        </el-form-item>
+      </el-form>
+      <span class="forgetPsw" @click="forgetPsw">忘记密码</span>
     </el-main>
-  </div>
+  </el-container>
 </template>
 
 <script>
@@ -187,29 +179,10 @@
 </script>
 
 <style scoped>
-  #app-login{
-    height: 90vh;
-    width:100vw;
-    margin: auto;
-    text-align: center;
-    display:table-cell;
-    vertical-align: middle;
-  }
-
   #app-login img{
     margin: 1rem 0rem;
   }
 
-
-  .login-input{
-    border-radius: 5px;
-    padding:5px 10px;
-    margin: 2vw 0;
-    font-size: 18px;
-    height: 30px;
-    width: 75vw;
-    border:solid 1px #C0C4CC;
-  }
   .login-button{
     width: 80vw;
     height: 50px;
@@ -227,8 +200,5 @@
   .login-button:focus{
     background-color: #8084b1;
     border-color: #8084b1;
-  }
-  .el-radio{
-    font-size: 25px;
   }
 </style>

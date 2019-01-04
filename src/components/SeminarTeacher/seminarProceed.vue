@@ -98,6 +98,7 @@
       },
       created(){
         this.load();
+        this.wsService();
       },
       methods: {
         load(){
@@ -224,6 +225,12 @@
             + " " + Hours + seperator2 + Minutes
             + seperator2 + Seconds;
           return currentdate;
+        },
+        wsService(){
+          let ws = new WebSocket("ws://"+window.location.host+"/websocket/presentation");
+          ws.onopen = (event)=>{
+            ws.send("jjjjj");
+          };
         }
       }
     }
