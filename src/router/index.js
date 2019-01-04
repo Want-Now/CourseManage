@@ -6,6 +6,7 @@ import ActiveS from '@/components/LoginPart/activeStudent'
 import PswSetting from '@/components/LoginPart/pswSetting'
 import MailSetting from '@/components/LoginPart/mailSetting'
 import ForgetPsw from '@/components/LoginPart/forgetPsw'
+import emptyPage from '@/components/emptyPage'
 //LoginPart
 import roundSeting from '@/components/SeminarTeacher/roundSeting'
 import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
@@ -28,7 +29,6 @@ import studentSeminarPre from '@/components/studentSeminar/studentSeminarPre'
 import studentSeminarIndex from '@/components/studentSeminar/studentSeminarIndex'
 import studentSeminarViewScore from '@/components/studentSeminar/studentSeminarViewScore'
 import studentViewPpt from '@/components/studentSeminar/studentViewPpt'
-import ViewDeatilsAndSignUp from '@/components/studentSeminar/ViewDeatilsAndSignUp'
 //SeminarStudent
 import StuPersonCenter from '@/components/StudentPersonal/stuPersonalCenter'
 import StudentCourse from '@/components/StudentPersonal/studentCourse'
@@ -80,6 +80,11 @@ export default new Router({
       path: '/',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/emptyPage',
+      name: 'emptyPage',
+      component: emptyPage
     },
     {
       path: '/ActiveStudent',
@@ -203,11 +208,6 @@ export default new Router({
       path: '/studentViewPpt',
       name: 'studentViewPpt',
       component:studentViewPpt
-    },
-    {
-      path: '/ViewDeatilsAndSignUp',
-      name: 'ViewDeatilsAndSignUp',
-      component:ViewDeatilsAndSignUp
     },
     //SeminarStudent
     {
