@@ -52,7 +52,6 @@ import studentScore from '@/components/TeacherPersonal/studentScore'
 import teacherSetting from '@/components/TeacherPersonal/teacherSetting'
 import teacherStudentTeam from '@/components/TeacherPersonal/teacherStudentTeam'
 import teamRequirementSetting from '@/components/TeacherPersonal/teamRequirementSetting'
-
 //teacherpersonal
 
 import LoginPC from '@/components/PC/loginPC'

@@ -21,8 +21,7 @@
         <p class="content2" v-if="seminarVO.status=='0'">未开始</p>
         <p class="content2" v-if="seminarVO.status=='1'">正在进行</p>
         <p class="content2" v-if="seminarVO.status=='2'">已完成</p>
-        <p class="viewInfo" @click="viewDe()">查看信息</p>
-      </div>
+        <p class="viewInfo" @click="viewDe()">查看信息</p></div>
       <div class="rowP" v-if="attendanceStatus"><p class="title">ppt:</p><p class="content" v-if="pptStatus">已提交</p><p class="content" v-if="!pptStatus">未提交</p></div>
       <div class="rowP" v-if="attendanceStatus && seminarVO.status=='2'"><p class="title">书面报告:</p><p class="content" >{{reportStatus}}</p></div>
       <br>
