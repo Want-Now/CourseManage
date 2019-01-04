@@ -64,9 +64,6 @@
         <el-form-item v-if="reportStatus=='已提交'&&submitStatus">
           <el-button style="width:100%;background-color:#494e8e" type="primary" @click="RdialogVisible = true">重新提交书面报告</el-button>
         </el-form-item>
-        <el-form-item>
-        <el-button style="width:100%;background-color:#494e8e" type="primary" @click="viewScore">查看成绩</el-button>
-      </el-form-item>
     </el-form>
     </el-footer>
     <el-dialog
@@ -216,15 +213,6 @@
             attendanceId:this.attendanceId,
           }})
       },
-      viewScore() {
-        this.$router.push({path:"/studentSeminarViewScore",
-          query:{
-            klassSeminarId:this.klassSeminarId,
-            seminarName:this.seminarName,
-            courseName:this.courseName,
-          }})
-      },
-      submitreport(){},
 
     }
   }

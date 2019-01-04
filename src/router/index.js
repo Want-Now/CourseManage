@@ -27,7 +27,6 @@ import StudentCourseSeminar from '@/components/studentSeminar/StudentCourseSemin
 import studentSeminar from '@/components/studentSeminar/studentSeminar'
 import studentSeminarPre from '@/components/studentSeminar/studentSeminarPre'
 import studentSeminarIndex from '@/components/studentSeminar/studentSeminarIndex'
-import studentSeminarViewScore from '@/components/studentSeminar/studentSeminarViewScore'
 import studentViewPpt from '@/components/studentSeminar/studentViewPpt'
 //SeminarStudent
 import StuPersonCenter from '@/components/StudentPersonal/stuPersonalCenter'
@@ -198,11 +197,6 @@ export default new Router({
       path: '/studentSeminarIndex',
       name: 'studentSeminarIndex',
       component: studentSeminarIndex
-    },
-    {
-      path: '/studentSeminarViewScore',
-      name: 'studentSeminarViewScore',
-      component: studentSeminarViewScore
     },
     {
       path: '/studentViewPpt',
