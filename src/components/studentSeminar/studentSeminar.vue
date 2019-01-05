@@ -1,6 +1,7 @@
 <template>
   <el-container>
     <el-header id="header">
+      <el-button class="el-icon-back" @click="back()" ></el-button>
       <p>{{headerLocation}}</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>

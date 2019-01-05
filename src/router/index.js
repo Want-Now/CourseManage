@@ -65,6 +65,8 @@ import ModeifyTeacherMessage from '@/components/PC/PCManager/modifyTeacherMessag
 import ManagerIndex from '@/components/PC/PCManager/index'
 import PCseminarIndex from '@/components/PC/TeacherPart/PCseminarIndex'
 import TeaOneSeminar from '@/components/PC/TeacherPart/TeaOneSeminar'
+import PCseminarSIndex from '@/components/PC/StudentPart/PCseminarSIndex'
+import stuOneSeminar from '@/components/PC/StudentPart/stuOneSeminar'
 //PC
 Vue.use(Router)
 
@@ -278,6 +280,7 @@ export default new Router({
       name: 'newShare',
       component:newShare
     },
+
     {
       path: '/shareSeting',
       name: 'shareSeting',
@@ -308,6 +311,11 @@ export default new Router({
       path: '/PC',
       name: 'LoginPC',
       component: LoginPC
+    },
+    {
+      path: '/PCseminarSIndex',
+      name: 'PCseminarSIndex',
+      component: PCseminarSIndex
     },
     {
       path: '/CoursePagePC',
@@ -364,6 +372,11 @@ export default new Router({
       path:'/TeaOneSeminar',
       name:'TeaOneSeminar',
       component:TeaOneSeminar
+    },
+    {
+      path: '/stuOneSeminar',
+      name: 'stuOneSeminar',
+      component:stuOneSeminar
     },
     //PC
   ]

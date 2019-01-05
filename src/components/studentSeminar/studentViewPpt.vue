@@ -51,7 +51,6 @@
       }
     },
     created(){
-
       var _this = this;
       this.klassSeminarId=this.$route.query.klassSeminarId;
       this.status=this.$route.query.status;

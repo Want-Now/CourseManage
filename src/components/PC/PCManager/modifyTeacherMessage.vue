@@ -80,7 +80,7 @@
         var that=this;
         this.$axios({
           method:'put',
-          url:"http://ghctcourse.natapp1.cc/teacher/"+this.id+"/information",
+          url:"/teacher/"+this.id+"/information",
           data:{
             teacherId:this.id,
             newTeacherAccount:this.account,

@@ -34,17 +34,16 @@
           courses: [],
         }
       },
-      created(){
-        var _this=this;
-        if(this.$store.state.role=='teacher') {
+      created() {
+        var _this = this;
+        if (this.$store.state.role == 'teacher') {
           this.$axios({
             method: 'get',
             url: '/getCourse/teacher '
           }).then(response => {
             _this.courses = response;
           })
-        }
-        else if(this.$store.state.role=='student'){
+        } else if (this.$store.state.role == 'student') {
           this.$axios({
             method: 'get',
             url: '/getCourse/student'
@@ -53,16 +52,28 @@
           })
         }
       },
-      methods:{
-        enter(index,row){
-         // console.log(index, row);
-          this.$router.push({path:"/PCseminarIndex",
-            query:{
-              courseId:row.courseId,
-              courseName:row.courseName,
-            }})
-        },
+      methods: {
+        enter(index, row) {
+          // console.log(index, row);
+          if (this.$store.state.role == 'teacher') {
+            this.$router.push({
+              path: "/PCseminarIndex",
+              query: {
+                courseId: row.courseId,
+                courseName: row.courseName,
+              }
+            })
+          } else if (this.$store.state.role == 'student') {
+            this.$router.push({
+              path: "/PCseminarSIndex",
+              query: {
+                courseId: row.courseId,
+                courseName: row.courseName,
+              }
+            })
+          }
         }
+      }
     }
 </script>
 

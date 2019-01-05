@@ -89,13 +89,14 @@
             that.$message({
               message:'创建成功',
               type:'success',
-              duration:800
+              duration:1000
             });
+            that.$router.push('/ManagerIndex');
           } else{
             that.$message({
               message:'创建失败',
               type:'error',
-              duration:800
+              duration:1000
             });
           }
         })

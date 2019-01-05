@@ -65,6 +65,9 @@
       );
     },
     methods: {
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      },
       getSeminar(round){
         this.loading=true;
         let _this=this;
@@ -161,4 +164,3 @@
   }
 
 </style>
-

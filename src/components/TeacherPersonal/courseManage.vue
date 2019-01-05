@@ -39,7 +39,7 @@
       </el-menu>
     </el-main>
     <el-footer>
-      <el-button class="bottomButt" v-if="role==='teacher'"><i class="el-icon-plus"></i>新建课程</el-button>
+      <el-button class="bottomButt" v-if="role==='student'"><i class="el-icon-plus"></i>新建课程</el-button>
     </el-footer>
   </el-container>
 </template>

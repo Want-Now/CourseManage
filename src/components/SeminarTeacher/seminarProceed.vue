@@ -102,7 +102,6 @@
         this.load();
         // this.wsService();
       },
-
       methods: {
         load(){
           let _this=this;

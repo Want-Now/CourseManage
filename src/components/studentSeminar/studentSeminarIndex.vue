@@ -125,6 +125,7 @@
       this.courseName=this.$route.query.courseName;
       this.klassSeminarId=this.$route.query.klassSeminarId;
       var _this = this;
+      console.log(this.klassSeminarId);
       this.$axios({
         method: 'get',
         url: "/seminar/"+this.$route.query.klassSeminarId+"/team/seminarInfo",

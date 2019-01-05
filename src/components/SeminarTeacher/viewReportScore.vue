@@ -1,15 +1,9 @@
 <template>
   <el-container id="reportScore">
     <el-header>
-      <el-button class="el-icon-back" @click="back()"></el-button>
+      <el-button class="el-icon-back" ></el-button>
       <p>{{topic}}</p>
-      <el-dropdown>
-        <el-button class="el-icon-menu"></el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
-          <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
-          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>        </el-dropdown-menu>
-      </el-dropdown>
+      <el-button class="el-icon-menu" ></el-button>
     </el-header>
     <el-main>
       <el-table
@@ -23,7 +17,6 @@
         </el-table-column>
         <el-table-column
           prop="reportScore" label="成绩" width="50">
-
         </el-table-column>
       </el-table>
     </el-main>
@@ -44,36 +37,33 @@
         name: "viewReportScore",
       data(){
         return{
-          topic:"",
-          tableData: [],
+          topic:"书面报告成绩",
+          tableData: [{
+            team:"1-2",
+            file:"1-2 书面报告",
+            reportScore:"5.0"
+          }, {
+            team:"1-2",
+            file:"1-2 书面报告",
+            reportScore:"5.0"
+          }, {
+            team:"1-2",
+            file:"1-2 书面报告",
+            reportScore:"5.0"
+          }, {
+            team:"1-2",
+            file:"1-2 书面报告",
+            reportScore:"5.0"
+          }],
         }
-      },
-      created(){
-        let _this=this;
-        this.topic=this.$route.query.courseName+'-书面报告成绩';
-        this.$axios({
-          method:'get',
-          url:'/seminar/'+this.$route.query.klassSeminarId+'/reportSubmitStatus'
-        }).then(response=>{
-          for(var index=0;index<response.length;index++)
-          {
-            _this.tableData.push({
-              teamName:response[index].teamName,
-              presentationScore:response[index].presentationScore,
-              questionScore:response[index].questionScore,
-              reportScore:response[index].reportScore,
-              score:response[index].totalScore,
-            });
-          }
-        })
-      },
+      }
     }
 </script>
 
 <style scoped>
 
   .el-row .el-button{
-    height: 45px;
+    height: 50px;
     margin:10px;
     font-size: 18px;
     background-color: #494e8f;
