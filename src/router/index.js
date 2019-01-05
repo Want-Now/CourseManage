@@ -6,6 +6,7 @@ import ActiveS from '@/components/LoginPart/activeStudent'
 import PswSetting from '@/components/LoginPart/pswSetting'
 import MailSetting from '@/components/LoginPart/mailSetting'
 import ForgetPsw from '@/components/LoginPart/forgetPsw'
+import emptyPage from '@/components/emptyPage'
 //LoginPart
 import roundSeting from '@/components/SeminarTeacher/roundSeting'
 import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
@@ -26,9 +27,7 @@ import StudentCourseSeminar from '@/components/studentSeminar/StudentCourseSemin
 import studentSeminar from '@/components/studentSeminar/studentSeminar'
 import studentSeminarPre from '@/components/studentSeminar/studentSeminarPre'
 import studentSeminarIndex from '@/components/studentSeminar/studentSeminarIndex'
-import studentSeminarViewScore from '@/components/studentSeminar/studentSeminarViewScore'
 import studentViewPpt from '@/components/studentSeminar/studentViewPpt'
-import ViewDeatilsAndSignUp from '@/components/studentSeminar/ViewDeatilsAndSignUp'
 //SeminarStudent
 import StuPersonCenter from '@/components/StudentPersonal/stuPersonalCenter'
 import StudentCourse from '@/components/StudentPersonal/studentCourse'
@@ -53,17 +52,12 @@ import studentScore from '@/components/TeacherPersonal/studentScore'
 import teacherSetting from '@/components/TeacherPersonal/teacherSetting'
 import teacherStudentTeam from '@/components/TeacherPersonal/teacherStudentTeam'
 import teamRequirementSetting from '@/components/TeacherPersonal/teamRequirementSetting'
-
 //teacherpersonal
 
 import LoginPC from '@/components/PC/loginPC'
 import CoursePage from '@/components/PC/coursePage'
 import ImportStu from '@/components/PC/TeacherPart/importStudent'
 import TeaViewScorePC from '@/components/PC/TeacherPart/teaViewScore'
-import TeaExportScorePC from '@/components/PC/TeacherPart/teaExportScore'
-import TeaDownloadFilePC from '@/components/PC/TeacherPart/downloadFile'
-import TeaDownloadPagePC from '@/components/PC/TeacherPart/downloadPage'
-import TeaDownloadBatchPC from '@/components/PC/TeacherPart/downloadBatch'
 import StuViewScorePC from '@/components/PC/StudentPart/stuViewScore'
 import createTeacherAccount from '@/components/PC/PCManager/createTeacherAccount'
 import ModeifyStudentMessage from '@/components/PC/PCManager/modeifyStudentMessage'
@@ -80,6 +74,11 @@ export default new Router({
       path: '/',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/emptyPage',
+      name: 'emptyPage',
+      component: emptyPage
     },
     {
       path: '/ActiveStudent',
@@ -195,19 +194,9 @@ export default new Router({
       component: studentSeminarIndex
     },
     {
-      path: '/studentSeminarViewScore',
-      name: 'studentSeminarViewScore',
-      component: studentSeminarViewScore
-    },
-    {
       path: '/studentViewPpt',
       name: 'studentViewPpt',
       component:studentViewPpt
-    },
-    {
-      path: '/ViewDeatilsAndSignUp',
-      name: 'ViewDeatilsAndSignUp',
-      component:ViewDeatilsAndSignUp
     },
     //SeminarStudent
     {
@@ -340,26 +329,6 @@ export default new Router({
       name: 'TeaViewScorePC',
       component: TeaViewScorePC
     },
-    {
-      path: '/TeaExportScorePC',
-      name: 'TeaExportScorePC',
-      component: TeaExportScorePC
-    },
-    {
-      path: '/TeaDownloadFilePC',
-      name: 'TeaDownloadFilePC',
-      component: TeaDownloadFilePC
-    },
-    {
-      path: '/TeaDownloadPagePC',
-      name: 'TeaDownloadPagePC',
-      component: TeaDownloadPagePC
-    },
-    {
-      path: '/TeaDownloadBatchPC',
-      name: 'TeaDownloadBatchPC',
-      component: TeaDownloadBatchPC
-    }
     ,
     {
       path: '/StuViewScorePC',

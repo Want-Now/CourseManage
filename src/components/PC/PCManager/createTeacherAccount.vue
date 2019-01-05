@@ -27,11 +27,6 @@
                   <el-col :span="4"><el-input v-model="email" ></el-input></el-col>
                 </el-row>
                 <br>
-                <el-row>
-                  <el-col :span="3">初始密码：</el-col>
-                  <el-col :span="4"><el-input v-model="password"></el-input></el-col>
-                </el-row>
-                <br>
               </el-form-item>
             </el-form>
             <el-form>
@@ -52,7 +47,6 @@
         name:'',
         email:'',
         account:'',
-        password:'',
         type:'1',
       }
     },
@@ -87,7 +81,6 @@
           url:"/teacher",
           data:{
             account:this.account,
-            password:this.password,
             name:this.name,
             email:this.email
           }

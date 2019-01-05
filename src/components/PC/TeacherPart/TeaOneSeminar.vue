@@ -4,44 +4,59 @@
       <button style="background-color: #efefef" class="el-icon-back backButt" @click="back()"></button>
       <span>个人信息综合管理平台</span>
       <button style="background-color: #efefef" class="el-icon-menu courseButt" @click="chosecourse()">&nbsp;选择课程</button>
-      <button style="background-color: #efefef" class="el-icon-circle-close-outline exitButt">&nbsp;退出系统</button>
+      <button style="background-color: #efefef" class="el-icon-circle-close-outline exitButt" @click="loginOutPC()">&nbsp;退出系统</button>
     </div>
-    <teacherMenu></teacherMenu>
-    <el-main style="margin-left:20%">
+    <div id="teacherMenu">
+      <el-menu>
+        <el-menu-item index="1" @click="Stu">
+          <i class="el-icon-news"></i>导入学生名单
+        </el-menu-item>
+        <el-menu-item index="2" @click="seminarIndex">
+          <i class="el-icon-document" ></i>讨论课
+        </el-menu-item>
+        <el-menu-item index="3" @click="importScore">
+          <i class="el-icon-edit"></i>查看成绩
+        </el-menu-item>
+      </el-menu>
+    </div>
+    <div class="main">
       <br>
       <el-form>
         <el-form-item>
-          <div style="font-family:Calibri;font-size:30px;font-weight:bold;width:100%;background-color:white;border:1px solid #dfdfdf;color:#409dfe;">{{courseName}}-讨论课</div>
+          <div style="font-family:Calibri;font-size:50px;height:60px;line-height:60px;font-weight:bold;width:100%;background-color:white;border:1px solid #dfdfdf;color:#409dfe;">{{courseName}}-讨论课</div>
         </el-form-item>
         </el-form-item>
         <el-form-item>
           <br>
-          <div style="font-size:30px;float:left;font-weight:bold;color:#959595">&nbsp;&nbsp;<span>主题：</span><span>{{ListForm[0].seminarName}}</span></div>
+          <div style="font-size:40px;float:left;font-weight:bold;color:#959595">&nbsp;&nbsp;<span>主题：</span><span>{{ListForm[0].seminarName}}</span></div>
           <br>
           <br>
-          <div style="font-size:20px;float:left;">&nbsp;&nbsp;<span>报名起止时间：&nbsp;&nbsp;&nbsp;</span><span>{{ListForm[0].enrollStartTime|dateFmt('YYYY-MM-DD HH:mm:ss')}}—{{ListForm[0].enrollEndTime|dateFmt('YYYY-MM-DD HH:mm:ss')}}</span></div>
+          <div style="font-size:30px;float:left;">&nbsp;&nbsp;<span>报名起止时间：&nbsp;&nbsp;&nbsp;</span><span>{{ListForm[0].enrollStartTime|dateFmt('YYYY-MM-DD HH:mm:ss')}}—{{ListForm[0].enrollEndTime|dateFmt('YYYY-MM-DD HH:mm:ss')}}</span></div>
           <br>
-          <div v-if="status=='2'" style="font-size:20px;float:left;">&nbsp;&nbsp;<span>报告提交截止时间：</span><span>{{tableData[0].reportDDL|dateFmt('YYYY-MM-DD HH:mm:ss')}}</span></div>
+          <div v-if="status=='2'" style="font-size:30px;float:left;">&nbsp;&nbsp;<span>报告提交截止时间：</span><span>{{tableData[0].reportDDL|dateFmt('YYYY-MM-DD HH:mm:ss')}}</span></div>
           <br>
-          <div style="font-size:20px;float:left;"><span style="float:left">&nbsp;&nbsp;&nbsp;内容：</span>
+          <div style="font-size:30px;float:left;"><span style="float:left">&nbsp;&nbsp;&nbsp;内容：</span>
             &nbsp;&nbsp;&nbsp;{{ListForm[0].introduction}}</div>
         </el-form-item>
         <div>
-          <span style="float:left;font-size:20px;color:#949494">&nbsp;&nbsp;已报名小组</span>
-          <el-select   v-model="ListClass"  value-key="" placeholder="请选择班级" label="请选择班级" style="float:right"  @change="getteam">
+          <span style="float:left;font-size:30px;color:#949494">&nbsp;&nbsp;已报名小组
+          </span><span style="float:right;font-size:20px">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请选择班级
+              <el-select  v-model="klassId"  label="请选择班级" size="large" @change="getteam">
             <el-option
-              v-for="o in length1"
-              :key="o"
-              :label="ListForm[o].klassSerial"
-              :value="ListForm[o].klassId">
+              v-for="klass in ListClass"
+              :key="klass.klassId"
+              :label="klass.klassSerial"
+              :value="klass.klassId">
             </el-option>
           </el-select>
+          </span>
           <br>
           <br>
         </div>
         <el-table
           :data="tableData"
-          style="width: 100%;padding-left:1%;">
+          :header-cell-style="{'font-size':'25px','height':'90px'}"
+          :row-style="{'font-size':'25px','height':'80px'}">
           <el-table-column
             label="展示次序"
             type="index"
@@ -74,17 +89,12 @@
         </el-table>
       </el-form>
       </el-form>
-    </el-main>
+    </div>
   </div>
 </template>
 <script>
-  import teacherMenu from './teacherMenu'
-
   export default {
     name: "TeaOneSeminar",
-    components:{
-      teacherMenu,
-    },
     data(){
       return{
         ListForm:[{
@@ -94,56 +104,79 @@
             klassId:'',
           }],
         enrollEndTime:'',
-        length1:'2',
-        length2:'2',
         seminarSerial:'',
-        klassSerial:'',
-        nowteam:'',
-        maxteam:'',
-        ListClass:[{
-          klassSerial:'',
-        }],
-        tableData:[{
-            klassSerial:'',
-        }],
+        ListClass:[],
+        tableData:[],
         courseName:'',
-        o:'1',
-        p:'1',
-        val:'',
+        klassId:'',
         status:'0',
       }
     },
     created() {
       this.basicmessage();
+      this.cour();
     },
   methods:{
     indexMethod(index) {
       return index + 1;
     },
-      basicmessage(){
+    basicmessage(){
         var _this = this;
         this.$axios({
           method: 'get',
-          url: '/seminar/5/attendance/pc'
+          url: '/seminar/'+this.$route.query.seminarId+'/attendance/pc'
         }).then(response => {
           _this.ListForm = response;
-          _this.length1= _this.ListForm.length-1;
           _this.courseName=this.$route.query.courseName;
           console.log(response);
         })
       },
-      getteam(val){
+    cour(){
+      var _this = this;
+      this.$axios({
+        method: 'get',
+        url: '/seminar/'+this.$route.query.seminarId+'/klass'
+      }).then(response => {
+        _this.ListClass = response;
+        console.log(response);
+      })
+    },
+    getteam(val){
         var _this = this;
         this.$axios({
           method: 'get',
-          url: '/seminar/5/'+val+'/klassSeminar/pc'
+          url: '/seminar/'+this.$route.query.seminarId+'/'+val+'/klassSeminar/pc'
         }).then(response => {
           _this.tableData = response;
           _this.status=response[0].status;
           console.log(response);
           console.log(_this.status);
         })
-      }
+      },
+    Stu(){
+      this.$router.push({path:'/ImportStuPC',
+        query:{
+          courseId:this.$route.query.courseId,
+          courseName:this.$route.query.courseName
+        }
+      })
+    },
+    seminarIndex(){
+      this.$router.push({path:'/PCseminarIndex',
+        query:{
+          courseId:this.$route.query.courseId,
+          courseName:this.$route.query.courseName
+        }
+      })
+    },
+    importScore(){
+      this.$router.push({path:'/TeaViewScorePC',
+        query:{
+          courseId:this.$route.query.courseId,
+          courseName:this.$route.query.courseName
+        }
+      })
+    },
   }
   }
 </script>
@@ -206,6 +239,36 @@
     height: 60px;
     font-size: 22px;
 
+  }
+  #teacherMenu{
+    min-width: 300px;
+
+    position: absolute;
+    left: 0px;
+  }
+  .el-menu{
+    height: 90vh;
+  }
+  .el-menu-item{
+    height: 30vh;
+    font-size: 25px;
+    line-height: 30vh;
+  }
+  .el-icon-news{
+    margin-right: 10px;
+    font-size: 30px;
+  }
+  .el-icon-document{
+    margin-right: 10px;
+    font-size: 30px;
+  }
+  .main{
+    margin-left: 300px;
+    padding: 0 50px;
+  }
+  .el-icon-edit{
+    margin-right: 10px;
+    font-size: 30px;
   }
 </style>
 <style>

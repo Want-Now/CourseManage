@@ -1,12 +1,22 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
 <script>
 export default {
   name: 'App',
+  provide(){
+    return{
+      reload:this.reload
+    }
+  },
+  data(){
+    return{
+      isRouterAlive:true
+    }
+  },
   mounted(){
     var _this = this
     window.onresize = () => {
@@ -14,6 +24,15 @@ export default {
       _this.$store.state.screenHeight = document.documentElement.clientHeight
       _this.$store.state.isMobile = navigator.userAgent.toLowerCase().match(/(phone|pad|pod|iphone|ipod|ios|ipad|android|mobile|blackberry|iemobile|mqqbrowser|juc|fennec|wosbrowser|browserng|webos|symbian|windows phone)/i) !== null
       _this.$store.state.isVertical = document.documentElement.clientWidth < document.documentElement.clientHeight
+    }
+  },
+  methpds:{
+    reload(){
+      this.isRouterAlive=false
+      this.$nextTick(function(){
+        this.isRouterAlive=true
+      })
+
     }
   }
 }

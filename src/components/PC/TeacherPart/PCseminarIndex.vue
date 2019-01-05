@@ -4,38 +4,46 @@
       <button style="background-color: #efefef" class="el-icon-back backButt" @click="back()"></button>
       <span>个人信息综合管理平台</span>
       <button style="background-color: #efefef" class="el-icon-menu courseButt" @click="chosecourse()">&nbsp;选择课程</button>
-      <button style="background-color: #efefef" class="el-icon-circle-close-outline exitButt">&nbsp;退出系统</button>
+      <button style="background-color: #efefef" class="el-icon-circle-close-outline exitButt" @click="loginOutPC()">&nbsp;退出系统</button>
     </div>
-    <teacherMenu></teacherMenu>
-    <el-main style="margin-left:20%">
-      <br>
+    <div id="teacherMenu">
+      <el-menu>
+        <el-menu-item index="1" @click="Stu">
+          <i class="el-icon-news"></i>导入学生名单
+        </el-menu-item>
+        <el-menu-item index="2" @click="seminarIndex">
+          <i class="el-icon-document" ></i>讨论课
+        </el-menu-item>
+        <el-menu-item index="3" @click="importScore">
+          <i class="el-icon-edit"></i>查看成绩
+        </el-menu-item>
+      </el-menu>
+    </div>
+    <div class="main">
       <br>
       <br>
       <div style="padding-left:15%;">
       <el-card class="box-card" size="large" style="padding-left:5%;" v-for="round in rounds" :key="round.roundId">
         <div slot="header" class="clearfix">
-          <span style="font-size:25px;color:#409dfe;font-weight:bold;float: left; padding: 3px 0">第{{round[0].roundSerial}}轮讨论课</span>
+          <span style="font-size:50px;color:#409dfe;font-weight:bold;float: left; padding: 3px 0">第{{round[0].roundSerial}}轮讨论课</span>
         </div>
         <div>
-          <el-row v-for="o in length1":key="o" style="border-bottom: 1px solid #dddddd">
-          <el-col :span="12"><div style="font-size:20px;float:left;padding-left:60px;font-weight:bold;font-size:20px">{{round[o].seminarName}}</div></el-col>
-            <el-col :span="12" style="padding-left:100px;"><el-button @click="enter(round[o].seminarId)">进入</el-button></el-col>
+          <el-row v-for="o in length1":key="o" style="height:80px;line-height: 80px">
+          <el-col :span="12"><div style="font-size:30px;float:left;padding-left:60px;">{{round[o].seminarName}}</div></el-col>
+            <el-col :span="12" style="padding-left:100px;"><el-button size="large;" @click="enter(round[o].seminarId)">进入</el-button></el-col>
           </el-row>
           <br>
           <br>
         </div>
       </el-card>
       </div>
-    </el-main>
+    </div>
   </div>
 </template>
 <script>
-  import teacherMenu from './teacherMenu'
+
   export default {
     name: "PCseminarIndex",
-    components:{
-      teacherMenu,
-    },
     data() {
       return {
         rounds:[],
@@ -66,8 +74,33 @@
         this.$router.push({path:'/TeaOneSeminar',
           query:{
             seminarId:seminarId,
-            courseName:this.$route.query.courseName
+            courseName:this.$route.query.courseName,
+            courseId:this.$route.query.courseId
         }
+        })
+      },
+      Stu(){
+        this.$router.push({path:'/ImportStuPC',
+          query:{
+            courseId:this.$route.query.courseId,
+            courseName:this.$route.query.courseName
+          }
+        })
+      },
+      seminarIndex(){
+        this.$router.push({path:'/PCseminarIndex',
+          query:{
+            courseId:this.$route.query.courseId,
+            courseName:this.$route.query.courseName
+          }
+        })
+      },
+      importScore(){
+        this.$router.push({path:'/TeaViewScorePC',
+          query:{
+            courseId:this.$route.query.courseId,
+            courseName:this.$route.query.courseName
+          }
         })
       },
     }
@@ -85,6 +118,10 @@
 }
 .clearfix:after {
   clear: both
+}
+.main{
+  margin-left: 300px;
+  padding: 0 50px;
 }
 .box-card {
   width: 80%;
@@ -146,6 +183,32 @@
     height: 60px;
     font-size: 22px;
   }
+#teacherMenu{
+  min-width: 300px;
+
+  position: absolute;
+  left: 0px;
+}
+.el-menu{
+  height: 90vh;
+}
+.el-menu-item{
+  height: 30vh;
+  font-size: 25px;
+  line-height: 30vh;
+}
+.el-icon-news{
+  margin-right: 10px;
+  font-size: 30px;
+}
+.el-icon-document{
+  margin-right: 10px;
+  font-size: 30px;
+}
+.el-icon-edit{
+  margin-right: 10px;
+  font-size: 30px;
+}
 </style>
 <style>
   .select .el-input__inner{

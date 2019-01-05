@@ -1,14 +1,14 @@
 <template>
   <el-container>
-    <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
+    <el-header>
+      <el-button class="el-icon-back" @click="back()"></el-button>
       <p>新增共享</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>代办</el-dropdown-item>
-          <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
+          <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
+          <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
@@ -27,11 +27,10 @@
           </el-form-item>
           <el-form-item label="共享对象">
             <el-select v-model="shareForm.shareCourse">
-              <el-option
-                v-for="course in shareForm.shareCourses"
-                :key="course.id"
-                :label="type.label"
-                :value="course.id">
+              <el-option v-for="course in courseList" :key="course.courseId"
+                         :value= "course.courseId"
+                         :label="`${course.courseNaem}(${course.teacherName}老师)`"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -40,7 +39,7 @@
 
     </el-main>
     <el-footer>
-      <el-button class="bottomButt">确认共享</el-button>
+      <el-button class="bottomButt" @click="cre">确认共享</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -51,25 +50,72 @@
         shareForm:{
           shareTypes:[
             {
-              label:'共享讨论课',
+              label:'共享组队',
               value:1
             },
             {
-              label:'共享分组',
+              label:'共享讨论课',
               value:2
             }
           ],
-          shareCourses: [
-
-          ],
+          subCourseId: '',
+          subCourseTeacherId: '',
           shareType:'',
           shareCourse:''
         },
+        subCourseId:'',
+        subCourseTeacherId:'',
+        courseList:{},
       };
     },
-
+      created(){
+        var that=this;
+        console.log(this.$route.query.courseId);
+        this.$axios({
+          method: 'get',
+          url: "/share/showSendShare",
+          params:{
+            courseId: that.$route.query.courseId,
+          }
+        }).then(function (response) {
+          that.courseList=response;
+          //console.log(that.courseList);
+        })
+      },
     methods: {
-
+      cre() {
+        for (var a = 0; a < this.courseList.length; a++) {
+          if (this.shareForm.shareCourse == this.courseList[a].courseId) {
+            this.subCourseId = this.courseList[a].courseId,
+              this.subCourseTeacherId = this.courseList[a].teacherId
+          }
+        }
+        var that = this;
+        this.$axios({
+          method: 'post',
+          url: '/share/sendShare',
+          data: {
+            mainCourseId: that.$route.query.courseId,
+            subCourseId: that.subCourseId,
+            subCourseTeacherId: that.subCourseTeacherId,
+            type: that.shareForm.shareType,
+          }
+        }).then(function (response) {
+          if (response === true) {
+            that.$message({
+              message: '发送成功，等待对方同意',
+              type: 'success',
+              duration: 2000
+            });
+          } else {
+            that.$message({
+              message: '发送失败',
+              type: 'error',
+              duration: 2000
+            });
+          }
+        })
+      }
     }
   }
 </script>

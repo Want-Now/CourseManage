@@ -2,7 +2,7 @@
   <div id="page">
     <div class="header">
       <span>个人信息综合管理平台</span>
-      <button class="el-icon-circle-close-outline exitButt" style="background-color:#efefef">&nbsp;退出系统</button>
+      <button class="el-icon-circle-close-outline exitButt" style="background-color:#efefef" @click="loginOutPC()">&nbsp;退出系统</button>
     </div>
     <div class="main">
       <p class="title">选择课程</p>
