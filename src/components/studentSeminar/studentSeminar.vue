@@ -60,7 +60,8 @@
           query:{
             courseId:row.courseId,
             courseName:row.courseName
-          }})
+          }}
+          )
       }
     },
   }
