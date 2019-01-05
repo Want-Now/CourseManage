@@ -79,7 +79,6 @@
           }
         }).then(function (response) {
           that.courseList=response;
-          //console.log(that.courseList);
         })
       },
     methods: {

@@ -2,7 +2,7 @@
   <el-container>
     <el-header class="header" style="background-color:#efefef">
       <span>翻转课堂综合管理平台</span>
-      <button class="el-icon-circle-close-outline exitButt" style="background-color:#efefef" @click="loginOutPC">&nbsp;退出系统</button>
+      <button class="el-icon-circle-close-outline exitButt" style="background-color:#efefef" @click="loginOutPC()">&nbsp;退出系统</button>
     </el-header>
     <br>
     <el-main>
@@ -185,7 +185,6 @@
             type:1
           }
         }).then(function (response) {
-          //console.log(response.data);
           _this.tableData=response
         })
       },
@@ -198,7 +197,6 @@
             type:0
           }
         }).then(function (response) {
-          // console.log(response.data);
           _this.tableData2=response;
         })
       },

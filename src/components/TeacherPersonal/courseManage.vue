@@ -39,7 +39,7 @@
       </el-menu>
     </el-main>
     <el-footer>
-      <el-button class="bottomButt" v-if="role==='student'"><i class="el-icon-plus"></i>新建课程</el-button>
+      <el-button class="bottomButt" @click="newcourse"><i class="el-icon-plus"></i>新建课程</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -73,11 +73,14 @@
       back(){
         this.$router.go(-1);
       },
+      newcourse(){
+        this.$router.push({path:'/createCourse'})
+      },
       handleChange(val) {
         console.log(val);
       },
       goStudentScore(item){
-        this.$router.push({path:'/StudentScore',query:{courseId:item.courseId}});
+
       },
       goTeamPage(item){
         // console.log(item.courseId);

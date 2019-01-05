@@ -26,7 +26,6 @@
             <span class="col-content">{{course.shareType}}</span>
           </el-col>
         </el-row>
-        <br>
         <el-row class="content-row">
           <el-col class="row-col">
             <span class="col-title">共享情况：</span>
@@ -84,8 +83,7 @@
                 type:'success',
                 duration:2000
               });
-              
-              //that.$router.push('/emptyPage');
+              window.location.reload();
             } else {
               that.$message({
                 message: '取消失败',
