@@ -8,7 +8,7 @@
       <el-main>
         <el-form>
           <el-form-item>
-            <div style="font-family:Calibri;font-size:120%;font-weight:bold;width:100%;background-color:white;border:1px solid #dfdfdf;color:#409dfe;">修改教师信息</div>
+            <div style="font-family:Calibri;font-size:120%;font-weight:bold;width:100%;background-color:white;border:1px solid #dfdfdf;color:#409dfe;">修改学生信息</div>
           </el-form-item>
           <el-form-item style="border:1px solid #dfdfdf;">
             <br>
@@ -86,7 +86,7 @@
             newStudentName:this.name,
             newStudentEmail:this.email,
             type:0,
-          }
+          },
         }).then(function (response) {
           if(response===true){
             that.$message({

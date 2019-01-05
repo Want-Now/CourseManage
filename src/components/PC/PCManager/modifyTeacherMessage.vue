@@ -89,7 +89,7 @@
             type:1,
           }
         }).then(function (response) {
-          if(response.data===true){
+          if(response===true){
             that.$message({
               message:'修改成功',
               type:'success',

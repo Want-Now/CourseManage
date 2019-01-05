@@ -39,8 +39,7 @@
             &nbsp;&nbsp;&nbsp;{{ListForm[0].introduction}}</div>
         </el-form-item>
         <div>
-          <span style="float:left;font-size:30px;color:#949494">&nbsp;&nbsp;已报名小组
-          </span><span style="float:right;font-size:20px">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请选择班级
+          <span style="float:left;font-size:30px;color:#949494">  &nbsp;&nbsp;请选择班级
               <el-select  v-model="klassId"  label="请选择班级" size="large" @change="getteam">
             <el-option
               v-for="klass in ListClass"
