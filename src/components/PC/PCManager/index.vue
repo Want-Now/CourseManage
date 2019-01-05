@@ -98,7 +98,6 @@
                 <div  class="text item">
                   <el-table  :data="tableData2.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase())|| data.account.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pagesize,currentPage*pagesize)"
                              style="width: 100%"
-
                   >
                     <el-table-column
                       padding-left="10px"
