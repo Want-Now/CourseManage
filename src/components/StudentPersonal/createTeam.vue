@@ -14,17 +14,17 @@
           class="activeInput">
           <el-option
             v-for="classOption in classOptions"
-            :key="classOption.value"
+            :key="classOption.klassId"
             :label="classOption.label"
-            :value="classOption.value">
-
+            :value="classOption.klassId">
           </el-option>
         </el-select>
       </div>
       <div>
         <el-table
           ref="multipleTable"
-          :data="unteamStudent"
+          :data="unteamMember.filter(data => !searchStudent || data.name.toLowerCase().includes(searchStudent.toLowerCase())||data.account.includes(searchStudent))"
+          @selection-change="changeFun"
           tooltip-effect="dark"
           height="50vh"
           style="width: 100%">
@@ -32,29 +32,24 @@
             type="selection">
           </el-table-column>
           <el-table-column
-            prop="studentNum"
+            prop="account"
             label="学号">
           </el-table-column>
           <el-table-column
             prop="name"
             label="姓名">
           </el-table-column>
-
         </el-table>
-        <!--搜索-->
-        <el-autocomplete
-          class="inline-input activeInput"
-          v-model="searchStudent"
-          :fetch-suggestions="tableSearch"
-          placeholder="请输入学号/名字"
-          @select="handleSelect"
-        >
-          <template slot="prepend"><i class="el-icon-search"></i>搜索</template>
-        </el-autocomplete>
       </div>
     </el-main>
     <el-footer>
-      <el-button class="bottomButt">确认提交</el-button>
+      <el-input
+        v-model="searchStudent"
+        size="mini"
+        class="activeInput"
+        placeholder="输入关键字搜索"
+        style="margin-bottom: 20px"/>
+      <el-button class="bottomButt" @click="createTeam()">确认提交</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -64,46 +59,100 @@
         name: "createTeam",
       data(){
           return{
-            headerLocation:'OOAD 2016(1)',
+            headerLocation:'',
             teamNameInput:'',
-            classOptions:[
-              {
-                value:'选项1',
-                label:'2016(1)'
-              },
-              {
-                value:'选项2',
-                label:'2016(2)'
-              },
-              {
-                value:'选项3',
-                label:'2016(3)'
-              }],
-            unteamStudent:[
-              {
-                studentNum:'24331434324',
-                name:'MINGming'
-              },
-              {
-                studentNum:'24331434324',
-                name:'MINGming'
-              },
-              {
-                studentNum:'24331434324',
-                name:'MINGming'
-              }],
+            classOptions:[],
+            unteamMember:[],
             classSelect:'',
             searchStudent:'',
-
+            multipleSelection:[]
           }
       },
-      methods:{
-          tableSearch(){
+      created(){
+          this.headerLocation=this.$route.query.courseName;
+          this.unTeamList();
+          this.$axios({
+            method:'get',
+            url:'/course/'+this.$route.query.courseId+'/klass',
+          }).then(response=>{
+            var _this=this;
+            for(var index=0;index<response.length;index++)
+            {
+              _this.classOptions.push({
+                label:response[index].grade+'('+response[index].klassSerial+')',
+                klassId:response[index].klassId,
+              })
+            }
+          });
 
-          },
-          handleSelect(){
-
+      },
+      computed:{
+        unteam:function(){
+          var search=this.searchStudent;
+          if(search){
+            return  this.unteamMember.filter(function(dataNews){
+              return Object.keys(dataNews).some(function(key){
+                return String(dataNews[key]).toLowerCase().indexOf(search) > -1
+              })
+            })
           }
+          return this.unteamMember
+        }
+      },
+      methods:{
+        // tableSearch(queryString, cb) {
+        //   var unteamStudent = this.unteamMember;
+        //   var results = queryString ? unteamStudent.filter(this.createStateFilter(queryString)) : unteamStudent;
+        //   clearTimeout(this.timeout);
+        //   this.timeout = setTimeout(() => {
+        //     cb(results);
+        //   }, 3000 * Math.random());
+        // },
+
+        changeFun(val){
+          this.multipleSelection = val;
+        },
+        unTeamList(){
+          let _this=this;
+          this.$axios({
+            method: 'get',
+            url:'/course/'+this.$route.query.courseId+'/noTeam'
+          }).then(response=>{
+            _this.unteamMember=response;
+            _this.loading2=false;
+          })
+        },
+        createTeam(){
+          let ids=[];
+          this.multipleSelection.map((item)=> {
+            ids.push(item.studentId)
+          });
+          console.log(this.classSelect.klassId,ids);
+          this.$axios({
+            method:'post',
+            url:'/team/create',
+            data:{
+              klassId: this.classSelect.klassId,
+              courseId:this.$route.query.courseId,
+              teamName:this.teamNameInput,
+              studentIdList:ids
+            }
+          }).then(response=>{
+            if(response===true){
+              this.$message({
+                type: 'success',
+                message: '创建成功!',
+                duration:800
+              });
+            }else{
+              this.$message({
+                type: 'error',
+                message: '创建失败',
+                duration:800
+              });
+            }
+          })
+        }
       }
 
     }
@@ -111,7 +160,7 @@
 
 <style scoped>
   .el-container{
-    height: 99vh;
+    height: 88vh;
   }
   .selectDiv{
     margin:20px 0px;

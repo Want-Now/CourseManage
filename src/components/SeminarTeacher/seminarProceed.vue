@@ -93,13 +93,16 @@
           nowPre:'',
           preIndex:'',
           dialogVisible:false,
-          repoDeadline:''
+          repoDeadline:'',
+          websock:'',
         }
       },
       created(){
+        this.initWebSocket();
         this.load();
-        this.wsService();
+        // this.wsService();
       },
+
       methods: {
         load(){
           let _this=this;
@@ -127,8 +130,13 @@
                 //console.log(_this.seminarInfos[index].attendanceId)
               }
               _this.preLength=response.length;
+              if(_this.websock.readyState===1){
+                var message = JSON.stringify("开始展示");
+                _this.websock.send(message);
+              }
             }
-          )
+          );
+
         },
         back(){
           this.$router.go(-1);
@@ -141,6 +149,8 @@
         },
         goQuesPage(){
           this.isPrePage=false;
+          this.webSocketSend("");
+
         },
         nextTeamPre(){
           let _this=this;
@@ -162,6 +172,11 @@
               _this.nowPre=_this.seminarInfos[_this.preIndex].teamId+'';
             })
           }
+          this.webSocketSend(JSON.stringify("下一组"));
+          this.websock.onmessage=function (msg) {
+            console.log(msg.data);
+          }
+
         },
         uploadPreScore(item){
 
@@ -171,7 +186,21 @@
             data:{
               presentationScore:item.presentationScore
             }
-            }).then(response=>{console.log(response);});
+            }).then(response=>{
+              if(response===true) {
+                this.$message({
+                  type: 'success',
+                  message: '成功!',
+                  duration: 800
+                });
+              }else {
+                this.$message({
+                  type: 'error',
+                  message: '失败！',
+                  duration:800
+                });
+              }
+            });
         },
         uploadQuesScore(){
 
@@ -226,13 +255,37 @@
             + seperator2 + Seconds;
           return currentdate;
         },
-        wsService(){
-          let ws = new WebSocket("ws://"+window.location.host+"/websocket/presentation");
-          ws.onopen = (event)=>{
-            ws.send("jjjjj");
-          };
-        }
-      }
+
+        initWebSocket(){ //初始化weosocket
+
+          const wsuri = "ws://ghctcourse.natapp1.cc/websocket";//ws地址
+          this.websock = new WebSocket(wsuri);
+          this.websock.onopen = this.webSocketOnOpen;
+
+          this.websock.onerror = this.webSocketOnError;
+
+          this.websock.onmessage = this.webSocketOnMessage;
+          this.websock.onclose = this.webSocketClose;
+        },
+
+        webSocketOnOpen() {
+          console.log("WebSocket连接成功");
+        },
+        webSocketOnError(e) { //错误
+          console.log("WebSocket连接发生错误");
+        },
+        webSocketSend(agentData){//数据发送
+          this.websock.send(agentData);
+        },
+
+        webSocketClose(e){ //关闭
+          console.log("connection closed (" + e + ")");
+        },
+      },
+      destroyed(){
+        //页面销毁时关闭长连接
+        this.webSocketClose();
+      },
     }
 </script>
 

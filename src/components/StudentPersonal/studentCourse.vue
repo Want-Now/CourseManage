@@ -62,7 +62,10 @@
         this.$router.push('/CourseScore');
       },
       goMyTeam(item){
-        //判断是组长还是组员
+        this.$router.push({
+          path:'/TeamPage',
+          query:{courseId:item.courseId,courseName:item.courseName}
+        });
       }
     }
 
