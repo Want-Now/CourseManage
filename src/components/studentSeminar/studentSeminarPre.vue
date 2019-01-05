@@ -1,59 +1,31 @@
 <template>
   <el-container style="height:100%;width: 100%; margin:0 auto;">
     <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
+      <el-button class="el-icon-back" @click="back()"></el-button>
       <p>{{headerLocation}}</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>代办</el-dropdown-item>
-          <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
+          <el-dropdown-item @click.native="stuCenter()">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="stuSeminar()">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
     <el-main>
       <div>
-        <div  style="font-size:110%">业务流程分析</div>
-        <div style="float:left;font-size:80%">第四组 展示</div>
-        <div style="float:right;font-size:80%">已有一名同学提问</div>
+        <div  style="font-size:20px">{{seminarName}}</div>
+        <div style="float:left;font-size:15px">第{{nowPreOrder}}组展示</div>
+        <div style="float:right;font-size:15px">已有{{questionNum}}名同学提问</div>
       </div>
       <br>
-      <el-row style=" border-top: 1px solid #999999;">
+      <el-row style=" border-top: 1px solid #999999;" v-for="">
         <el-col :span="8"><div class="grid-content bg-purple">第一组</div></el-col>
         <el-col :span="16"><div class="grid-content bg-purple-light">1-1</div></el-col>
       </el-row>
-      <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">第二组</div></el-col>
-        <el-col :span="16"><div class="grid-content bg-purple-light">1-3</div></el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">第三组</div></el-col>
-        <el-col :span="16">
-          <div class="grid-content bg-purple-light">1-5</div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">第四组</div></el-col>
-        <el-col :span="16"><div style="color:red;" class="grid-content bg-purple-light">1-2</div></el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">第五组</div></el-col>
-        <el-col :span="16"><div class="grid-content bg-purple-light">1-6</div></el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8"><div class="grid-content bg-purple">第六组</div></el-col>
-        <el-col :span="16"><div class="grid-content bg-purple-light">1-4</div></el-col>
-      </el-row>
     </el-main>
-    <el-form>
-      <el-form-item style="padding-bottom: 20px;">
-        <router-link to="">
-          <el-button style="width:50%;background-color:#494e8e" type="primary" @click="submitForm('ruleForm')">Q&A</el-button>
-        </router-link>
-
-      </el-form-item>
-    </el-form>
+    <el-footer>
+      <el-button class="bottomButt" type="primary" @click="submitForm('ruleForm')">Q&A</el-button>
+    </el-footer>
   </el-container>
 </template>
 
@@ -61,21 +33,17 @@
   export default {
     data() {
       return {
-        headerLocation: "OOAD-讨论课",
-        tableData: [{
-          team: '第一组',
-          ppt: '1-1业务流程.ppt '
-        }, {
-          team: '第二组',
-          ppt: '1-2 未提交'
-        }, {
-          team: '第三组',
-          ppt: '可报名 '
-        }, {
-          team: '第四组',
-          ppt: '1-4业务流程.ppt '
-        }]
+        headerLocation: "",
+        tableData: [],
+        seminarName:'',
+        nowPreOrder:'',
+        questionNum:'',
+
       }
+    },
+    created(){
+      this.headerLocation=this.$route.query.courseName;
+      this.seminarName=this.$route.query.seminarName;
     },
     methods: {
       open() {
@@ -104,14 +72,64 @@
 </script>
 <style>
   .el-container {
-    margin-bottom: 40px;
-    color: #333;
-    background-color:white;
+    height: 95vh;
   }
   .el-row{
     border-bottom: 1px solid #999999;
     font-size:110%;
     height:50px;
     line-height:50px;
+  }
+  .el-header{
+    margin: 0px;
+    padding: 0px;
+    background-color: #494e8f;
+    color:white;
+    font-size: 20px;
+    line-height: 22px;
+    text-align: center;
+  }
+
+  .el-header p{
+    display: inline-block;
+  }
+
+  .el-header .el-icon-back{
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
+    left: 10px;
+    top: 10px;
+  }
+
+  .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
+
+  .el-header .el-icon-menu{
+    position: absolute;
+    width: 60px;
+    height: 55px;
+    background-color: #494e8f;
+    border-color: #494e8f;
+    color: white;
+    right: 10px;
+    top: 10px;
+  }
+  .el-header .el-icon-menu:hover{background-color: #494e8f;border-color: #494e8f;}
+  .el-header .el-icon-menu:focus{background-color: #494e8f;border-color: #494e8f;}
+
+  .el-header .el-dropdown{
+    position: absolute;
+    margin: 0px;
+    width: 60px;
+    height: 55px;
+    color: white;
+    right: 0px;
+    top: 0px;
+    line-height: 55px;
+    text-align: center;
   }
 </style>

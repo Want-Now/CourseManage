@@ -69,7 +69,7 @@
     </el-main>
     <el-footer v-if="role==='student'">
       <el-button class="bottomButt" v-if="isUnteamed===true&&canTeam===true" @click="goCreateTeam()">创建小组<i class="el-icon-plus"></i></el-button>
-      <el-button class="bottomButt" v-else-if="isUnteamed===false" @click="goMemberTeam()">我的小组</el-button>
+      <el-button class="bottomButt" v-if="isUnteamed===false" @click="goMemberTeam()">我的小组</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -166,7 +166,7 @@
           });
         },
         goMemberTeam(){
-          this.$router.push({path:'/MemberTeam',query:{}});
+          this.$router.push({path:'/MemberTeam',query:{courseName:this.$route.query.courseName,courseId:this.$route.query.courseId,canTeam:this.canTeam}});
         },
         getDate(date) {
           var seperator1 = "-";

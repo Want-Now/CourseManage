@@ -59,7 +59,10 @@
         this.$router.push({path:'/CourseInfo',query:{courseId:item.courseId,courseName:item.courseName}});
       },
       goScorePage(item){
-        this.$router.push('/CourseScore');
+        this.$router.push({
+          path:'/CourseScore',
+          query:{courseName:item.courseName,grade:item.grade,klassSerial:item.klassSerial,courseId:item.courseId}
+        });
       },
       goMyTeam(item){
         this.$router.push({

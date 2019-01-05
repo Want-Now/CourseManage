@@ -125,15 +125,14 @@
         createTeam(){
           let ids=[];
           this.multipleSelection.map((item)=> {
-            ids.push(item.studentId)
+            ids.push(parseInt(item.studentId))
           });
-          console.log(this.classSelect.klassId,ids);
           this.$axios({
             method:'post',
             url:'/team/create',
             data:{
-              klassId: this.classSelect.klassId,
-              courseId:this.$route.query.courseId,
+              klassId: parseInt(this.classSelect),
+              courseId:parseInt(this.$route.query.courseId),
               teamName:this.teamNameInput,
               studentIdList:ids
             }
@@ -144,6 +143,7 @@
                 message: '创建成功!',
                 duration:800
               });
+              this.$route.go(-1);
             }else{
               this.$message({
                 type: 'error',

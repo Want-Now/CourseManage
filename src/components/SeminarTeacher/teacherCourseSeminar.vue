@@ -72,7 +72,6 @@
         function (response) {
           _this.headerLocation=_this.$route.query.courseName;
           _this.rounds=response;
-
         }
       );
     },

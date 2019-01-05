@@ -3,13 +3,6 @@
     <el-header>
       <el-button class="el-icon-back" @click="back()"></el-button>
       <p>{{headerLocation}}</p>
-      <el-dropdown>
-        <el-button class="el-icon-menu"></el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
     </el-header>
     <el-main>
       <el-menu
@@ -67,11 +60,10 @@
         this.$axios({
           method:'get',
           url:'/user/information',
-
         }).then(function (response) {
-          that.stuName=response.data.name;
-          that.stuID=response.data.account;
-          that.stuEmail=response.data.email;
+          that.stuName=response.name;
+          that.stuID=response.account;
+          that.stuEmail=response.email;
         }).catch(function (error) {
           console.log(error);
         })
