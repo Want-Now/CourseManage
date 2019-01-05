@@ -12,7 +12,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://ghctcourse.natapp1.cc', //设置你调用的接口域名和端口号 别忘了加http
+        target: 'http://47.107.122.159:8080',
+        //设置你调用的接口域名和端口号 别忘了加http
+        // target: 'http://ghctcourse.natapp1.cc',
         // target: 'http://localhost:8080', //设置你调用的接口域名和端口号，别忘了加http
         changeOrigin: true,
         pathRewrite: {
