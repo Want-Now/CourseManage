@@ -38,7 +38,7 @@ Vue.prototype.back=function () {
   this.$router.go(-1);
 }
 Vue.prototype.chosecourse=function () {
-  this.$router.push('/coursePage');
+  this.$router.push('/coursePagePC');
 }
 Vue.prototype.stuSeminar=function () {
   this.$router.push('/StudentSeminar');
@@ -54,6 +54,9 @@ Vue.prototype.teaCenter=function () {
 }
 Vue.prototype.backlogPage=function () {
   this.$router.push('/BacklogPage');
+}
+Vue.prototype.loginOutPC=function () {
+  this.$router.push('/PC');
 }
 
 

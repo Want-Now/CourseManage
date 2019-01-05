@@ -2,7 +2,7 @@
   <el-container>
     <el-header class="header" style="background-color:#efefef">
       <span>翻转课堂综合管理平台</span>
-      <button class="el-icon-circle-close-outline exitButt" style="background-color:#efefef">&nbsp;退出系统</button>
+      <button class="el-icon-circle-close-outline exitButt" style="background-color:#efefef" @click="loginOutPC">&nbsp;退出系统</button>
     </el-header>
     <br>
     <el-main>
@@ -142,6 +142,7 @@
 
 <script>
   export default {
+    inject:['reload'],
     data() {
       return {
         currentPage: 1,
@@ -157,6 +158,7 @@
       this.gettable2()
       this.getParams ()
     },
+
     methods: {
       handleClick(tab, event) {
         console.log(tab, event);
@@ -316,7 +318,8 @@
                 type:'success',
                 duration:800
               });
-              window.location.reload()
+              this.reload()
+              //window.location.reload()
             } else {
               that.$message({
                 message: '删除失败',
@@ -353,7 +356,7 @@
                 type:'success',
                 duration:800
               });
-              window.location.reload()
+              //window.location.reload()
             } else {
               that.$message({
                 message: '删除失败',
@@ -367,6 +370,7 @@
             message: '已取消删除'
           });
         });
+        this.reload
       },
     }
   }
