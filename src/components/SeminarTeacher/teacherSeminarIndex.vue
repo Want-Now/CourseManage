@@ -54,7 +54,6 @@
         klassId:'',
         klassName:'',
         courseName:'',
-        klassSeminarId:'',
       }
     },
     created() {
@@ -88,8 +87,7 @@
           query:{
             courseName:this.courseName,
             seminarName:this.seminarName,
-            klassSeminarId:this.klassSeminarId,
-            status:this.status
+            klassSeminarId:this.klassSeminarId
           }})
       },
       enterSe(){
@@ -98,34 +96,25 @@
             klassSeminarId:this.klassSeminarId,
             seminarName:this.seminarName,
             courseName:this.courseName,
-            seminarId:this.$route.query.seminarId,
-            roundSerial:this.$route.query.roundSerial,
-            klassId:this.$route.query.klassId,
-
           }})
       },
       starSe(){
         var that=this;
         this.$axios({
-          method:'put',
-          url:'/presentation/'+this.klassSeminarId+'/status',
-          params:{
-            status:1
+          method:'post',
+          url:"/presentation/{klassSeminarId}",
+          data:{
+            klassSeminarId:this.klassSeminarId,
           }
-        }).then(
-          response=>{
-            if(response===true)
-            {
-              this.$router.push({path:"/SeminarProceed",
-                query:{
-                  klassSeminarId:this.klassSeminarId,
-                  seminarName:this.seminarName,
-                  courseName:this.courseName,
-                }})
-            }
-          }
-        )
-
+        }).then()
+        {
+          this.$router.push({path:"/SeminarProceed",
+            query:{
+              klassSeminar:this.klassSeminar,
+              seminarName:this.seminarName,
+              courseName:this.courseName,
+            }})
+        }
       },
       Report(){
         this.$router.push({path:"/ViewReportScore",
@@ -152,8 +141,7 @@
           that.seminarSerial = response.seminarSerial,
             that.introduction = response.introduction,
             that.seminarName = response.seminarName,
-            that.status = response.status,
-            that.klassSeminarId=response.klassSeminarId
+            that.status = response.status
         })
       }
     }

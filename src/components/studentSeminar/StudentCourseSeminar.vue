@@ -6,8 +6,8 @@
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="stuCenter">个人页面</el-dropdown-item>
-          <el-dropdown-item @click.native="stuSeminar">讨论课</el-dropdown-item>
+          <el-dropdown-item @click.native="stuCenter()">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="stuSeminar()">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
@@ -69,11 +69,13 @@
           url:'/round/'+round.roundId+'/seminar'
         }).then(response=>{
           _this.seminars=response;
+          console.log(response);
           console.log(round.roundId);
         })
         _this.loading=false;
       },
       goSeminar(round, seminar) {
+        console.log("出书seminar");
         console.log(seminar.klassSeminarId);
         this.$router.push({
           path: '/studentSeminarIndex',

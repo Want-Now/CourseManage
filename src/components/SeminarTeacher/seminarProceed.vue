@@ -2,74 +2,24 @@
     <el-container>
       <el-header>
         <el-button class="el-icon-back" @click="back()"></el-button>
-        <p>{{courseName}}</p>
-        <el-dropdown>
-          <el-button class="el-icon-menu"></el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
-            <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
-            <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <p>{{topic}}</p>
+        <el-button class="el-icon-menu" ></el-button>
       </el-header>
       <el-main>
-        <p class="seminarName">{{seminarName}}</p>
-        <el-tabs tab-position="left" @tab-click="handleClick"  v-if="isPrePage" :value="nowPre">
-          <el-tab-pane v-for="item in seminarInfos" :label="item.preTeam" :key="item.teamId" :name="''+item.teamId" :disabled="item.present===0">
-            <!--<div class="info">-->
-              <!--已有{{item.questionNum}}位同学提问-->
-            <!--</div>-->
-            <el-input v-model="item.presentationScore" type="input" class="scoreInput"></el-input>
+        <el-tabs tab-position="left" @tab-click="handleClick">
+          <el-tab-pane v-for="item in seminarInfos" :label="item.preTeam" :key="item.id">
+            <div class="info">
+              已有{{item.questionNum}}位同学提问
+            </div>
+            <el-input v-model="item.presentationScore" :key="item.id" type="input" class="scoreInput"></el-input>
             <p>展示分数</p>
-            <div v-if="item.present===1">
-              <el-button class="button" @click="uploadPreScore(item)">
-                确认打分
-              </el-button><br/>
-              <el-button class="button" @click="goQuesPage()">
-                抽取提问
-              </el-button><br/>
-              <el-button class="button" @click="nextTeamPre()">
-                下组展示
-              </el-button>
-            </div>
-            <div v-if="item.present===2">
-              <el-button class="button" @click="uploadPreScore(item)">确认修改</el-button>
-            </div>
-            <el-dialog
-              title="提示"
-              :visible.sync="dialogVisible"
-              width="80%"
-              center
-              :modal-append-to-body='false'>
-              <span>
-                <el-date-picker
-                v-model="repoDeadline"
-                type="datetime"
-                placeholder="选择日期时间"
-                default-time="12:00:00">
-                </el-date-picker>
-              </span>
-              <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="uploadRepoDeadline">确 定</el-button>
-              </span>
-            </el-dialog>
-          </el-tab-pane>
-        </el-tabs>
-        <el-tabs tab-position="left" @tab-click="handleClick" v-if="!isPrePage">
-          <el-tab-pane v-for="question in questions" :key="question.id" :label="question.team">
-            <div class="info">
-              {{question.preTeam}}正在展示
-            </div>
-            <div class="info">
-              已有{{question.questionNum}}名同学提问
-            </div>
-            <el-input v-model="question.questionScore" type="input" class="scoreInput"></el-input>
-            <p>提问分数</p>
-            <el-button class="button">
-              下个提问
+            <el-button>
+              确认打分
             </el-button><br/>
-            <el-button class="button" @click="goPrePage()">
+            <el-button @click="getQuestion()">
+              抽取提问
+            </el-button><br/>
+            <el-button>
               下组展示
             </el-button>
           </el-tab-pane>
@@ -84,157 +34,34 @@
 
       data(){
         return{
-          courseName:"",
-          seminarName:'',
-          seminarInfos:[],
-          isPrePage:true,
-          questions:[{}],
-          preLength:'',
-          nowPre:'',
-          preIndex:'',
-          dialogVisible:false,
-          repoDeadline:''
+          topic:"业务流程分析",
+          seminarInfos:[
+            {
+              id:'',
+              preTeam:'',
+              questionNum:'',
+              presentationScore:'',
+            },
+          ]
+
         }
       },
-      created(){
-        this.load();
-      },
       methods: {
-        load(){
-          let _this=this;
-          this.courseName=this.$route.query.courseName;
-          this.seminarName=this.$route.query.seminarName;
-          this.$axios({
-            method:'get',
-            url:'/presentation/'+this.$route.query.klassSeminarId
-          }).then(
-            response=>{
-              for(var index=0;index<response.length;index++)
-              {
-                _this.seminarInfos.push({
-                  preTeam:response[index].klassSerial+'-'+response[index].teamSerial,
-                  teamId:response[index].teamId,
-                  presentationScore:response[index].presentationScore,
-                  present:response[index].present,
-                  attendanceId:response[index].attendanceId,
-                })
-                if(_this.seminarInfos[index].present===1)
-                {
-                  _this.nowPre=_this.seminarInfos[index].teamId+'';
-                  _this.preIndex=index;
-                }
-                //console.log(_this.seminarInfos[index].attendanceId)
-              }
-              _this.preLength=response.length;
-            }
-          )
-        },
         back(){
           this.$router.go(-1);
+        },
+        getQuestion(){
+          this.$router.push("/SeminarQuestionScore");
         },
         handleClick(tab, event) {
           console.log(tab, event);
         },
-        goPrePage(){
-          this.isPrePage=true;
-        },
-        goQuesPage(){
-          this.isPrePage=false;
-        },
-        nextTeamPre(){
-          let _this=this;
-          if(this.preIndex===(this.preLength-1)){
-            this.dialogVisible=true;
-          }
-          else{
-            this.seminarInfos[this.preIndex].present=2;
-            this.$axios({
-              method:'put',
-              url:'/presentation/klassSeminar/updatePresentStatus',
-              data:{
-                thisAttendanceId:parseInt(this.seminarInfos[this.preIndex].attendanceId),
-                nextAttendanceId:parseInt(this.seminarInfos[(this.preIndex+1)].attendanceId)
-              }
-            }).then(function () {
-              _this.preIndex++;
-              _this.seminarInfos[_this.preIndex].present=1;
-              _this.nowPre=_this.seminarInfos[_this.preIndex].teamId+'';
-            })
-          }
-        },
-        uploadPreScore(item){
 
-          this.$axios({
-            method: 'put',
-            url:'/presentation/'+this.$route.query.klassSeminarId+'/attendance/'+item.teamId,
-            data:{
-              presentationScore:item.presentationScore
-            }
-            }).then(response=>{console.log(response);});
-        },
-        uploadQuesScore(){
-
-        },
-        uploadRepoDeadline(){
-          let _this=this;
-          var date=new Date(this.repoDeadline);
-          this.$axios({
-            method:'put',
-            url:'/seminar/'+this.$route.query.klassSeminarId+'/updateReportDDL',
-            data:{
-              reportDDL:this.getDate(date),
-              lastAttendanceId:this.seminarInfos[this.preIndex].attendanceId
-            }
-          }).then(response=>{
-            if(response===true){
-              _this.dialogVisible = false;
-            }
-            else{
-              console.log("error");
-            }
-          });
-          this.$router.go(-1);
-
-        },
-        getDate(date) {
-          var seperator1 = "-";
-          var seperator2 = ":";
-          var month = date.getMonth() + 1;
-          var strDate = date.getDate();
-          if (month >= 1 && month <= 9) {
-            month = "0" + month;
-          }
-          if (strDate >= 0 && strDate <= 9) {
-            strDate = "0" + strDate;
-          }
-          var Hours = date.getHours();
-          var Minutes = date.getMinutes();
-          var Seconds = date.getSeconds();
-
-          if (Hours >= 0 && Hours <= 9) {
-            Hours = "0" + Hours;
-          }
-          if (Minutes >= 0 && Minutes <= 9) {
-            Minutes = "0" + Minutes;
-          }
-          if (Seconds >= 0 && Seconds <= 9) {
-            Seconds = "0" + Seconds;
-          }
-          var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-            + " " + Hours + seperator2 + Minutes
-            + seperator2 + Seconds;
-          return currentdate;
-        }
       }
     }
 </script>
 
 <style scoped>
-  .seminarName{
-    margin-top: 0px;
-    font-size: 18px;
-    color: #494e8f;
-  }
   .el-tabs{
     position: absolute;
     height: 75%;
@@ -260,7 +87,7 @@
   }
 
 
-  .button{
+  .el-tab-pane .el-button{
     width: 120px;
     height: 40px;
     font-size: 18px;
@@ -271,11 +98,11 @@
     color: white;
 
   }
-  .button:hover{
+  .el-button:hover{
     background-color: #8084b1;
     border-color: #8084b1;
   }
-  .button:focus{
+  .el-button:focus{
     background-color: #8084b1;
     border-color: #8084b1;
   }
@@ -360,11 +187,12 @@
   .scoreInput .el-input__inner{
     position: relative;
     top: 30px;
-    height: 110px;
-    width: 110px;
+    height: 150px;
+    width: 150px;
     margin-bottom: 10px ;
     font-size: 50px;
     text-align: center;
+    height: 150px;
   }
 
 </style>

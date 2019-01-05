@@ -1,35 +1,28 @@
 <template>
   <el-container id="reportScore">
     <el-header>
-      <el-button class="el-icon-back" @click="back()"></el-button>
+      <el-button class="el-icon-back" ></el-button>
       <p>{{topic}}</p>
-      <el-dropdown>
-        <el-button class="el-icon-menu"></el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
-          <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
-          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <el-button class="el-icon-menu" ></el-button>
     </el-header>
     <el-main>
       <el-table
         :data="tableData"
         style="width: 100%">
         <el-table-column
-          prop="teamName" label="组别" align="center">
+          prop="team" label="组别" >
         </el-table-column>
         <el-table-column
-          prop="presentationScore" label="展示" align="center">
+          prop="presentationScore" label="展示" >
         </el-table-column>
         <el-table-column
-          prop="questionScore" label="提问" align="center">
+          prop="questionScore" label="提问" >
         </el-table-column>
         <el-table-column
-          prop="reportScore" label="报告" align="center">
+          prop="reportScore" label="报告" >
         </el-table-column>
         <el-table-column
-          prop="score" label="总分" align="center">
+          prop="score" label="总分" >
         </el-table-column>
       </el-table>
     </el-main>
@@ -50,38 +43,41 @@
         name: "viewScore",
       data(){
         return{
-          topic:"",
-          tableData: [],
+          topic:"书面报告成绩",
+          tableData: [{
+            team:"1-2",
+            presentationScore:"3.0",
+            questionScore:"4.0",
+            reportScore:"5.0",
+            score:"4.0",
+          }, {
+            team:"1-2",
+            presentationScore:"3.0",
+            questionScore:"4.0",
+            reportScore:"5.0",
+            score:"4.0",
+          }, {
+            team:"1-2",
+            presentationScore:"3.0",
+            questionScore:"4.0",
+            reportScore:"5.0",
+            score:"4.0",
+          }, {
+            team:"1-2",
+            presentationScore:"3.0",
+            questionScore:"4.0",
+            reportScore:"5.0",
+            score:"4.0",
+          }],
         }
-      },
-      created(){
-        let _this=this;
-        this.topic=this.$route.query.courseName+'-讨论课成绩';
-        this.$axios({
-            method:'get',
-            url:'/seminar/'+this.$route.query.klassSeminarId+'/seminarScore'
-          }).then(response=>{
-            for(var index=0;index<response.length;index++)
-            {
-              _this.tableData.push({
-                teamName:response[index].klassSerial+'-'+response[index].teamSerial,
-                presentationScore:response[index].presentationScore,
-                questionScore:response[index].questionScore,
-                reportScore:response[index].reportScore,
-                score:response[index].totalScore,
-              });
-            }
-          })
       }
     }
 </script>
 
 <style scoped>
-  .el-container{
-    height: 85vh;
-  }
+
   .el-row .el-button{
-    height: 45px;
+    height: 50px;
     margin:10px;
     font-size: 18px;
     background-color: #494e8f;

@@ -8,8 +8,8 @@
     </div>
     <div id="teacherMenu">
       <el-menu>
-        <el-menu-item index="1" @click="Stu">
-          <i class="el-icon-news"></i>导入学生名单
+        <el-menu-item index="1" @click="chosecourse()">
+          <i class="el-icon-news"></i>选择课程
         </el-menu-item>
         <el-menu-item index="2" @click="seminarIndex">
           <i class="el-icon-document" ></i>讨论课
@@ -24,19 +24,19 @@
       <br>
       <br>
       <div style="padding-left:15%;">
-      <el-card class="box-card" size="large" style="padding-left:5%;" v-for="round in rounds" :key="round.roundId">
-        <div slot="header" class="clearfix">
-          <span style="font-size:35px;color:#409dfe;font-weight:bold;float: left; padding: 3px 0">第{{round[0].roundSerial}}轮讨论课</span>
-        </div>
-        <div>
-          <el-row v-for="o in length1":key="o" style="height:80px;line-height: 80px">
-          <el-col :span="12"><div style="font-size:30px;float:left;padding-left:60px;">{{round[o].seminarName}}</div></el-col>
-            <el-col :span="12" style="padding-left:100px;"><el-button size="large;" @click="enter(round[o].seminarId)">进入</el-button></el-col>
-          </el-row>
-          <br>
-          <br>
-        </div>
-      </el-card>
+        <el-card class="box-card" size="large" style="padding-left:5%;" v-for="round in rounds" :key="round.roundId">
+          <div slot="header" class="clearfix">
+            <span style="font-size:35px;color:#409dfe;font-weight:bold;float: left; padding: 3px 0">第{{round[0].roundSerial}}轮讨论课</span>
+          </div>
+          <div>
+            <el-row v-for="o in length1":key="o" style="height:80px;line-height: 80px">
+              <el-col :span="12"><div style="font-size:30px;float:left;padding-left:60px;">{{round[o].seminarName}}</div></el-col>
+              <el-col :span="12" style="padding-left:100px;"><el-button size="large;" @click="enter(round[o].seminarId)">进入</el-button></el-col>
+            </el-row>
+            <br>
+            <br>
+          </div>
+        </el-card>
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@
 <script>
 
   export default {
-    name: "PCseminarIndex",
+    name: "PCseminarSIndex",
     data() {
       return {
         rounds:[],
@@ -61,7 +61,7 @@
     },
     methods: {
       getround() {
-        var _this=this;
+        var _this = this;
         this.$axios({
           method: 'get',
           url: '/course/'+this.$route.query.courseId+'/pc'
@@ -73,16 +73,16 @@
         })
       },
       enter(seminarId){
-        this.$router.push({path:'/TeaOneSeminar',
+        this.$router.push({path:'/StuOneSeminar',
           query:{
             seminarId:seminarId,
             courseName:this.$route.query.courseName,
             courseId:this.$route.query.courseId
-        }
+          }
         })
       },
       Stu(){
-        this.$router.push({path:'/ImportStuPC',
+        this.$router.push({path:'/stuViewScore',
           query:{
             courseId:this.$route.query.courseId,
             courseName:this.$route.query.courseName
@@ -90,7 +90,7 @@
         })
       },
       seminarIndex(){
-        this.$router.push({path:'/PCseminarIndex',
+        this.$router.push({path:'/PCseminarSIndex',
           query:{
             courseId:this.$route.query.courseId,
             courseName:this.$route.query.courseName
@@ -98,7 +98,7 @@
         })
       },
       importScore(){
-        this.$router.push({path:'/TeaViewScorePC',
+        this.$router.push({path:'/stuViewScore',
           query:{
             courseId:this.$route.query.courseId,
             courseName:this.$route.query.courseName
@@ -109,25 +109,25 @@
   }
 </script>
 <style scoped>
-.el-col{
-  height:50px;
-  line-height: 50px;
-}
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-.clearfix:after {
-  clear: both
-}
-.main{
-  margin-left: 300px;
-  padding: 0 50px;
-}
-.box-card {
-  width: 80%;
-}
+  .el-col{
+    height:50px;
+    line-height: 50px;
+  }
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+  .main{
+    margin-left: 300px;
+    padding: 0 50px;
+  }
+  .box-card {
+    width: 80%;
+  }
   .header{
     padding-left: 50px;
     height: 100px;
@@ -164,7 +164,7 @@
     font-size: 30px;
     height: 50px;
   }
-.title{
+  .title{
     font-weight: bold;
     color: #409EFF;
     font-size: 27px;
@@ -172,7 +172,7 @@
     text-align: left;
     border: solid 1px #DCDFE6;
   }
-.roundSpan{
+  .roundSpan{
     margin-right:20px;
     font-size: 22px;
   }
@@ -185,32 +185,32 @@
     height: 60px;
     font-size: 22px;
   }
-#teacherMenu{
-  min-width: 300px;
+  #teacherMenu{
+    min-width: 300px;
 
-  position: absolute;
-  left: 0px;
-}
-.el-menu{
-  height: 90vh;
-}
-.el-menu-item{
-  height: 30vh;
-  font-size: 25px;
-  line-height: 30vh;
-}
-.el-icon-news{
-  margin-right: 10px;
-  font-size: 30px;
-}
-.el-icon-document{
-  margin-right: 10px;
-  font-size: 30px;
-}
-.el-icon-edit{
-  margin-right: 10px;
-  font-size: 30px;
-}
+    position: absolute;
+    left: 0px;
+  }
+  .el-menu{
+    height: 90vh;
+  }
+  .el-menu-item{
+    height: 30vh;
+    font-size: 25px;
+    line-height: 30vh;
+  }
+  .el-icon-news{
+    margin-right: 10px;
+    font-size: 30px;
+  }
+  .el-icon-document{
+    margin-right: 10px;
+    font-size: 30px;
+  }
+  .el-icon-edit{
+    margin-right: 10px;
+    font-size: 30px;
+  }
 </style>
 <style>
   .select .el-input__inner{

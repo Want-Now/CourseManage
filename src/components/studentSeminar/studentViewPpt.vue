@@ -6,8 +6,8 @@
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="stuCenter">个人页面</el-dropdown-item>
-          <el-dropdown-item @click.native="stuSeminar">讨论课</el-dropdown-item>
+          <el-dropdown-item @click.native="stuCenter()">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="stuSeminar()">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
@@ -51,7 +51,6 @@
       }
     },
     created(){
-
       var _this = this;
       this.klassSeminarId=this.$route.query.klassSeminarId;
       this.status=this.$route.query.status;

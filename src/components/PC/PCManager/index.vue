@@ -36,7 +36,8 @@
                 </div>
                 <div  class="text item">
                   <el-table :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize).filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase())|| data.account.toLowerCase().includes(search.toLowerCase()))"
-                            style="width: 100%">
+                            style="width: 100%"
+                  >
                     <el-table-column
                       padding-left="10px"
                       prop="account"
@@ -96,7 +97,9 @@
                 </div>
                 <div  class="text item">
                   <el-table  :data="tableData2.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase())|| data.account.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pagesize,currentPage*pagesize)"
-                             style="width: 100%">
+                             style="width: 100%"
+
+                  >
                     <el-table-column
                       padding-left="10px"
                       prop="account"
@@ -142,7 +145,6 @@
 
 <script>
   export default {
-    inject:['reload'],
     data() {
       return {
         currentPage: 1,
@@ -153,7 +155,7 @@
         tableData2: [],
       }
     },
-    created(){
+    mounted(){
       this.gettable()
       this.gettable2()
       this.getParams ()
@@ -164,7 +166,7 @@
         console.log(tab, event);
       },
       getParams () {
-        this.activeName = this.$route.query.type
+        //this.activeName = this.$route.query.type
       },
       handleSizeChange: function (size) {
         this.pagesize = size;
@@ -318,8 +320,7 @@
                 type:'success',
                 duration:800
               });
-              this.reload()
-              //window.location.reload()
+              window.location.reload();
             } else {
               that.$message({
                 message: '删除失败',
@@ -356,7 +357,7 @@
                 type:'success',
                 duration:800
               });
-              //window.location.reload()
+              window.location.reload();
             } else {
               that.$message({
                 message: '删除失败',
@@ -370,7 +371,6 @@
             message: '已取消删除'
           });
         });
-        this.reload
       },
     }
   }

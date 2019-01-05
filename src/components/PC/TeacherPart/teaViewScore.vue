@@ -21,58 +21,37 @@
     </div>
     <div class="main">
       <p class="title">{{courseName}}—查看成绩</p>
-      <span class="roundSpan" >轮数</span>
-      <el-select v-model="roundId" label="请选择轮次" class="select" @change="getScore">
-        <el-option
-          v-for="round in roundsList"
-          :key="round.roundId"
-          :label="round.roundSerial"
-          :value="round.roundId">
-        </el-option>
-      </el-select>
-      <el-table
-        :data="scoreList"
-        :header-cell-style="{'color':'#409EFF','font-size':'25px','height':'90px'}"
-        :row-style="{'font-size':'25px','height':'80px'}">
-        <el-table-column
-          label="小组"
-          prop="team"
-          align="center" >
-          <template slot-scope="scope">
-            <span> {{scope.row.klassSerial}}-{{scope.row.teamSerial}}</span>
+      <el-collapse>
+        <el-collapse-item v-for="round in rounds" :key="round.roundId">
+          <template slot="title">
+            <div style="font-size:30px;color: #5ba6fe;padding-left:50px;">第{{round.roundSerial}}轮</div>
           </template>
-        </el-table-column>
-        <el-table-column
-          label="总分"
-          prop="roundTotalScore"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="讨论课"
-          prop="seminarName"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="展示成绩"
-          prop="presentationScore"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="提问成绩"
-          prop="questionScore"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="报告成绩"
-          prop="reportScore"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="该次总成绩"
-          prop="totalScore"
-          align="center">
-        </el-table-column>
-      </el-table>
+          <el-collapse v-for="team in round.teams" :key="team.teamId" >
+            <el-collapse-item>
+              <template slot="title" >
+                <div>
+                <span class="teamName" style="font-size:32px;padding-left:90px">{{team.klassSerial}}-{{team.teamSerial}}</span>
+                <span class="teamScore" style="font-size:32px;padding-left:1000px">该轮次总分：{{team.totalScore}}</span>
+                </div>
+              </template>
+              <div class="scoreDiv" v-for="seminar in team.seminars"  v-loading="loading">
+                <p class="seminarName">{{seminar.seminarName}}</p>
+                <span>展示：</span><span class="scoreFont">{{seminar.presentationScore}}</span>
+
+                <span>提问：</span><span class="scoreFont">{{seminar.questionScore}}</span>
+                <span>书面报告：</span><span class="scoreFont">{{seminar.reportScore}}</span>
+              </div>
+              <div class="scoreDiv">
+                <p class="seminarName">总成绩</p>
+                <span>展示：</span><span class="scoreFont">{{team.presentationScore}}</span>
+                <span>提问：</span><span class="scoreFont">{{team.questionScore}}</span>
+                <span>书面报告：</span><span class="scoreFont">{{team.reportScore}}</span>
+              </div>
+            </el-collapse-item>
+          </el-collapse>
+        </el-collapse-item>
+
+      </el-collapse>
     </div>
   </div>
 </template>
@@ -86,96 +65,80 @@
           seminars:[],
           courseName:'',
           roundsList:[],
+          rounds:[],
           value:'',
           seminarList:'',
           roundId:'',
           teamId:'',
           teamSerial:'',
-          scoreList:[
-          ],
-          spanArr:[],
-          position:'',
         }
       },
       created(){
-          //this.rowspan();
-        this.courseName=this.$route.query.courseName;
-        var _this = this;
-        this.$axios({
-          method: 'get',
-          url: '/course/'+this.$route.query.courseId+'/round',
-          params:{
-            courseId:this.$route.query.courseId
-          }
-        }).then(function (response) {
-          _this.roundsList=response
-        })
+        this.courseName=this.$route.query.courseName
+        this.getRound();
       },
       methods:{
-        handleChange(a,b){
-          this.getScore(a,b)
-        },
-        getScore(val){
-          var _this = this;
-          this.$axios({
-            method: 'get',
-            url: '/round/'+val+'/seminarScore/pc',
-            params:{
-              roundId:val,
+        seminarIndex() {
+          this.$router.push({
+            path: '/PCseminarIndex',
+            query: {
+              courseId: this.$route.query.courseId,
+              courseName: this.$route.query.courseName
             }
-          }).then(response => {
-            _this.scoreList = response;
           })
-          //this.rowspan();
-          //console.log(this.ScoreList.length);
         },
-
-        //获得数据后调用
-        rowspan(){
-          this.spanArr = [];//在data里面定义
-          this.position = 0; //在data里面定义
-          this.scoreList.forEach((item,index) => {
-            if( index === 0){
-              this.spanArr.push(1);
-              this.position = 0;
-              item.sequence=index+1;//设置序号
-            }else{
-              if(this.scoreList[index].team === this.scoreList[index-1].team){
-                this.spanArr[this.position] += 1;//连续有几行项目名名称相同
-                this.spanArr.push(0); // 名称相同后往数组里面加一项0
-                console.log(this.spanArr)
-                //当项目名称相同时，设置当前序号和前一个相同
-                this.scoreList[index].sequence = this.scoreList[index-1].sequence;
-              }else{
-                this.spanArr.push(1);
-                this.position = index;
-                //当项目名称不同时，将当前序号设置为前一个序号+1
-                this.scoreList[index].sequence = this.scoreList[index-1].sequence+1;
+        getRound(){
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/course/'+this.$route.query.courseId+'/round'
+          }).then(response=>{
+            for(var index=0;index<response.length;index++)
+            {
+              _this.rounds.push({
+                roundId:response[index].roundId,
+                roundSerial:response[index].roundSerial,
+                teams:[]
+              });
+              // console.log(_this.rounds[index]);
+              _this.getTeam(_this.rounds[index]);
+            }
+          });
+        },
+        getTeam(round){
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/course/round/'+round.roundId
+          }).then(
+            response=> {
+              for (var i=0; i < response.length; i++) {
+                round.teams.push({
+                  teamId: response[i].teamId,
+                  klassSerial: response[i].klassSerial,
+                  teamSerial: response[i].teamSerial,
+                  totalScore: response[i].totalScore,
+                  presentationScore: response[i].presentationScore,
+                  questionScore: response[i].questionScore,
+                  reportScore: response[i].reportScore,
+                  seminars: []
+                });
+                _this.getSeminar(round,round.teams[i])
+                // console.log(round.teams);
+                // _this.getSeminars(rounds[i].teams,rounds[i].roundId);
               }
             }
-          })
+          )
         },
-        //合并
-        objectSpanMethod({ row, column, rowIndex, columnIndex }){
-          if(columnIndex === 0){
-            const _row = this.spanArr[rowIndex];
-            const _col = _row>0 ? 1 : 0;
-            console.log("ppp")
-            console.log(_row)
-            console.log(_col)
-            return {
-              rowspan: _row, //行
-              colspan: _col  //列
-            }
-          }
-          if(columnIndex === 1){ //项目列也进行合并(第二列)
-            const _row = this.spanArr[rowIndex];
-            const _col = _row>0 ? 1 : 0;
-            return {
-              rowspan: _row,
-              colspan: _col
-            }
-          }
+        getSeminar(round,team) {
+          this.$axios({
+            method:'get',
+            url:'/course/round/'+round.roundId+'/'+team.teamId
+          }).then(
+            res=>{
+              team.seminars=res;
+              this.loading=false;
+            });
         },
         Stu(){
           this.$router.push({path:'/ImportStuPC',
@@ -206,12 +169,27 @@
 </script>
 
 <style scoped>
+  .scoreDiv{
+    background-color: #eeeeee;
+    border-bottom: solid 1px white;
+    font-size:30px;
+  }
+  .scoreFont{
+    font-size: 30px;
+    color: #494E8F;
+    margin-right: 20px;
+  }
   .header{
     padding-left: 50px;
     height: 100px;
     line-height: 100px;
     font-size: 30px;
     color: #409EFF;
+    text-align: left;
+  }
+  .clickDiv{
+    width: 100%;
+    height: 100%;
     text-align: left;
   }
   .main{

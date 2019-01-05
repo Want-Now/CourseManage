@@ -10,12 +10,12 @@ export default {
   provide(){
     return{
       reload:this.reload
-    }
+    };
   },
   data(){
     return{
       isRouterAlive:true
-    }
+    };
   },
   mounted(){
     var _this = this
@@ -28,11 +28,10 @@ export default {
   },
   methpds:{
     reload(){
-      this.isRouterAlive=false
+      this.isRouterAlive=false;
       this.$nextTick(function(){
         this.isRouterAlive=true
       })
-
     }
   }
 }
