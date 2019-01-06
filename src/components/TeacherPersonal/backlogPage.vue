@@ -86,7 +86,6 @@
                 type:'success',
                 duration:800
               });
-              _this.window.reload();
             } else{
               _this.$message({
                 message:'操作失败',
@@ -203,5 +202,4 @@
     line-height: 55px;
     text-align: center;
   }
-
 </style>
