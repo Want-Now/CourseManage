@@ -17,14 +17,15 @@
         <div style="float:left;font-size:15px">第{{nowPreOrder}}组展示</div>
         <div style="float:right;font-size:15px">已有{{questionNum}}名同学提问</div>
       </div>
-      <br>
-      <el-row style=" border-top: 1px solid #999999;" v-for="">
-        <el-col :span="8"><div class="grid-content bg-purple">第一组</div></el-col>
-        <el-col :span="16"><div class="grid-content bg-purple-light">1-1</div></el-col>
-      </el-row>
+      <br/>
+      <div class="Div" v-for="(team,index) in teams">
+        <span class="title">第{{index+1}}组</span>
+        <span v-if="team.present===1" class="now">{{team.klassSerial}}-{{team.teamSerial}}</span>
+        <span v-else class="notNow">{{team.klassSerial}}-{{team.teamSerial}}</span>
+      </div>
     </el-main>
     <el-footer>
-      <el-button class="bottomButt" type="primary" @click="submitForm('ruleForm')">Q&A</el-button>
+      <el-button class="bottomButt" type="primary" >Q&A</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -35,6 +36,7 @@
       return {
         headerLocation: "",
         tableData: [],
+        teams:[],
         seminarName:'',
         nowPreOrder:'',
         questionNum:'',
@@ -42,31 +44,18 @@
       }
     },
     created(){
+      let _this=this;
       this.headerLocation=this.$route.query.courseName;
       this.seminarName=this.$route.query.seminarName;
+      this.$axios({
+        method:'get',
+        url:'/presentation/'+this.$route.query.klassSeminarId,
+      }).then(response=>{
+        _this.teams=response;
+      })
     },
     methods: {
-      open() {
-        this.$confirm('是否确认报名此次讨论课？', '确认信息', {
-          distinguishCancelAndClose: true,
-          confirmButtonText: '确认',
-          cancelButtonText: '取消'
-        })
-          .then(() => {
-            this.$message({
-              type: 'info',
-              message: '已报名'
-            });
-          })
-          .catch(action => {
-            this.$message({
-              type: 'info',
-              message: action === 'cancel'
-                ? '取消'
-                : '取消'
-            })
-          });
-      }
+
     }
   }
 </script>
@@ -74,11 +63,28 @@
   .el-container {
     height: 95vh;
   }
-  .el-row{
-    border-bottom: 1px solid #999999;
-    font-size:110%;
-    height:50px;
-    line-height:50px;
+  .Div{
+    width: 100%;
+    text-align: left;
+    margin:20px;
+  }
+  .title{
+    font-size: 20px;
+    display: inline-block;
+    width: 30%;
+  }
+  .now{
+    font-size: 20px;
+    text-align: center;
+    display: inline-block;
+    width: 60%;
+    color: #F56C6C;
+  }
+  .notNow{
+    font-size: 20px;
+    text-align: center;
+    display: inline-block;
+    width: 60%;
   }
   .el-header{
     margin: 0px;

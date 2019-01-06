@@ -8,7 +8,8 @@
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item @click.native="backlogPage">代办</el-dropdown-item>
           <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
-          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>        </el-dropdown-menu>
+          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>
+        </el-dropdown-menu>
       </el-dropdown>
     </el-header>
     <el-main>
@@ -27,12 +28,6 @@
         </el-table-column>
       </el-table>
     </el-main>
-    <el-footer>
-        <el-button class="bottomButt">确认</el-button>
-
-        <el-button class="bottomButt">修改</el-button>
-
-    </el-footer>
   </el-container>
 </template>
 
@@ -56,10 +51,7 @@
         {
           _this.tableData.push({
             teamName:response[index].teamName,
-            presentationScore:response[index].presentationScore,
-            questionScore:response[index].questionScore,
             reportScore:response[index].reportScore,
-            score:response[index].totalScore,
           });
         }
       })
@@ -68,9 +60,7 @@
 </script>
 
 <style scoped>
-  .el-button{
-    margin:10px;
-  }
+
   .el-header{
     margin: 0px;
     padding: 0px;

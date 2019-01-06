@@ -33,10 +33,6 @@
         </el-table-column>
       </el-table>
     </el-main>
-    <el-footer>
-        <el-button class="bottomButt">确认</el-button>
-        <el-button class="bottomButt">修改</el-button>
-    </el-footer>
   </el-container>
 </template>
 
@@ -78,9 +74,6 @@
   .el-input__inner{
     height: 50px;
     font-size: 15px;
-  }
-  .el-button{
-    margin:10px;
   }
   .el-header{
     margin: 0px;

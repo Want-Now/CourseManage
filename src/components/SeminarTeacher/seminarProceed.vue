@@ -62,16 +62,22 @@
               {{question.preTeam}}正在展示
             </div>
             <div class="info">
-              已有{{question.questionNum}}名同学提问
+              已有{{questionNum}}名同学提问
             </div>
             <el-input v-model="question.questionScore" type="input" class="scoreInput"></el-input>
             <p>提问分数</p>
-            <el-button class="button">
-              下个提问
-            </el-button><br/>
-            <el-button class="button" @click="goPrePage()">
-              下组展示
-            </el-button>
+            <div>
+              <el-button class="button" v-if="question.selecteBefore===false" @click="uploadQuesScore(question)">
+                确认打分
+              </el-button><br/>
+              <el-button class="button" v-if="question.selectBefore===true" @click="uploadQuesScore(question)">确认修改</el-button><br/>
+              <el-button class="button" @click="nextQues()">
+                下个提问
+              </el-button><br/>
+              <el-button class="button" @click="goPrePage()">
+                返回展示
+              </el-button>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </el-main>
@@ -87,18 +93,21 @@
           courseName:"",
           seminarName:'',
           seminarInfos:[],
-          isPrePage:true,
-          questions:[],
+          isPrePage:'',
+          questions:[{}],
           preLength:'',
           nowPre:'',
           preIndex:'',
           dialogVisible:false,
           repoDeadline:'',
           websock:'',
-          nowQues:'m'
+          nowQues:'',
+          nowAttendanceId:'',
+          questionNum:''
         }
       },
       created(){
+        this.isPrePage=true;
         this.initWebSocket();
         this.load();
         // this.wsService();
@@ -146,20 +155,66 @@
         },
         goPrePage(){
           this.isPrePage=true;
+          this.questions=[{}];
         },
         goQuesPage(item){
+          this.isPrePage=false;
           let _this=this;
           this.$axios({
             method:'get',
-            url:'/attendanceId/'+item.attendanceId+'/question'
+            url:'/seminar/'+item.attendanceId+'/question'
+          }).then(
+            response=>{
+              for(var index=0;index<response.length;index++)
+              {
+                _this.questions.push({
+                  questionId:response[index].questionId,
+                  team:response[index].klassSerial+'-'+response[index].teamSerial+' '+response[index].studentName,
+                  questionScore:response[index].questionScore,
+                  selectBefore:true,
+                })
+                _this.nowQues=_this.questions[index].questionId+'';
+              }
+              _this.nowAttendanceId=item.attendanceId;
+            }
+          )
+
+        },
+        nextQues(){
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/attendanceId/'+this.nowAttendanceId+'/question'
           }).then(function (response) {
-            _this.isPrePage=false;
-            _this.questions.push({
-              questionId:response.questionId,
-              team:response
-            })
+            if(response==='')
+            {
+              _this.$message({
+                type: 'success',
+                message: '没有提问了哟',
+                duration: 1000
+              });
+              _this.questionNum=0;
+            }
+            else{
+              console.log(response.studentName);
+              _this.questions.push({
+                questionId:response.questionId,
+                team:response.klassSerial+'-'+response.teamSerial+' '+response.studentName,
+                selectBefore:false,
+              });
+              console.log(response.questionId);
+              _this.nowQues=response.questionId+'';
+              var call='请'+response.klassSerial+'-'+response.teamSerial+' '+response.studentName+'进行提问';
+              _this.webSocketSend(JSON.stringify(call));
+              _this.websock.onmessage=function (msg) {
+                console.log(msg.data);
+              }
+              _this.webSocketSend(JSON.stringify("提问人数-1"));
+              _this.websock.onmessage=function (message) {
+                _this.questionNum=message.data;
+              }
+            }
           })
-          this.webSocketSend("");
 
         },
         nextTeamPre(){
@@ -212,8 +267,19 @@
               }
             });
         },
-        uploadQuesScore(){
-
+        uploadQuesScore(question){
+          this.$axios({
+            method:'put',
+            url:'/question/'+question.questionId,
+            data:{
+              klassSeminarId:parseInt(this.$route.query.klassSeminarId),
+              questionScore:parseFloat(question.questionScore)
+            }
+          }).then(response=>{
+              if(response===true){
+                alert('success');
+              }else alert('failed');
+            })
         },
         uploadRepoDeadline(){
           let _this=this;

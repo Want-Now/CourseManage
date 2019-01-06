@@ -14,17 +14,20 @@
     <el-main>
       <el-collapse accordion>
         <el-collapse-item v-for="round in rounds" :key="round.roundId">
-          <template slot="title">第{{round.roundSerial}}轮</template>
+          <template slot="title">
+            <span style="font-size: 18px;color:#494e8f;">第{{round.roundSerial}}轮</span>
+          </template>
           <el-collapse v-for="seminar in round.seminars" :key="seminar.id">
             <el-collapse-item>
-              <template slot="title">{{seminar.topic}}</template>
+              <template slot="title"><span style="font-size: 15px;">{{seminar.topic}}</span></template>
                 <div class="scoreDiv">
                   <span>展示：</span><span class="scoreFont">{{seminar.presentationScore}}</span><br/>
                   <span>提问：</span><span class="scoreFont">{{seminar.questionScore}}</span><br/>
                   <span>书面报告：</span><span class="scoreFont">{{seminar.reportScore}}</span><br/>
                   <span>本次总成绩：</span><span class="scoreFont">{{seminar.seminarScore}}</span><br/>
-                  <span>本轮总成绩：</span><span class="scoreFont">{{seminar.roundScore}}</span><br/>
+
                 </div>
+              <span>本轮总成绩：</span><span class="scoreFont">{{seminar.totalScore}}</span><br/>
             </el-collapse-item>
           </el-collapse>
         </el-collapse-item>
