@@ -77,11 +77,14 @@
       },
       modify() {
         this.$router.push({
-          path: "/modifySeminar",
+          path: "/CreatSeminar",
           query: {
             courseName: this.courseName,
             seminarName: this.seminarName,
-            klassSeminarId: this.klassSeminarId
+            klassSeminarId: this.klassSeminarId,
+            seminarId:this.seminarId,
+            klassId:this.klassId,
+            modify:true
           }
         })
       },

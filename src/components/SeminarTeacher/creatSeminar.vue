@@ -13,9 +13,10 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <p class="title">新建讨论课</p>
+      <p class="title" v-if="modify">修改讨论课</p>
+      <p class="title" v-else>新建讨论课</p>
       <el-form :model="seminarForm" :rules="rules" ref="seminarForm" label-width="110px">
-        <el-form-item label="讨论课主题" prop="topic" >
+        <el-form-item label="讨论课主题" prop="topic">
           <el-input class="inputCss" v-model="seminarForm.topic"></el-input>
         </el-form-item>
         <el-form-item label="讨论课内容" prop="introduction">
@@ -30,7 +31,7 @@
         <el-form-item label="报名小组数" prop="applyNum">
           <el-input-number v-model="seminarForm.applyNum" :min="1"></el-input-number>
         </el-form-item>
-        <el-form-item label="所属Round" prop="round">
+        <el-form-item label="所属Round" prop="round" v-if="!modify">
           <el-select v-model="seminarForm.round" placeholder="无(默认新建Round)">
             <el-option value="0" label="无(默认新建Round)"></el-option>
             <el-option v-for="roundItem in rounds" :key="roundItem.roundId" :value="roundItem.roundId" :label="roundItem.roundSerial"></el-option>
@@ -43,7 +44,11 @@
 
     </el-main>
     <el-footer>
-      <el-button class="bottomButt" @click="uploadSeminar('seminarForm')">发布</el-button>
+      <div v-if="modify">
+        <p><el-button class="bottomButt" @click="modifySeminar('seminarForm')">保存修改</el-button></p>
+        <p><el-button class="bottomButt" @click="deleteSeminar()">删除该讨论课</el-button></p>
+      </div>
+      <el-button v-else class="bottomButt" @click="uploadSeminar('seminarForm')">发布</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -51,7 +56,7 @@
   export default {
     data() {
       return {
-        headerLocation:"OOAD",
+        headerLocation:"",
         seminarForm: {
           topic: '',
           introduction: '',
@@ -75,11 +80,28 @@
           preApplyEndDate:[
             { required: true, message: '请输入报名结束时间', trigger: 'blur' },
           ],
-        }
+        },
+        modify:false
       };
     },
     created(){
+      let _this=this;
+      this.headerLocation=this.$route.query.courseName;
       this.rounds=this.$route.query.rounds;
+      this.modify=new Boolean(this.$route.query.modify);
+      if(this.modify){
+        this.$axios({
+          method:'get',
+          url:'/seminar/'+this.$route.query.seminarId
+        }).then(response=>{
+          _this.seminarForm.topic=response.seminarName;
+          _this.seminarForm.introduction=response.introduction;
+          _this.seminarForm.preApplyStartDate=new Date(response.enrollStartTime);
+          _this.seminarForm.preApplyEndDate=new Date(response.enrollEndTime);
+          _this.seminarForm.applyNum=response.maxTeam;
+          _this.seminarForm.isViewed=response.visible;
+        })
+      }
     },
     methods: {
       uploadSeminar(form)
@@ -98,7 +120,6 @@
                 visible:this.boolToInt(this.seminarForm.isViewed),
                 enrollStartTime:this.getDate(this.seminarForm.preApplyStartDate),
                 enrollEndTime:this.getDate(this.seminarForm.preApplyEndDate),
-                seminarSerial:10
               }
             }).then(
               response=>{
@@ -123,6 +144,69 @@
             return false;
           }
         });
+      },
+      modifySeminar(form){
+        let _this=this;
+        this.$refs[form].validate((valid) => {
+          if (valid) {
+            this.$axios({
+              method:'put',
+              url:'/seminar/'+this.$route.query.seminarId,
+              data:{
+                roundId:this.seminarForm.round,
+                seminarName:this.seminarForm.topic,
+                introduction:this.seminarForm.introduction,
+                maxTeam:parseInt(this.seminarForm.applyNum),
+                visible:this.boolToInt(this.seminarForm.isViewed),
+                enrollStartTime:this.getDate(this.seminarForm.preApplyStartDate),
+                enrollEndTime:this.getDate(this.seminarForm.preApplyEndDate),
+              }
+            }).then(
+              response=>{
+                if(response===true){
+                  _this.$message({
+                    message:'修改讨论课成功',
+                    type:'success',
+                    duration:800
+                  });
+                  _this.$router.go(-1);
+                }else{
+                  _this.$message({
+                    message:'修改讨论课失败',
+                    type:'error',
+                    duration:800
+                  });
+                }
+              }
+            )
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      deleteSeminar(){
+        this.$axios({
+          method:'delete',
+          url:'/seminar/'+this.$route.query.seminarId+'/klass/'+this.$route.query.klassId
+        }).then(
+          response=>{
+            if(response===true){
+              _this.$message({
+                message:'修改讨论课成功',
+                type:'success',
+                duration:800
+              });
+              _this.$router.go(-1);
+            }else{
+              _this.$message({
+                message:'修改讨论课失败',
+                type:'error',
+                duration:800
+              });
+            }
+          }
+        )
       },
       boolToInt(value){
         if(value===true){
@@ -166,6 +250,7 @@
   }
 </script>
 <style scoped>
+
   .title{
     margin-top: 0px;
     color: #494e8f;
@@ -173,7 +258,7 @@
   }
 
   .el-container{
-    height: 98vh;
+    height: 90vh;
   }
   .el-header{
     margin: 0px;

@@ -87,6 +87,7 @@
           url:'/round/'+round.roundId+'/teacherSeminar'
         }).then(response=>{
           _this.seminars=response;
+          console.log(_this.seminars);
         })
         this.loading=false;
       },
@@ -110,6 +111,7 @@
           }});
       },
       goSeminarIndex(round,seminar,klass){
+        console.log(seminar.seminarId);
         this.$router.push({
           path:'/TeacherSeminarIndex',
           query:{

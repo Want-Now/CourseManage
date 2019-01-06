@@ -127,7 +127,7 @@
       var _this = this;
       this.$axios({
         method: 'get',
-        url: "/seminar/"+this.$route.query.klassSeminarId+"/team/seminarInfo",
+        url: "/seminar/"+this.$route.query.klassSeminarId+"/seminarInfo",
       }).then(function (response) {
         var date=_this.getDate(new Date());
         _this.attendanceStatus=response.attendanceStatus;
