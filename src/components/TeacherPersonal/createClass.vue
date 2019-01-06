@@ -31,23 +31,17 @@
             <el-col :span="12" ><el-input v-model="klassLocation" placeholder="请输入"></el-input></el-col>
           </el-row>
           <br>
-          <el-row>
-            <el-col :span="12">班级学生名单：</el-col>
-            <el-col :span="12">
-              <el-upload
-              class="upload-demo"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-              multiple
-              :limit="1"
-              :on-exceed="handleExceed"
-              :file-list="fileList">
-              <el-button size="small" type="primary">点击上传</el-button>
-            </el-upload></el-col>
-          </el-row>
         </div>
+        <el-dialog
+          title="提示"
+          :visible.sync="dialogVisible"
+          width="20%">
+          <input type="file" @change="getFile($event)">
+          <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="submit(scope.row.klassId)">上传</el-button>
+  </span>
+        </el-dialog>
       </el-card>
     </el-main>
     <el-footer>
@@ -80,6 +74,7 @@
     data() {
       return {
         //klass:[],
+        dialogVisible:false,
         success:false,
         fail:false,
         fileList: [],
@@ -95,18 +90,6 @@
       refresh(){
         location.reload()
         this.$router.go(0)
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
-      handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 1个文件，本次已上传了 ${fileList.length} 个文件`);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
       },
       create(){
         var that=this;
