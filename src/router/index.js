@@ -58,7 +58,7 @@ import LoginPC from '@/components/PC/loginPC'
 import CoursePage from '@/components/PC/coursePage'
 import ImportStu from '@/components/PC/TeacherPart/importStudent'
 import TeaViewScorePC from '@/components/PC/TeacherPart/teaViewScore'
-import StuViewScorePC from '@/components/PC/StudentPart/stuViewScore'
+import stuViewScore from '@/components/PC/StudentPart/stuViewScore'
 import createTeacherAccount from '@/components/PC/PCManager/createTeacherAccount'
 import ModeifyStudentMessage from '@/components/PC/PCManager/modeifyStudentMessage'
 import ModeifyTeacherMessage from '@/components/PC/PCManager/modifyTeacherMessage'
@@ -203,7 +203,7 @@ export default new Router({
     //SeminarStudent
     {
       path: '/StuPersonCenter',
-      name: 'StuPersonalCenter',
+      name: 'StuPersonCenter',
       component: StuPersonCenter
     },
     {
@@ -339,9 +339,9 @@ export default new Router({
     },
     ,
     {
-      path: '/StuViewScorePC',
-      name: 'StuViewScorePC',
-      component: StuViewScorePC
+      path: '/stuViewScore',
+      name: 'stuViewScore',
+      component: stuViewScore
     },
     {
       path: '/ManagerIndex',

@@ -6,8 +6,8 @@
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="teaCenter">个人页面</el-dropdown-item>
-          <el-dropdown-item @click.native="teaSeminar">讨论课</el-dropdown-item>
+          <el-dropdown-item @click.native="stuCenter">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="stuSeminar">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
@@ -125,7 +125,6 @@
       this.courseName=this.$route.query.courseName;
       this.klassSeminarId=this.$route.query.klassSeminarId;
       var _this = this;
-      console.log(this.klassSeminarId);
       this.$axios({
         method: 'get',
         url: "/seminar/"+this.$route.query.klassSeminarId+"/team/seminarInfo",
@@ -141,7 +140,6 @@
         _this.teamOrder=response.teamOrder
         _this.attendanceId=response.attendanceId;
         _this.grade=response.grade;
-        console.log(response.grade);
         if(date<_this.seminarVO.enrollEndTime&&date>_this.seminarVO.enrollStartTime) _this.canApply=true;
         else _this.canApply=false;
       })
@@ -160,7 +158,7 @@
         this.$axios.post('attendance/'+this.attendanceId+'/powerPoint', formData)
           .then(function (response) {
             alert("上传成功");
-            that.$router.push('/emptyPage');
+            window.location.reload();
           })
           .catch(function (error) {
             alert("上传失败");
@@ -181,7 +179,7 @@
         this.$axios.post('attendance/'+this.attendanceId+'/report', formData)
           .then(function (response) {
             alert("上传成功");
-            that.$router.push('/emptyPage');
+            window.location.reload();
           })
           .catch(function (error) {
             alert("上传失败");
@@ -204,6 +202,7 @@
             status:this.seminarVO.status,
             courseName:this.courseName,
             attendanceId:this.attendanceId,
+            canApply:this.canApply,
           }})
       },
       signSem(){
@@ -213,6 +212,7 @@
             status:this.seminarVO.status,
             courseName:this.courseName,
             attendanceId:this.attendanceId,
+            canApply:this.canApply,
           }})
       },
       getDate(date) {
@@ -243,8 +243,7 @@
           + " " + Hours + seperator2 + Minutes
           + seperator2 + Seconds;
         return currentdate;
-      }
-
+      },
     }
   }
 </script>

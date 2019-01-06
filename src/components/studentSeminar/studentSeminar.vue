@@ -56,7 +56,6 @@
         })
       },
       goCourseSeminar(index,row){
-        console.log(index, row);
         this.$router.push({path:"/studentCourseSeminar",
           query:{
             courseId:row.courseId,

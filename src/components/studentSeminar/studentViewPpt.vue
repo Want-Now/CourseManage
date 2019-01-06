@@ -12,20 +12,20 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <div v-for="o in length-1" :key="o" class="order">
-        <span style="float:left">{{o}}</span>
-        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&& status=='0'&&!myTeamAttendance" style="color:red"><u @click="signin(o)">可报名</u></span>
-        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&& status=='0'&&myTeamAttendance" style="color:red"><u @click="modi(o)">可报名</u></span>
-        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&& status!='0'" >无人报名</span>
-        <span class="content" v-if="(tableData[o-1].attendanceStatus)&& status=='0'" >{{tableData[o-1].klassSerial}}-{{tableData[o-1].teamSerial}}</span>
-        <span class="content" v-if="(tableData[o-1].attendanceStatus)&& !(tableData[o-1].pptStatus)">ppt未提交</span>
-        <span class="content" v-if="(tableData[o-1].attendanceStatus)&& tableData[o-1].pptStatus"><el-button @click="dow(tableData[o-1].pptName)">下载</el-button></span>
+      <div v-for="item ,index in pptList" class="order" :key="index">
+        <span style="float:left">{{index+1}}</span>
+        <span class="content" v-if="!(item.attendanceStatus)&& status=='0'&&!myTeamAttendance&&canApply" style="color:red"><u @click="signin(index+1)">可报名</u></span>
+        <span class="content" v-if="!(item.attendanceStatus)&& status=='0'&&myTeamAttendance&&canApply" style="color:red"><u @click="modi(index+1)">可报名</u></span>
+        <span class="content" v-if="!(item.attendanceStatus)&&!canApply" >无人报名</span>
+        <span class="content" v-if="(item.attendanceStatus)&& status=='0'" >{{item.klassSerial}}-{{item.teamSerial}}</span>
+        <span class="content" v-if="(item.attendanceStatus)&& !(item.pptStatus)">ppt未提交</span>
+        <span class="content" v-if="(item.attendanceStatus)&& item.pptStatus"><el-button @click="dow(item.pptName,item.attendanceId)">下载</el-button></span>
       </div>
     </el-main>
     <br>
     <br>
     <el-footer>
-      <el-button v-if="status=='0'&&myTeamAttendance"class="bottomButt" @click="concel">取消报名</el-button>
+      <el-button v-if="status=='0'&&myTeamAttendance&&canApply"class="bottomButt" @click="concel">取消报名</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -36,13 +36,10 @@
       return {
         myTeamAttendance:'',
         courseName: '',
+        canApply:'',
         loading:false,
         attendanceId:'',
-        tableData:[
-          {
-            attStatus:'',
-          }
-        ],
+        pptList:[],
         status:'0',
         klassSeminarId:'',
         length:6,
@@ -56,15 +53,25 @@
       this.status=this.$route.query.status;
       this.courseName=this.$route.query.courseName;
       this.attendanceId=this.$route.query.attendanceId;
-      console.log(this.attendanceId);
+      this.canApply=this.$route.query.canApply;
       this.$axios({
         method: 'get',
         url: '/round/seminar/'+ this.klassSeminarId+'/attendance'
       }).then(response => {
         console.log(response);
-        _this.tableData= response;
         _this.length=response.length;
         _this.myTeamAttendance=response[_this.length-1].myTeamAttendance;
+        _this.attendanceId=response[_this.length-1].myAttendanceId;
+        for (var i = 0; i < (response.length-1); i++) {
+          _this.pptList.push({
+            attendanceStatus: response[i].attendanceStatus,
+            klassSerial: response[i].klassSerial,
+            teamSerial: response[i].teamSerial,
+            pptName: response[i].pptName,
+            pptStatus: response[i].pptStatus,
+            attendanceId: response[i].attendanceId,
+          });
+        }
       })
     },
     methods:{
@@ -84,7 +91,7 @@
               type: 'success',
               duration: 2000
             });
-            that.$router.push('/emptyPage');
+            window.location.reload();
           }else {
             that.$message({
               message: '报名失败',
@@ -109,7 +116,7 @@
               type: 'success',
               duration: 2000
             });
-           that.$router.push('/emptyPage');
+            window.location.reload();
           }else {
             that.$message({
               message: '修改失败',
@@ -120,7 +127,6 @@
       },
       concel() {
           var that=this;
-          console.log(this.attendanceId)
           this.$axios({
             method: 'delete',
             url:'/attendance/'+this.attendanceId,
@@ -132,7 +138,7 @@
                 type:'success',
                 duration:2000
               });
-              that.$router.push('/emptyPage');
+              window.location.reload();
             } else {
               that.$message({
                 message: '取消失败',
@@ -141,15 +147,14 @@
               });
             }})
         },
-      dow(ol){
+      dow(ol,aid){
         this.ppt=ol;
         console.log(this.ppt);
         this.$axios({
           method: 'get',
-          url: '/attendance/'+this.attendanceId+'/powerPoint',
+          url: '/attendance/'+aid+'/powerPoint',
           responseType: 'blob'
         }).then(response => {
-          console.log(response);
           this.download(response)
           //window.open(response, '_blank');
           // window.location.href = response;

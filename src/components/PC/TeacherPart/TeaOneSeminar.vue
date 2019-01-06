@@ -76,14 +76,23 @@
           </el-table-column>
           <el-table-column
             prop="pptName"
-            label="展示材料"
+            label="ppt"
             idth="150">
+            <template slot-scope="scope" v-if="scope.row.attendanceStatus">
+              <span v-if="scope.row.pptUrl" @click="dow(scope.row.pptName,scope.row.attendanceId)" style="color:#409dfe"> {{scope.row.pptName}}</span>
+              <span v-if="!scope.row.pptUrl" @click="dow(scope.row.pptName,scope.row.attendanceId)" > 未提交</span>
+            </template>
           </el-table-column>
           <el-table-column
             v-if="status=='2'"
             prop="reportName"
             label="书面报告"
-            idth="150">
+            width="150">
+            <template slot-scope="scope" v-if="scope.row.attendanceStatus">
+              <span  v-if="status=='2'&&scope.row.reportUrl" @click="dow(scope.row.reportName,scope.row.attendanceId)" style="color:#409dfe"> {{scope.row.reportName}}</span>
+              <span  v-if="status=='2'&&!scope.row.reportUrl" > {{scope.row.reportName}}</span>
+              <span  v-if="status!='2'">未到提交时间</span>
+            </template>
           </el-table-column>
         </el-table>
       </el-form>

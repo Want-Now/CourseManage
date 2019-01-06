@@ -2,7 +2,7 @@
   <el-container style="height:100%;width: 100%; margin:0 auto;">
     <el-header id="header">
       <el-button class="el-icon-back" @click="back()"></el-button>
-      <p>{{headerLocation}}</p>
+      <p>{{courseName}}-讨论课</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
@@ -12,18 +12,17 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <el-table :data="tableData">
-        <el-table-column prop="order" label="组别" width="100px"  align="center">
-        </el-table-column>
-        <el-table-column prop="content" align="center">
-
-        </el-table-column>
-      </el-table>
-      <p>
-        <span class="title"></span>
-        <span class="content"></span>
-      </p>
+      <div v-for="item ,index in pptList" class="order" :key="index">
+        <span style="float:left">{{index+1}}</span>
+        <span class="content" v-if="!item.attendanceStatus" >无人报名</span>
+        <span class="content" v-if="item.attendanceStatus" >{{item.klassSerial}}-{{item.teamSerial}}</span>
+        <span class="content" v-if="(item.attendanceStatus)&& !(item.pptStatus)">ppt未提交</span>
+        <span class="content" v-if="(item.attendanceStatus)&& (item.pptStatus)" @click="dow(item.pptName,item.attendanceId)" style="font-size:20px;color:#494e8e"><u>{{item.pptName}}</u></span>
+      </div>
     </el-main>
+    <el-footer>
+        <el-button class="bottomButt" @click="allD">批量下载</el-button>
+    </el-footer>
   </el-container>
 </template>
 
@@ -31,50 +30,74 @@
   export default {
     data() {
       return {
-        headerLocation: "",
-        tableData:[],
-        status:'',
-        pptAddress:'',
+        courseName:'',
+        klassSeminarId:'',
+        pptList:[],
       }
     },
-    create(){
-      this.headerLocation=this.$route.query.courseName+'-'+this.$route.query.seminarName;
-      this.status=this.$route.query.status;
-      let _this=this;
+    created() {
+      var _this = this;
+      this.klassSeminarId=this.$route.query.klassSeminarId;
+      this.courseName=this.$route.query.courseName;
+      //this.attendanceId=this.$route.query.attendanceId;
       this.$axios({
-        method:'get',
-        url:'/round/seminar/'+this.$route.query.klassSeminarId+'/attendance'
-      }).then(response=>{
-        if(_this.status===0){
-          for(var i=0;i<response.length;i++)
-          {
-            _this.tableData[i].order='第'+(i+1)+'组';
-            if(response[i].attendanceStatus===false)
-              _this.tableDate[i].content="未报名";
-            else {
-              if(response[i].pptStatus===false)
-                _this.tableDate[i].content=response[i].klassSerial
-                  +'-'+response[i].teamSerial+'未提交PPT';
-              else _this.tableDate[i].content=response[i].klassSerial +'-'+response[i].teamSerial;
-            }
-          }
-        }
-        else if(_this.status===1)
-        {
-          for(var i=0;i<response.length;i++)
-          {
-            _this.tableData[i].order='第'+(i+1)+'组';
-            if(response[i].attendanceStatus===false)
-              _this.tableDate[i].content="未报名";
-            else {
-              if(response[i].pptStatus===false)
-                _this.tableDate[i].content=response[i].klassSerial
-                  +'-'+response[i].teamSerial+'  未提交';
-              else _this.tableDate[i].content=response[i].klassSerial +'-'+response[i].teamSerial;
-            }
-          }
-        }
+        method: 'get',
+        url: '/round/seminar/22/attendance'
+      }).then(response => {
+        for (var i = 0; i < (response.length-1); i++) {
+          _this.pptList.push({
+            attendanceStatus: response[i].attendanceStatus,
+            klassSerial: response[i].klassSerial,
+            teamSerial: response[i].teamSerial,
+            pptStatus: response[i].pptStatus,
+            pptName: response[i].pptName,
+            attendanceId: response[i].attendanceId,
+          });
+      }
       })
+    },
+    methods: {
+      allD(){
+        this.$axios({
+          method: 'get',
+          url: '/seminar/22/klass/report',
+          responseType: 'blob'
+        }).then(response => {
+          conlose.log(response);
+          this.download(response)
+          //window.open(response, '_blank');
+          // window.location.href = response;
+        }).catch((error) => {
+          alert("下载失败");
+        })
+      },
+      dow(ol,aid) {
+        this.ppt = ol;
+        console.log(this.ppt);
+        this.$axios({
+          method: 'get',
+          url: '/attendance/' + aid+ '/powerPoint',
+          responseType: 'blob'
+        }).then(response => {
+          this.download(response)
+          //window.open(response, '_blank');
+          // window.location.href = response;
+        }).catch((error) => {
+          alert("下载失败");
+        })
+      },
+      download(data) {
+        if (!data) {
+          alert("下载失败");
+        }
+        let url = window.URL.createObjectURL(new Blob([data]))
+        let link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download',this.ppt)
+        document.body.appendChild(link)
+        link.click()
+      },
     }
   }
 </script>
@@ -82,6 +105,8 @@
   .el-container {
     height: 90vh;
   }
+
+
   .el-header{
     margin: 0px;
     padding: 0px;
@@ -91,9 +116,18 @@
     line-height: 22px;
     text-align: center;
   }
+
   .el-header p{
     display: inline-block;
   }
+  .order{
+  //text-align: left;
+    height:70px;
+    line-height: 70px;
+    font-size: 20px;
+    border-bottom:1px solid #f4f6f9;
+  }
+
   .el-header .el-icon-back{
     position: absolute;
     width: 60px;
@@ -106,6 +140,7 @@
   }
   .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
   .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
+
   .el-header .el-icon-menu{
     position: absolute;
     width: 60px;

@@ -50,11 +50,12 @@
             label="展示次序"
             type="index"
             :index="indexMethod"
-            width="150">
+            :width="150"
+          >
           </el-table-column>
           <el-table-column
             label="组号"
-            width="150">
+            :width="120">
             <template slot-scope="scope" v-if="scope.row.attendanceStatus">
               {{scope.row.klassSerial}}-{{scope.row.teamSerial}}
             </template>
@@ -62,58 +63,62 @@
           <el-table-column
             prop="leaderName"
             label="组长"
-            width="150">
+            :width="120">
           </el-table-column>
           <el-table-column
             prop="pptName"
-            label="展示材料"
-            idth="150">
+            label="ppt">
+            <template slot-scope="scope" v-if="scope.row.attendanceStatus">
+              <span v-if="scope.row.pptUrl" @click="dow(scope.row.pptName,scope.row.attendanceId)" style="color:#409dfe"> {{scope.row.pptName}}</span>
+              <span v-if="!scope.row.pptUrl" @click="dow(scope.row.pptName,scope.row.attendanceId)" > 未提交</span>
+            </template>
           </el-table-column>
           <el-table-column
-            v-if="status=='2'"
             prop="reportName"
-            label="展示报告"
-            width="150">
+            label="书面报告">
+            <template slot-scope="scope" v-if="scope.row.attendanceStatus">
+              <span  v-if="status=='2'"> {{scope.row.reportName}}</span>
+              <span  v-if="status!='2'">未到提交时间</span>
+            </template>
           </el-table-column>
-          <el-table-column
-            v-if="status=='0'"
-            width="150">
+          <el-table-column>
             <template slot-scope="scope">
-              <div v-if="status=='0'">
+              <span  v-if="canApply">
               <el-button v-if="!scope.row.attendanceStatus" @click="signin(scope.$index)">报名</el-button>
-              <el-button v-if="scope.row.myAttendanceStatus" @click="concel">取消报名</el-button>
-              </div>
-              <div v-if="status!='2'">
+              <el-button v-if="scope.row.myAttendanceStatus" @click="concel(scope.row.myAttendanceId)">取消报名</el-button>
+              </span>
+              <span v-if="status!='2'">
                 <el-button v-if="scope.row.myAttendanceStatus&&!(scope.row.pptUrl)" @click="dialogVisible=true">上传ppt</el-button>
                 <el-button v-if="scope.row.myAttendanceStatus&&scope.row.pptUrl" @click="dialogVisible = true">重新上传ppt</el-button>
-              </div>
-              <div v-if="status=='3'">
+              </span>
+              <span v-if="status=='2'">
                 <el-button v-if="scope.row.submitStatus&&!(scope.row.reportUrl)" @click="RdialogVisible = true">上传书面报告</el-button>
-                <el-button v-if="scope.row.submitStatus&&scope.row.reportUrl"  @click="RdialogVisible = true">重新上传ppt</el-button>
-              </div>
+                <el-button v-if="scope.row.submitStatus&&scope.row.reportUrl"  @click="RdialogVisible = true">重新上传书面报告</el-button>
+              </span>
+              <el-dialog
+                title="提示"
+                :visible.sync="dialogVisible"
+                width="80%">
+                <input type="file" @change="getFile($event)">
+                <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="submit($event,scope.row.myAttendanceId)">上传</el-button>
+  </span>
+              </el-dialog>
+              <el-dialog
+                title="提示"
+                :visible.sync="RdialogVisible"
+                width="80%">
+                <input type="file" @change="RgetFile($event)">
+                <span slot="footer" class="dialog-footer">
+    <el-button @click="RdialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="Rsubmit($event,scope.row.myAttendanceId)">上传</el-button>
+  </span>
+              </el-dialog>
             </template>
           </el-table-column>
         </el-table>
-        <el-dialog
-          title="提示"
-          :visible.sync="dialogVisible"
-          width="80%">
-          <input type="file" @change="getFile($event)">
-          <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="submit($event)">上传</el-button>
-  </span>
-        </el-dialog>
-        <el-dialog
-          title="提示"
-          :visible.sync="RdialogVisible"
-          width="80%">
-          <input type="file" @change="RgetFile($event)">
-          <span slot="footer" class="dialog-footer">
-    <el-button @click="RdialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="Rsubmit($event)">上传</el-button>
-  </span>
-        </el-dialog>
+
       </el-form>
       </el-form>
     </div>
@@ -127,6 +132,7 @@
         dialogVisible:false,
         RdialogVisible:false,
         tableData:[],
+        canApply:false,
         ListForm:[{
           seminarName: '',
           enrollEndTime:'',
@@ -136,7 +142,6 @@
         klassSeminarId:'',
         enrollEndTime:'',
         seminarSerial:'',
-        tableData:[],
         courseName:'',
         klassId:'',
         status:'',
@@ -156,9 +161,43 @@
           method: 'get',
           url: '/seminar/'+this.$route.query.seminarId+'/attendance/pc'
         }).then(response => {
+          var date=_this.getDate(new Date());
           _this.ListForm = response;
+          console.log(response);
+          if(date<response[0].enrollEndTime&&date>response[0].enrollStartTime) _this.canApply=true;
+          else _this.canApply=false;
+          console.log(_this.canApply);
           _this.courseName=this.$route.query.courseName;
         })
+      },
+      getDate(date) {
+        var seperator1 = "-";
+        var seperator2 = ":";
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+          month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = "0" + strDate;
+        }
+        var Hours = date.getHours();
+        var Minutes = date.getMinutes();
+        var Seconds = date.getSeconds();
+
+        if (Hours >= 0 && Hours <= 9) {
+          Hours = "0" + Hours;
+        }
+        if (Minutes >= 0 && Minutes <= 9) {
+          Minutes = "0" + Minutes;
+        }
+        if (Seconds >= 0 && Seconds <= 9) {
+          Seconds = "0" + Seconds;
+        }
+        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+          + " " + Hours + seperator2 + Minutes
+          + seperator2 + Seconds;
+        return currentdate;
       },
       getmyseminar(){
         var _this = this;
@@ -167,7 +206,9 @@
           url: '/seminar/'+this.$route.query.seminarId+'/klass/klassSeminar/pc'
         }).then(response => {
           _this.tableData = response;
-         _this.klassSeminarId=response[0].klassSeminarId;
+          console.log(response);
+          var len=response.length;
+         _this.klassSeminarId=response[len-1].klassSeminarId;
          _this.status=response[0].status;
         })
       },
@@ -207,12 +248,12 @@
           }
         })
       },
-      concel() {
+      concel(attendanceId) {
         var that=this;
-        console.log(this.attendanceId)
+        console.log(attendanceId)
         this.$axios({
           method: 'delete',
-          url:'/attendance/'+this.attendanceId,
+          url:'/attendance/'+attendanceId,
         }).then(function (response) {
           if(response===true){
             that.myTeamAttendance=false;
@@ -221,7 +262,7 @@
               type:'success',
               duration:2000
             });
-            that.$router.push('/emptyPage');
+            window.location.reload();
           } else {
             that.$message({
               message: '取消失败',
@@ -235,7 +276,7 @@
         var that=this;
         this.$axios({
           method: 'post',
-          url: '/seminar/'+this.$route.query.seminarId+'/attendance',
+          url: '/seminar/'+this.klassSeminarId+'/attendance',
           data:{
             teamOrder:o+1
           },
@@ -247,7 +288,7 @@
               type: 'success',
               duration: 2000
             });
-            that.$router.push('/emptyPage');
+            window.location.reload();
           }else {
             that.$message({
               message: '报名失败',
@@ -260,16 +301,16 @@
         this.file = event.target.files[0];
         console.log(this.file);
       },
-      submit: function (event) {
+      submit: function (event,attendanceId) {
         var that=this;
         //阻止元素发生默认的行为
         event.preventDefault();
         let formData = new FormData();
         formData.append("file", this.file);
-        this.$axios.post('attendance/'+this.attendanceId+'/powerPoint', formData)
+        this.$axios.post('attendance/'+attendanceId+'/powerPoint', formData)
           .then(function (response) {
             alert("上传成功");
-            that.$router.push('/emptyPage');
+            window.location.reload();
           })
           .catch(function (error) {
             alert("上传失败");
@@ -281,16 +322,16 @@
         this.file = event.target.files[0];
         console.log(this.file);
       },
-      Rsubmit: function (event) {
+      Rsubmit: function (event,attendanceId) {
         var that=this;
         //阻止元素发生默认的行为
         event.preventDefault();
         let formData = new FormData();
         formData.append("file", this.file);
-        this.$axios.post('attendance/'+this.attendanceId+'/report', formData)
+        this.$axios.post('attendance/'+attendanceId+'/report', formData)
           .then(function (response) {
             alert("上传成功");
-            that.$router.push('/emptyPage');
+            window.location.reload();
           })
           .catch(function (error) {
             alert("上传失败");
@@ -298,6 +339,34 @@
             that.RdialogVisible=false;
           });
       },
+      dow(ol,aid){
+        this.ppt=ol;
+        console.log(this.ppt);
+        this.$axios({
+          method: 'get',
+          url: '/attendance/'+aid+'/powerPoint',
+          responseType: 'blob'
+        }).then(response => {
+          this.download(response)
+          //window.open(response, '_blank');
+          // window.location.href = response;
+        }).catch((error) => {
+          alert("下载失败");
+        })
+      },
+      download (data) {
+        if (!data) {
+          alert("下载失败");
+        }
+        let url = window.URL.createObjectURL(new Blob([data]))
+        let link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', this.ppt)
+        document.body.appendChild(link)
+        link.click()
+      },
+
     }
   }
 </script>
