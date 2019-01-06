@@ -56,7 +56,7 @@
       var _this = this;
       this.$axios({
         method: 'get',
-        url: '/share/successShare '
+        url: '/share/'+this.$route.query.courseId+'/successShare '
         }).then(response => {
           _this.shareCourses = response;
         })
@@ -78,18 +78,24 @@
             }
           }).then(function (response){
             if(response===true){
+              alert("取消成功");
+              /*
               that.$message({
                 message:'取消成功',
                 type:'success',
                 duration:2000
               });
+              */
               window.location.reload();
             } else {
+              alert("取消失败");
+              /*
               that.$message({
                 message: '取消失败',
                 type: 'error',
                 duration: 2000
               });
+              */
             }})
         }
       }

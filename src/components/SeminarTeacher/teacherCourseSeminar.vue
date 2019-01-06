@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
+      <el-button class="el-icon-back" @click="back()"></el-button>
       <p>{{headerLocation}}</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
@@ -82,7 +82,7 @@
         let _this=this;
         this.$axios({
           method:'get',
-          url:'/round/'+round.roundId+'/seminar'
+          url:'/round/'+round.roundId+'/teacherSeminar'
         }).then(response=>{
           _this.seminars=response;
         })

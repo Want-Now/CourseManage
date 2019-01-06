@@ -70,7 +70,6 @@
     },
       created(){
         var that=this;
-        console.log(this.$route.query.courseId);
         this.$axios({
           method: 'get',
           url: "/share/showSendShare",
@@ -101,17 +100,24 @@
           }
         }).then(function (response) {
           if (response === true) {
+            alert("发送成功，等待对方同意");
+            /*
             that.$message({
               message: '发送成功，等待对方同意',
+              width:20,
               type: 'success',
               duration: 2000
             });
+            */
           } else {
+            alert("发送失败");
+            /*
             that.$message({
               message: '发送失败',
               type: 'error',
               duration: 2000
             });
+            */
           }
         })
       }

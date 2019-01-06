@@ -287,7 +287,7 @@
             maxMember: teamStrategy[i].maxMember,
           });
         }
-        //转化冲突课程心中
+        //转化冲突课程
         let teamConflict = this.$data.courseForm.conflictCourseIdS;
         let conflictList = [];
         for (let i = 0; i < teamConflict.length; i++) {

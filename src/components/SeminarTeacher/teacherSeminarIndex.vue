@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" @click="back"></el-button>
+      <el-button class="el-icon-back" @click="back()"></el-button>
       <p>{{courseName}}-讨论课</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
@@ -44,7 +44,7 @@
   export default {
     data() {
       return {
-
+        klassSeminarId:'',
         seminarSerial:'',
         roundSerial:'',
         introduction:'',
@@ -117,7 +117,7 @@
         }
       },
       Report(){
-        this.$router.push({path:"/ViewReportScore",
+        this.$router.push({path:"/changeReportScore",
           query:{
             courseName:this.courseName,
             seminarName:this.seminarName,
@@ -138,7 +138,8 @@
           method: 'get',
           url: "/seminar/"+this.$route.query.seminarId+"/klass/"+this.$route.query.klassId,
         }).then(function (response) {
-          that.seminarSerial = response.seminarSerial,
+            that.klassSeminarId=response.klassSeminarId,
+            that.seminarSerial = response.seminarSerial,
             that.introduction = response.introduction,
             that.seminarName = response.seminarName,
             that.status = response.status
