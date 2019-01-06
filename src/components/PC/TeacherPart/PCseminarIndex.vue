@@ -30,8 +30,8 @@
         </div>
         <div>
           <el-row v-for="o in length1":key="o" style="height:80px;line-height: 80px">
-          <el-col :span="12"><div style="font-size:30px;float:left;padding-left:60px;">{{round[o].seminarName}}</div></el-col>
-            <el-col :span="12" style="padding-left:100px;"><el-button size="large;" @click="enter(round[o].seminarId)">进入</el-button></el-col>
+          <el-col :span="16"><div style="font-size:30px;float:left;padding-left:60px;">{{round[o].seminarName}}</div></el-col>
+            <el-col :span="8" style="padding-left:100px;"><el-button size="large;" @click="enter(round[o].seminarId)">进入</el-button></el-col>
           </el-row>
           <br>
           <br>

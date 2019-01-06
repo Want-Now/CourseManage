@@ -154,7 +154,7 @@
         tableData2: [],
       }
     },
-    mounted(){
+    created(){
       this.gettable()
       this.gettable2()
       this.getParams ()
