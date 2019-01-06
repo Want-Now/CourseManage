@@ -155,7 +155,7 @@
         event.preventDefault();
         let formData = new FormData();
         formData.append("file", this.file);
-        this.$axios.post('attendance/'+this.attendanceId+'/powerPoint', formData)
+        this.$axios.post('/attendance/'+this.attendanceId+'/powerPoint', formData)
           .then(function (response) {
             alert("上传成功");
             window.location.reload();
