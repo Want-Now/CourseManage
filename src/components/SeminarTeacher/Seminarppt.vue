@@ -13,15 +13,17 @@
     </el-header>
     <el-main>
       <el-table :data="tableData">
-        <el-table-column prop="team" label="组别" width="100%">
+        <el-table-column prop="order" label="组别" width="100px"  align="center">
         </el-table-column>
-        <el-table-column prop="ppt" label="演示文档" width="200%">
+        <el-table-column prop="content" align="center">
+
         </el-table-column>
       </el-table>
+      <p>
+        <span class="title"></span>
+        <span class="content"></span>
+      </p>
     </el-main>
-    <el-footer>
-        <el-button class="bottomButt">批量下载</el-button>
-    </el-footer>
   </el-container>
 </template>
 
@@ -29,21 +31,50 @@
   export default {
     data() {
       return {
-        headerLocation: "OOAD-讨论课",
-        tableData: [{
-          team: '第一组',
-          ppt: '1-1业务流程.ppt '
-        }, {
-          team: '第二组',
-          ppt: '未提交'
-        }, {
-          team: '第三组',
-          ppt: '1-3业务流程.ppt '
-        }, {
-          team: '第四组',
-          ppt: '1-4业务流程.ppt '
-        }]
+        headerLocation: "",
+        tableData:[],
+        status:'',
+        pptAddress:'',
       }
+    },
+    create(){
+      this.headerLocation=this.$route.query.courseName+'-'+this.$route.query.seminarName;
+      this.status=this.$route.query.status;
+      let _this=this;
+      this.$axios({
+        method:'get',
+        url:'/round/seminar/'+this.$route.query.klassSeminarId+'/attendance'
+      }).then(response=>{
+        if(_this.status===0){
+          for(var i=0;i<response.length;i++)
+          {
+            _this.tableData[i].order='第'+(i+1)+'组';
+            if(response[i].attendanceStatus===false)
+              _this.tableDate[i].content="未报名";
+            else {
+              if(response[i].pptStatus===false)
+                _this.tableDate[i].content=response[i].klassSerial
+                  +'-'+response[i].teamSerial+'未提交PPT';
+              else _this.tableDate[i].content=response[i].klassSerial +'-'+response[i].teamSerial;
+            }
+          }
+        }
+        else if(_this.status===1)
+        {
+          for(var i=0;i<response.length;i++)
+          {
+            _this.tableData[i].order='第'+(i+1)+'组';
+            if(response[i].attendanceStatus===false)
+              _this.tableDate[i].content="未报名";
+            else {
+              if(response[i].pptStatus===false)
+                _this.tableDate[i].content=response[i].klassSerial
+                  +'-'+response[i].teamSerial+'  未提交';
+              else _this.tableDate[i].content=response[i].klassSerial +'-'+response[i].teamSerial;
+            }
+          }
+        }
+      })
     }
   }
 </script>
@@ -51,8 +82,6 @@
   .el-container {
     height: 90vh;
   }
-
-
   .el-header{
     margin: 0px;
     padding: 0px;
@@ -62,11 +91,9 @@
     line-height: 22px;
     text-align: center;
   }
-
   .el-header p{
     display: inline-block;
   }
-
   .el-header .el-icon-back{
     position: absolute;
     width: 60px;
@@ -79,7 +106,6 @@
   }
   .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
   .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
-
   .el-header .el-icon-menu{
     position: absolute;
     width: 60px;

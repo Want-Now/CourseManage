@@ -25,7 +25,7 @@
               <el-button class="button" @click="uploadPreScore(item)">
                 确认打分
               </el-button><br/>
-              <el-button class="button" @click="goQuesPage()">
+              <el-button class="button" @click="goQuesPage(item)">
                 抽取提问
               </el-button><br/>
               <el-button class="button" @click="nextTeamPre()">
@@ -56,8 +56,8 @@
             </el-dialog>
           </el-tab-pane>
         </el-tabs>
-        <el-tabs tab-position="left" @tab-click="handleClick" v-if="!isPrePage">
-          <el-tab-pane v-for="question in questions" :key="question.id" :label="question.team">
+        <el-tabs tab-position="left" @tab-click="handleClick" v-if="!isPrePage" :value="nowQues">
+          <el-tab-pane v-for="question in questions" :key="question.questionId" :name="question.questionId+''" :label="question.team">
             <div class="info">
               {{question.preTeam}}正在展示
             </div>
@@ -88,13 +88,14 @@
           seminarName:'',
           seminarInfos:[],
           isPrePage:true,
-          questions:[{}],
+          questions:[],
           preLength:'',
           nowPre:'',
           preIndex:'',
           dialogVisible:false,
           repoDeadline:'',
           websock:'',
+          nowQues:'m'
         }
       },
       created(){
@@ -146,8 +147,18 @@
         goPrePage(){
           this.isPrePage=true;
         },
-        goQuesPage(){
-          this.isPrePage=false;
+        goQuesPage(item){
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/attendanceId/'+item.attendanceId+'/question'
+          }).then(function (response) {
+            _this.isPrePage=false;
+            _this.questions.push({
+              questionId:response.questionId,
+              team:response
+            })
+          })
           this.webSocketSend("");
 
         },
@@ -260,10 +271,7 @@
           const wsuri = "ws://ghctcourse.natapp1.cc/websocket";//ws地址
           this.websock = new WebSocket(wsuri);
           this.websock.onopen = this.webSocketOnOpen;
-
           this.websock.onerror = this.webSocketOnError;
-
-          this.websock.onmessage = this.webSocketOnMessage;
           this.websock.onclose = this.webSocketClose;
         },
 

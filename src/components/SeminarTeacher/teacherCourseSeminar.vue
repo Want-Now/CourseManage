@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
+      <el-button class="el-icon-back" @click="back()"></el-button>
       <p>{{headerLocation}}</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
@@ -20,11 +20,13 @@
               <span class="titleSpan">第{{round.roundSerial}}轮</span>
             </div>
           </template>
+
           <el-menu>
             <el-menu-item index="0" @click="goRoundSetting(round,seminars)">
               <i class="el-icon-setting"></i>
               <span style="font-size: 15px">该轮轮次设置</span>
             </el-menu-item>
+
             <el-submenu v-for="(seminar,index) in seminars" :key="seminar.id" :index="(index+'')">
               <template slot="title">
                 <div class="itemDiv"  @click="getKlass(seminar)">
@@ -42,6 +44,7 @@
           </el-menu>
         </el-collapse-item>
       </el-collapse>
+
     </el-main>
     <el-footer>
       <el-button class="bottomButt" @click="newSeminar(rounds)">新建讨论课</el-button>
@@ -72,7 +75,6 @@
         }
       );
     },
-
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
@@ -82,7 +84,7 @@
         let _this=this;
         this.$axios({
           method:'get',
-          url:'/round/'+round.roundId+'/seminar'
+          url:'/round/'+round.roundId+'/teacherSeminar'
         }).then(response=>{
           _this.seminars=response;
         })
@@ -105,7 +107,7 @@
             courseId:this.$route.query.courseId,
             courseName:this.$route.query.courseName,
             seminars:seminars
-        }});
+          }});
       },
       goSeminarIndex(round,seminar,klass){
         this.$router.push({
@@ -115,7 +117,6 @@
             seminarId:seminar.id,
             klassId:klass.klassId,
             courseName:this.$route.query.courseName,
-
           }
         })
       },
@@ -125,7 +126,6 @@
           query:{courseId:this.$route.query.courseId,rounds:rounds}
         });
       },
-
     }
   }
 </script>

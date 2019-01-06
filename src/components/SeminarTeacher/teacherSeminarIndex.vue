@@ -44,7 +44,6 @@
   export default {
     data() {
       return {
-
         seminarSerial:'',
         roundSerial:'',
         introduction:'',
@@ -54,13 +53,13 @@
         klassId:'',
         klassName:'',
         courseName:'',
+        klassSeminarId:'',
       }
     },
     created() {
       this.changeIcon()
       this.getParams ()
     },
-
     methods: {
       back() {
         this.$router.go(-1);
@@ -87,7 +86,8 @@
           query:{
             courseName:this.courseName,
             seminarName:this.seminarName,
-            klassSeminarId:this.klassSeminarId
+            klassSeminarId:this.klassSeminarId,
+            status:this.status
           }})
       },
       enterSe(){
@@ -96,25 +96,32 @@
             klassSeminarId:this.klassSeminarId,
             seminarName:this.seminarName,
             courseName:this.courseName,
+            seminarId:this.$route.query.seminarId,
+            roundSerial:this.$route.query.roundSerial,
+            klassId:this.$route.query.klassId,
           }})
       },
       starSe(){
         var that=this;
         this.$axios({
-          method:'post',
-          url:"/presentation/{klassSeminarId}",
-          data:{
-            klassSeminarId:this.klassSeminarId,
+          method:'put',
+          url:'/presentation/'+this.klassSeminarId+'/status',
+          params:{
+            status:1
           }
-        }).then()
-        {
-          this.$router.push({path:"/SeminarProceed",
-            query:{
-              klassSeminar:this.klassSeminar,
-              seminarName:this.seminarName,
-              courseName:this.courseName,
-            }})
-        }
+        }).then(
+          response=>{
+            if(response===true)
+            {
+              this.$router.push({path:"/SeminarProceed",
+                query:{
+                  klassSeminarId:this.klassSeminarId,
+                  seminarName:this.seminarName,
+                  courseName:this.courseName,
+                }})
+            }
+          }
+        )
       },
       Report(){
         this.$router.push({path:"/ViewReportScore",
@@ -141,7 +148,8 @@
           that.seminarSerial = response.seminarSerial,
             that.introduction = response.introduction,
             that.seminarName = response.seminarName,
-            that.status = response.status
+            that.status = response.status,
+            that.klassSeminarId=response.klassSeminarId
         })
       }
     }
@@ -228,11 +236,9 @@
     line-height: 22px;
     text-align: center;
   }
-
   .el-header p{
     display: inline-block;
   }
-
   .el-header .el-icon-back{
     position: absolute;
     width: 60px;
@@ -243,10 +249,8 @@
     left: 10px;
     top: 10px;
   }
-
   .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
   .el-header .el-icon-back:focus{background-color: #494e8f;border-color: #494e8f;}
-
   .el-header .el-icon-menu{
     position: absolute;
     width: 60px;
@@ -259,7 +263,6 @@
   }
   .el-header .el-icon-menu:hover{background-color: #494e8f;border-color: #494e8f;}
   .el-header .el-icon-menu:focus{background-color: #494e8f;border-color: #494e8f;}
-
   .el-header .el-dropdown{
     position: absolute;
     margin: 0px;
@@ -271,5 +274,4 @@
     line-height: 55px;
     text-align: center;
   }
-
 </style>
