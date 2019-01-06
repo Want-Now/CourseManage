@@ -35,11 +35,10 @@
             <i class="el-icon-arrow-right"></i>
           </el-menu-item>
         </el-submenu>
-
       </el-menu>
     </el-main>
     <el-footer>
-      <el-button class="bottomButt" v-if="role==='student'"><i class="el-icon-plus"></i>新建课程</el-button>
+      <el-button class="bottomButt" v-if="role==='teacher'" @click="newcourse"><i class="el-icon-plus"></i>新建课程</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -78,7 +77,6 @@
         this.$router.push({path:'/StudentScore',query:{courseId:item.courseId}});
       },
       goTeamPage(item){
-        // console.log(item.courseId);
         this.$router.push({path:'/TeamPage',query:{courseId:item.courseId,courseName:item.courseName}});
       },
       goCourseInfo(item){
@@ -92,7 +90,10 @@
       },
       goShareSetting(item){
         this.$router.push({path:'/ShareSeting',query:{courseId:item.courseId,courseName:item.courseName}})
-      }
+      },
+      newcourse(){
+        this.$router.push('/createCourse');
+      },
     }
   }
 </script>
