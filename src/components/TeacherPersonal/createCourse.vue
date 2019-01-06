@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" ></el-button>
+      <el-button class="el-icon-back" @click="back()" ></el-button>
       <p>创建课程</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
@@ -13,7 +13,7 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <el-form :model="courseForm" label-position="left"  :rules="rulesNewCourse">
+      <el-form :model="courseForm" label-position="left"  :rules="rulesNewCourse" ref="courseForm">
         <el-form-item prop="courseName">
           <el-input v-model="courseForm.courseName" class="activeInput" placeholder="课程名称">
           </el-input>
@@ -61,7 +61,7 @@
       <div class="tooltip1">
         <span>均满足指选课人数均需达到要求，满足其一指任意选课人数满足即可</span>
       </div>
-      <el-form :model="item.courseId" v-for="item ,index in courseForm.courseLimitVOS" :key="index"  class="team-rule-form" label-width="140px"  :rules=" rulesFormTeam">
+      <el-form :model="item" v-for="item ,index in courseForm.courseLimitVOS" class="team-rule-form" label-width="140px"  :rules="rulesFormTeam">
           <el-form-item prop="courseId" label="课程：" >
             <el-select size="small" class="form-item" v-model="item.courseId">
               <el-option v-for="course in courseList" :key="course.CourseId" :value="course.CourseId"  :label="`${course.CourseName}(${course.TeacherName}老师)`">
@@ -86,7 +86,6 @@
                      inactive-text="满足其一"
                      v-model="courseForm.flag"></el-switch>
         </div>
-
       <div class="blank-spaces"></div>
       <div class="second-form-title">
         <span>冲突课程：</span><el-button type="primary" @click="newConflictCourse">新增</el-button><br/>
@@ -94,9 +93,10 @@
       <div class="tooltip1">
         <span>选修了不同冲突课程的学生不可同组，同课程名不同教师也为不同课程</span>
       </div>
-      <el-form :model="item" v-for="item,index in courseForm.conflictCourseIdS":key="index"  label-width="100px" class="team-rule-form" :rules="rulesFormTeam">
+      <el-form :model="item" v-for="item,index in courseForm.conflictCourseIdS":key="index"  class="team-rule-form" :rules="rulFormTeam">
         <el-form-item prop="courseId" label="冲突课程：" >
-          <el-select size="small" class="form-item1" v-model="item.courseId">
+          <br>
+          <el-select multiple size="small" class="form-item1" v-model="item.courseId">
             <el-option v-for="course in courseList" :key="course.CourseId" :value="course.CourseId"  :label="`${course.CourseName}(${course.TeacherName}老师)`">
             </el-option>
           </el-select>&nbsp;<el-button size="small" type="danger" @click.prevent="deleteConflictCourse(index)">删除</el-button>
@@ -104,7 +104,7 @@
       </el-form>
     </el-main>
     <el-footer>
-      <el-button class="bottomButt" @click="creat">新建</el-button>
+      <el-button class="bottomButt" @click="creat('courseForm')">新建</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -129,7 +129,6 @@
       };
       //日期判断
       let validateDate = (rule, value, callback) => {
-        console.log(value);
         if (this.$data.courseForm.teamStartDate !== '' && this.$data.courseForm.teamEndData !== '') {
           if (this.$data.courseForm.teamStartDate < this.$data.courseForm.teamEndDate) {
             callback();
@@ -166,20 +165,35 @@
             {validator: validateTeam, trigger: 'change'}
           ],
         },
+        rulFormTeam: {
+          courseId: [
+            {required: true, message: '请选择课程！', trigger: 'change'}
+          ],
+          maxMember: [
+            {validator: validateTeam, trigger: 'change'}
+          ],
+          minMember: [
+            {validator: validateTeam, trigger: 'change'}
+          ],
+        },
         rulesNewCourse: {
           courseName: [
             {required: true, message: '请输入课程名', trigger: 'change'},
-
             {max: 20, message: '课程名长度不能超过20', trigger: 'change'}
-
           ],
-
           introduction: [
-
             {required: true, message: '请输入课程详情', trigger: 'change'}
-
           ],
           presentationPercentage: [
+            {required: true, message: '请输入课堂展示成绩占比', trigger: 'change'},
+            {validator: validateRate, trigger: 'change'}
+          ],
+          questionPercentage: [
+            {required: true, message: '请输入课堂提问成绩占比', trigger: 'change'},
+            {validator: validateRate, trigger: 'change'}
+          ],
+          reportPercentage: [
+            {required: true, message: '请输入书面报告成绩占比', trigger: 'change'},
             {validator: validateRate, trigger: 'change'}
           ],
           maxMember: [
@@ -188,12 +202,12 @@
           minMember: [
             {validator: validateTeam, trigger: 'change'}
           ],
-
-          teamStartDate: [
+          teamEndDate: [
+            {required: true, message: '请选择组队结束时间', trigger: 'change'},
             {validator: validateDate, trigger: 'blur'}
           ],
-          teamEndDate: [
-            {validator: validateDate, trigger: 'blur'}
+          teamStartDate: [
+            {required: true, message: '请选择组队开始时间', trigger: 'change'},
           ]
         },
         courseForm: {
@@ -240,7 +254,6 @@
           url: "/course/getAllCourse"
       }).then(function (response) {
         that.courseList=response;
-        console.log(that.courseList);
       })
     },
     methods:{
@@ -262,63 +275,68 @@
           maxMember:''
         })
       },
-      creat(){
-        var that=this;
-        //转化其他课程组队限制
-        let teamStrategy=this.$data.courseForm.courseLimitVOS;
-        let newTeamStrategy=[];
-        for(var i=0;i<teamStrategy.length;i++){
-            newTeamStrategy.push({
-               courseName:teamStrategy[i].courseName,
-               courseId:teamStrategy[i].courseId,
-               minMember:teamStrategy[i].minMember,
-               maxMember:teamStrategy[i].maxMember,
-            });
-          }
-        //转化冲突课程组队限制
-        let teamConflict=this.$data.courseForm.conflictCourseIdS;
-        //console.log(this.$data.courseForm.conflictCourseIdS);
-        let conflictList=[];
-        for(let i=0;i<teamConflict.length;i++){
-          conflictList.push({
-            courseId:teamConflict[i].courseId,
+      creat(courseForm) {
+        var that = this;
+        let teamStrategy = this.$data.courseForm.courseLimitVOS;
+        let newTeamStrategy = [];
+        for (var i = 0; i < teamStrategy.length; i++) {
+          newTeamStrategy.push({
+            courseName: teamStrategy[i].courseName,
+            courseId: teamStrategy[i].courseId,
+            minMember: teamStrategy[i].minMember,
+            maxMember: teamStrategy[i].maxMember,
           });
-          }
-        this.$axios({
-          method: 'post',
-          url: "/course/creatCourse",
-          data: {
-            courseName: this.courseForm.courseName,
-            introduction:this.courseForm.introduction,
-            presentationPercentage: this.courseForm.presentationPercentage,
-            reportPercentage: this.courseForm.reportPercentage,
-            questionPercentage: this.courseForm.questionPercentage,
-            teamStartTime:this.getDate(new Date(this.courseForm.teamStartDate)),
-            teamEndTime:this.getDate(new Date(this.courseForm.teamEndDate)),
-            minMember:this.courseForm.minMember,
-            maxMember:this.courseForm.maxMember,
-            courseLimitVOS: newTeamStrategy,
-            conflictCourseIdS:conflictList,
-            flag:this.courseForm.flag,
-          }
-        }).then(function (response) {
-          console.log(conflictList);
-          if(response===true){
-            that.$message({
-              message:'创建成功',
-              type:'success',
-              duration:800
-            });
-            that.$router.push('/courseManage');
-          } else {
-            that.$message({
-              message: '创建失败',
-              type: 'error',
-              duration: 800
-            });
         }
-      })
-    },
+        //转化冲突课程心中
+        let teamConflict = this.$data.courseForm.conflictCourseIdS;
+        let conflictList = [];
+        for (let i = 0; i < teamConflict.length; i++) {
+           let temp=[]
+          for (let j = 0; j < teamConflict[i].courseId.length; j++) {
+            temp.push({
+              courseId: teamConflict[i].courseId[j]
+            });
+          }
+          conflictList.push(temp);
+        }
+        this.$refs[courseForm].validate((valid) => {
+          if (valid) {
+            this.$axios({
+              method: 'post',
+              url: "/course/creatCourse",
+              data: {
+                courseName: this.courseForm.courseName,
+                introduction: this.courseForm.introduction,
+                presentationPercentage: this.courseForm.presentationPercentage,
+                reportPercentage: this.courseForm.reportPercentage,
+                questionPercentage: this.courseForm.questionPercentage,
+                teamStartTime: this.getDate(new Date(this.courseForm.teamStartDate)),
+                teamEndTime: this.getDate(new Date(this.courseForm.teamEndDate)),
+                minMember: this.courseForm.minMember,
+                maxMember: this.courseForm.maxMember,
+                courseLimitVOS: newTeamStrategy,
+                conflictCourseIdS: conflictList,
+                flag: this.courseForm.flag,
+              }
+            }).then(function (response) {
+              if (response === true) {
+                that.$message({
+                  message: '创建成功',
+                  type: 'success',
+                  duration: 800
+                });
+                that.$router.push('/courseManage');
+              } else {
+                that.$message({
+                  message: '创建失败',
+                  type: 'error',
+                  duration: 800
+                });
+              }
+            })
+          }
+        })
+      },
       getDate(date) {
         var seperator1 = "-";
         var seperator2 = ":";
@@ -436,8 +454,8 @@
   }
   .form-item1{
     text-align: left;
-    margin-left: 0;
-    width: 50%;
+    //margin-left: 0;
+    width: 60%;
   }
 </style>
 <style>
