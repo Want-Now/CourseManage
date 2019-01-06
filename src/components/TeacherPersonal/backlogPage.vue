@@ -57,7 +57,6 @@
             headerLocation:'待办事项',
             shares:[],
             teamInfos:[]
-
           }
       },
       created(){
