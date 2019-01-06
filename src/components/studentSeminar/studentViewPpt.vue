@@ -12,11 +12,11 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <div v-for="o in length-1" :key="o" class="order">
+      <div v-for="o in tableData.length-1 " class="order" :key="o">
         <span style="float:left">{{o}}</span>
-        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&& status=='0'&&!myTeamAttendance" style="color:red"><u @click="signin(o)">可报名</u></span>
-        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&& status=='0'&&myTeamAttendance" style="color:red"><u @click="modi(o)">可报名</u></span>
-        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&& status!='0'" >无人报名</span>
+        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&& status=='0'&&!myTeamAttendance&&canApply" style="color:red"><u @click="signin(o)">可报名</u></span>
+        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&& status=='0'&&myTeamAttendance&&canApply" style="color:red"><u @click="modi(o)">可报名</u></span>
+        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&&!canApply" >无人报名</span>
         <span class="content" v-if="(tableData[o-1].attendanceStatus)&& status=='0'" >{{tableData[o-1].klassSerial}}-{{tableData[o-1].teamSerial}}</span>
         <span class="content" v-if="(tableData[o-1].attendanceStatus)&& !(tableData[o-1].pptStatus)">ppt未提交</span>
         <span class="content" v-if="(tableData[o-1].attendanceStatus)&& tableData[o-1].pptStatus"><el-button @click="dow(tableData[o-1].pptName)">下载</el-button></span>
@@ -25,7 +25,7 @@
     <br>
     <br>
     <el-footer>
-      <el-button v-if="status=='0'&&myTeamAttendance"class="bottomButt" @click="concel">取消报名</el-button>
+      <el-button v-if="status=='0'&&myTeamAttendance&&canApply"class="bottomButt" @click="concel">取消报名</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -36,6 +36,7 @@
       return {
         myTeamAttendance:'',
         courseName: '',
+        canApply:'',
         loading:false,
         attendanceId:'',
         tableData:[
@@ -56,15 +57,15 @@
       this.status=this.$route.query.status;
       this.courseName=this.$route.query.courseName;
       this.attendanceId=this.$route.query.attendanceId;
-      console.log(this.attendanceId);
+      this.canApply=this.$route.query.canApply;
       this.$axios({
         method: 'get',
         url: '/round/seminar/'+ this.klassSeminarId+'/attendance'
       }).then(response => {
-        console.log(response);
         _this.tableData= response;
         _this.length=response.length;
         _this.myTeamAttendance=response[_this.length-1].myTeamAttendance;
+        _this.attendanceId=response[_this.length-1].myAttendanceId;
       })
     },
     methods:{
@@ -120,7 +121,6 @@
       },
       concel() {
           var that=this;
-          console.log(this.attendanceId)
           this.$axios({
             method: 'delete',
             url:'/attendance/'+this.attendanceId,
@@ -149,7 +149,6 @@
           url: '/attendance/'+this.attendanceId+'/powerPoint',
           responseType: 'blob'
         }).then(response => {
-          console.log(response);
           this.download(response)
           //window.open(response, '_blank');
           // window.location.href = response;

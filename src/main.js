@@ -44,7 +44,7 @@ Vue.prototype.stuSeminar=function () {
   this.$router.push('/StudentSeminar');
 }
 Vue.prototype.stuCenter=function () {
-  this.$router.push('/StuPersonalCenter');
+  this.$router.push('/StuPersonCenter');
 }
 Vue.prototype.teaSeminar=function () {
   this.$router.push('/TeacherSeminar');

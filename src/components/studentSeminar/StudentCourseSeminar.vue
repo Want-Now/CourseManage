@@ -80,7 +80,6 @@
         this.loading=false;
       },
       goSeminar(round, seminar) {
-        console.log(seminar.klassSeminarId);
         this.$router.push({
           path: '/studentSeminarIndex',
           query: {

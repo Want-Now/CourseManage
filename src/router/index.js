@@ -203,7 +203,7 @@ export default new Router({
     //SeminarStudent
     {
       path: '/StuPersonCenter',
-      name: 'StuPersonalCenter',
+      name: 'StuPersonCenter',
       component: StuPersonCenter
     },
     {
