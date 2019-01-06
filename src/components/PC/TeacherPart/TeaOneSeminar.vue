@@ -35,8 +35,10 @@
           <br>
           <div v-if="status=='2'" style="font-size:30px;float:left;">&nbsp;&nbsp;<span>报告提交截止时间：</span><span>{{tableData[0].reportDDL|dateFmt('YYYY-MM-DD HH:mm:ss')}}</span></div>
           <br>
+          <br>
           <div style="font-size:30px;float:left;"><span style="float:left">&nbsp;&nbsp;&nbsp;内容：</span>
-            &nbsp;&nbsp;&nbsp;{{ListForm[0].introduction}}</div>
+          </div>
+          <div style="font-size:30px;padding-left:20px;text-align: left">{{ListForm[0].introduction}}</div>
         </el-form-item>
         <div>
           <span style="float:left;font-size:30px;color:#949494">  &nbsp;&nbsp;请选择班级
@@ -70,9 +72,12 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="leaderName"
             label="组长"
             idth="150">
+              <template slot-scope="scope" >
+                <span v-if="!scope.row.attendanceStatus">该次序无人报名</span>
+                <span v-if="scope.row.attendanceStatus">{{scope.row.leaderName}}</span>
+              </template>
           </el-table-column>
           <el-table-column
             prop="pptName"
@@ -80,7 +85,7 @@
             idth="150">
             <template slot-scope="scope" v-if="scope.row.attendanceStatus">
               <span v-if="scope.row.pptUrl" @click="dow(scope.row.pptName,scope.row.attendanceId)" style="color:#409dfe"> {{scope.row.pptName}}</span>
-              <span v-if="!scope.row.pptUrl" @click="dow(scope.row.pptName,scope.row.attendanceId)" > 未提交</span>
+              <span v-if="!scope.row.pptUrl"  > 未提交</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -95,6 +100,11 @@
             </template>
           </el-table-column>
         </el-table>
+        <br>
+        <br>
+        <el-footer>
+          <el-button class="bottomButt" style="width:15%;float:right;" @click="allD">批量下载书面报告</el-button>
+        </el-footer>
       </el-form>
       </el-form>
     </div>
@@ -169,6 +179,34 @@
         }
       })
     },
+    dow(ol,al){
+      this.ppt=ol;
+      console.log(this.ppt);
+      console.log(al);
+      this.$axios({
+        method: 'get',
+        url: '/attendance/'+al+'/powerPoint',
+        responseType: 'blob'
+      }).then(response => {
+        this.download(response)
+        //window.open(response, '_blank');
+        // window.location.href = response;
+      }).catch((error) => {
+        alert("下载失败");
+      })
+    },
+    download (data) {
+      if (!data) {
+        alert("下载失败");
+      }
+      let url = window.URL.createObjectURL(new Blob([data]))
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = url
+      link.setAttribute('download', this.ppt)
+      document.body.appendChild(link)
+      link.click()
+    },
     seminarIndex(){
       this.$router.push({path:'/PCseminarIndex',
         query:{
@@ -184,6 +222,31 @@
           courseName:this.$route.query.courseName
         }
       })
+    },
+    allD(){
+      this.$axios({
+        method: 'get',
+        url: '/seminar/'+this.klassSeminarId+'/klass/report',
+        responseType: 'blob'
+      }).then(response => {
+        this.download2(response)
+        //window.open(response, '_blank');
+        // window.location.href = response;
+      }).catch((error) => {
+        alert("下载失败");
+      })
+    },
+    download2(data) {
+      if (!data) {
+        alert("下载失败");
+      }
+      let url = window.URL.createObjectURL(new Blob([data]))
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = url
+      link.setAttribute('download','压缩包.zip')
+      document.body.appendChild(link)
+      link.click()
     },
   }
   }
