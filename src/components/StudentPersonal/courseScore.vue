@@ -14,17 +14,20 @@
     <el-main>
       <el-collapse accordion>
         <el-collapse-item v-for="round in rounds" :key="round.roundId">
-          <template slot="title">第{{round.roundSerial}}轮</template>
+          <template slot="title">
+            <span style="font-size: 18px;color:#494e8f;">第{{round.roundSerial}}轮</span>
+          </template>
           <el-collapse v-for="seminar in round.seminars" :key="seminar.id">
             <el-collapse-item>
-              <template slot="title">{{seminar.topic}}</template>
+              <template slot="title"><span style="font-size: 15px;">{{seminar.topic}}</span></template>
                 <div class="scoreDiv">
-                  <span>展示：</span><span class="scoreFont">{{seminar.presentationScore}}</span><br/>
-                  <span>提问：</span><span class="scoreFont">{{seminar.questionScore}}</span><br/>
-                  <span>书面报告：</span><span class="scoreFont">{{seminar.reportScore}}</span><br/>
-                  <span>本次总成绩：</span><span class="scoreFont">{{seminar.seminarScore}}</span><br/>
-                  <span>本轮总成绩：</span><span class="scoreFont">{{seminar.roundScore}}</span><br/>
+                  <span>展示：</span><span class="scoreFont">{{seminar.score.presentationScore}}</span><br/>
+                  <span>提问：</span><span class="scoreFont">{{seminar.score.questionScore}}</span><br/>
+                  <span>书面报告：</span><span class="scoreFont">{{seminar.score.reportScore}}</span><br/>
+                  <span>本次总成绩：</span><span class="scoreFont">{{seminar.score.totalScore}}</span><br/>
+
                 </div>
+              <span>本轮总成绩：</span><span class="scoreFont">{{round.totalScore}}</span><br/>
             </el-collapse-item>
           </el-collapse>
         </el-collapse-item>
@@ -52,13 +55,14 @@
           console.log(this.headerLocation);
           this.$axios({
             method:'get',
-            url:'/course/'+this.$route.query.courseId+'/round'
+            url:'/course/'+this.$route.query.courseId+'/round/student'
           }).then(response=>{
             for(var index=0;index<response.length;index++)
             {
               _this.rounds.push({
                 roundId:response[index].roundId,
                 roundSerial:response[index].roundSerial,
+                totalScore:response[index].totalScore,
                 seminars:[]
               });
               _this.getSeminars(_this.rounds[index]);
@@ -67,6 +71,8 @@
       },
       methods:{
           getSeminars(round){
+            let _this=this;
+            console.log(round.roundId);
             this.$axios({
               method:'get',
               url:'/course/round/'+round.roundId+'/team/roundSeminar'
@@ -76,11 +82,22 @@
                 round.seminars.push({
                   id:response[index].id,
                   topic:response[index].topic,
+                  klassSeminarId:response[index].klassSeminarId,
+                  score:{}
                 })
+                _this.getScore(round.seminars[index]);
               }
 
             })
-          }
+          },
+        getScore(seminar){
+          this.$axios({
+            method:'get',
+            url:'/course/round/team/'+seminar.klassSeminarId+'/seminarScore'
+          }).then(res=>{
+            seminar.score=res;
+          })
+        }
       }
     }
 </script>

@@ -133,6 +133,8 @@
           });
       },
       modifyScore(team,seminar){
+        let _this=this;
+        console.log(this.modifyPresentationScore);
         this.$axios({
           method:'put',
           url:'/seminar/'+seminar.klassSeminarId+'/team/'+team.teamId+'/modifySeminarScore',
@@ -143,13 +145,14 @@
           }
         }).then(response=>{
           if(response===true) {
-            this.$message({
+            _this.dialogVisible=false;
+            _this.$message({
               type: 'success',
               message: '修改成功!',
               duration: 800
             });
           }else {
-            this.$message({
+            _this.$message({
               type: 'error',
               message: '修改失败！',
               duration:800

@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header id="header">
-      <el-button class="el-icon-back" @click="back()"></el-button>
+      <el-button class="el-icon-back" @click="back"></el-button>
       <p>{{courseName}}-讨论课</p>
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
@@ -44,7 +44,7 @@
   export default {
     data() {
       return {
-        klassSeminarId:'',
+
         seminarSerial:'',
         roundSerial:'',
         introduction:'',
@@ -54,6 +54,7 @@
         klassId:'',
         klassName:'',
         courseName:'',
+        klassSeminarId:'',
       }
     },
     created() {
@@ -72,73 +73,92 @@
         this.seminarId = sid
         this.klassId = kcla
         this.courseName = kln
-        this.roundSerial=this.$route.query.roundSerial
+        this.roundSerial = this.$route.query.roundSerial
       },
-      modify(){
-        this.$router.push({path:"/modifySeminar",
-          query:{
-            courseName:this.courseName,
-            seminarName:this.seminarName,
-            klassSeminarId:this.klassSeminarId
-          }})
-      },
-      viewD(){
-        this.$router.push({path:"/Seminarppt",
-          query:{
-            courseName:this.courseName,
-            seminarName:this.seminarName,
-            klassSeminarId:this.klassSeminarId
-          }})
-      },
-      enterSe(){
-        this.$router.push({path:"/SeminarProceed",
-          query:{
-            klassSeminarId:this.klassSeminarId,
-            seminarName:this.seminarName,
-            courseName:this.courseName,
-          }})
-      },
-      starSe(){
-        var that=this;
-        this.$axios({
-          method:'post',
-          url:"/presentation/{klassSeminarId}",
-          data:{
-            klassSeminarId:this.klassSeminarId,
+      modify() {
+        this.$router.push({
+          path: "/modifySeminar",
+          query: {
+            courseName: this.courseName,
+            seminarName: this.seminarName,
+            klassSeminarId: this.klassSeminarId
           }
-        }).then()
-        {
-          this.$router.push({path:"/SeminarProceed",
-            query:{
-              klassSeminar:this.klassSeminar,
-              seminarName:this.seminarName,
-              courseName:this.courseName,
-            }})
-        }
+        })
       },
-      Report(){
-        this.$router.push({path:"/changeReportScore",
-          query:{
-            courseName:this.courseName,
-            seminarName:this.seminarName,
-            klassSeminarId:this.klassSeminarId
-          }})
+      viewD() {
+        this.$router.push({
+          path: "/Seminarppt",
+          query: {
+            courseName: this.courseName,
+            seminarName: this.seminarName,
+            klassSeminarId: this.klassSeminarId,
+            status: this.status
+          }
+        })
       },
-      checkScore(){
-        this.$router.push({path:"/ViewScore",
-          query:{
-            courseName:this.courseName,
-            seminarName:this.seminarName,
-            klassSeminarId:this.klassSeminarId
-          }})
+      enterSe() {
+        this.$router.push({
+          path: "/SeminarProceed",
+          query: {
+            klassSeminarId: this.klassSeminarId,
+            seminarName: this.seminarName,
+            courseName: this.courseName,
+            seminarId: this.$route.query.seminarId,
+            roundSerial: this.$route.query.roundSerial,
+            klassId: this.$route.query.klassId,
+          }
+        })
       },
-      changeIcon(){
+      starSe() {
+        var that = this;
+        this.$axios({
+          method: 'put',
+          url: '/presentation/' + this.klassSeminarId + '/status',
+          params: {
+            status: 1
+          }
+        }).then(
+          response => {
+            if (response === true) {
+              this.$router.push({
+                path: "/SeminarProceed",
+                query: {
+                  klassSeminarId: this.klassSeminarId,
+                  seminarName: this.seminarName,
+                  courseName: this.courseName,
+                }
+              })
+            }
+          }
+        )
+      },
+      Report() {
+        this.$router.push({
+          path: "/changeReportScore",
+          query: {
+            courseName: this.courseName,
+            seminarName: this.seminarName,
+            klassSeminarId: this.klassSeminarId
+          }
+        })
+      },
+      checkScore() {
+        this.$router.push({
+          path: "/ViewScore",
+          query: {
+            courseName: this.courseName,
+            seminarName: this.seminarName,
+            klassSeminarId: this.klassSeminarId
+          }
+        })
+      },
+      changeIcon() {
         var that = this;
         this.$axios({
           method: 'get',
-          url: "/seminar/"+this.$route.query.seminarId+"/klass/"+this.$route.query.klassId,
+          url: "/seminar/" + this.$route.query.seminarId + "/klass/" + this.$route.query.klassId,
         }).then(function (response) {
-            that.klassSeminarId=response.klassSeminarId,
+          that.klassSeminarId = response.klassSeminarId,
             that.seminarSerial = response.seminarSerial,
             that.introduction = response.introduction,
             that.seminarName = response.seminarName,

@@ -14,7 +14,7 @@
       </el-header>
       <el-main>
         <p class="seminarName">{{seminarName}}</p>
-        <el-tabs tab-position="left" @tab-click="handleClick"  v-if="isPrePage" :value="nowPre">
+        <el-tabs tab-position="left" v-if="isPrePage" :value="nowPre">
           <el-tab-pane v-for="item in seminarInfos" :label="item.preTeam" :key="item.teamId" :name="''+item.teamId" :disabled="item.present===0">
             <!--<div class="info">-->
               <!--已有{{item.questionNum}}位同学提问-->
@@ -25,7 +25,7 @@
               <el-button class="button" @click="uploadPreScore(item)">
                 确认打分
               </el-button><br/>
-              <el-button class="button" @click="goQuesPage()">
+              <el-button class="button" @click="goQuesPage(item)">
                 抽取提问
               </el-button><br/>
               <el-button class="button" @click="nextTeamPre()">
@@ -56,22 +56,28 @@
             </el-dialog>
           </el-tab-pane>
         </el-tabs>
-        <el-tabs tab-position="left" @tab-click="handleClick" v-if="!isPrePage">
-          <el-tab-pane v-for="question in questions" :key="question.id" :label="question.team">
+        <el-tabs tab-position="left" v-if="!isPrePage" :value="nowQues">
+          <el-tab-pane v-for="question in questions" :key="question.questionId" :name="question.questionId+''" :label="question.team">
             <div class="info">
-              {{question.preTeam}}正在展示
+              {{preTeam}}正在展示
             </div>
             <div class="info">
-              已有{{question.questionNum}}名同学提问
+              已有{{questionNum}}名同学提问
             </div>
             <el-input v-model="question.questionScore" type="input" class="scoreInput"></el-input>
             <p>提问分数</p>
-            <el-button class="button">
-              下个提问
-            </el-button><br/>
-            <el-button class="button" @click="goPrePage()">
-              下组展示
-            </el-button>
+            <div>
+              <el-button class="button" v-if="question.selectBefore===false" @click="uploadQuesScore(question)">
+                确认打分
+              </el-button>
+              <el-button class="button" v-if="question.selectBefore===true" @click="uploadQuesScore(question)">确认修改</el-button><br/>
+              <el-button class="button" @click="nextQues()">
+                下个提问
+              </el-button><br/>
+              <el-button class="button" @click="goPrePage()">
+                返回展示
+              </el-button>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </el-main>
@@ -87,7 +93,7 @@
           courseName:"",
           seminarName:'',
           seminarInfos:[],
-          isPrePage:true,
+          isPrePage:'',
           questions:[{}],
           preLength:'',
           nowPre:'',
@@ -95,9 +101,14 @@
           dialogVisible:false,
           repoDeadline:'',
           websock:'',
+          nowQues:'',
+          nowAttendanceId:'',
+          questionNum:0,
+          preTeam:''
         }
       },
-      created(){
+      mounted(){
+        this.isPrePage=true;
         this.initWebSocket();
         this.load();
         // this.wsService();
@@ -130,8 +141,7 @@
               }
               _this.preLength=response.length;
               if(_this.websock.readyState===1){
-                var message = JSON.stringify("开始展示");
-                _this.websock.send(message);
+                _this.websock.send("开始展示");
               }
             }
           );
@@ -145,10 +155,65 @@
         },
         goPrePage(){
           this.isPrePage=true;
+          this.questions=[{}];
         },
-        goQuesPage(){
+        goQuesPage(item){
+          this.preTeam=item.preTeam;
           this.isPrePage=false;
-          this.webSocketSend("");
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/seminar/'+item.attendanceId+'/question'
+          }).then(
+            response=>{
+              for(var index=0;index<response.length;index++)
+              {
+                _this.questions.push({
+                  questionId:response[index].questionId,
+                  team:response[index].klassSerial+'-'+response[index].teamSerial+' '+response[index].studentName,
+                  questionScore:response[index].questionScore,
+                  selectBefore:true,
+                })
+                _this.nowQues=_this.questions[index].questionId+'';
+              }
+              _this.nowAttendanceId=item.attendanceId;
+              _this.nextQues();
+            }
+          )
+
+        },
+        nextQues(){
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/attendanceId/'+this.nowAttendanceId+'/question'
+          }).then(function (response) {
+            if(response==='')
+            {
+              _this.$message({
+                type: 'success',
+                message: '没有提问了哟',
+                duration: 1000
+              });
+              _this.questionNum=0;
+            }
+            else{
+              console.log(response.studentName);
+              _this.questions.push({
+                questionId:response.questionId,
+                team:response.klassSerial+'-'+response.teamSerial+' '+response.studentName,
+                selectBefore:false,
+              });
+              console.log(response.questionId);
+              _this.nowQues=response.questionId+'';
+              var call='请'+response.klassSerial+'-'+response.teamSerial+' '+response.studentName+'进行提问';
+              _this.webSocketSend(call);
+              _this.websock.onmessage=function (msg) {
+                console.log(msg.data);
+              }
+              _this.webSocketSend("提问人数-1");
+            }
+          })
 
         },
         nextTeamPre(){
@@ -171,10 +236,7 @@
               _this.nowPre=_this.seminarInfos[_this.preIndex].teamId+'';
             })
           }
-          this.webSocketSend(JSON.stringify("下一组"));
-          this.websock.onmessage=function (msg) {
-            console.log(msg.data);
-          }
+          this.webSocketSend("下一组");
 
         },
         uploadPreScore(item){
@@ -201,8 +263,19 @@
               }
             });
         },
-        uploadQuesScore(){
-
+        uploadQuesScore(question){
+          this.$axios({
+            method:'put',
+            url:'/question/'+question.questionId,
+            data:{
+              klassSeminarId:parseInt(this.$route.query.klassSeminarId),
+              questionScore:parseFloat(question.questionScore)
+            }
+          }).then(response=>{
+              if(response===true){
+                alert('success');
+              }else alert('failed');
+            })
         },
         uploadRepoDeadline(){
           let _this=this;
@@ -260,10 +333,29 @@
           const wsuri = "ws://ghctcourse.natapp1.cc/websocket";//ws地址
           this.websock = new WebSocket(wsuri);
           this.websock.onopen = this.webSocketOnOpen;
-
+          let _this=this;
+          this.websock.addEventListener("message", function(event) {
+            if(event.data==='下一组')
+            {
+              _this.questionNum=0;
+              console.log(event.data);
+            }else if(event.data==='开始展示'){
+              _this.$message({
+                type: 'success',
+                message: '开始展示!',
+                duration: 800
+              });
+              console.log(event.data);
+            }else if(event.data==='提问'){
+              _this.questionNum++;
+              console.log(event.data);
+            }
+            else if(event.data.slice(0,1)==='请') {
+              _this.questionNum--;
+              console.log(event.data);
+            }else console.log(event.data);
+          });
           this.websock.onerror = this.webSocketOnError;
-
-          this.websock.onmessage = this.webSocketOnMessage;
           this.websock.onclose = this.webSocketClose;
         },
 
@@ -283,7 +375,7 @@
       },
       destroyed(){
         //页面销毁时关闭长连接
-        this.webSocketClose();
+        this.websock.close();
       },
     }
 </script>
