@@ -14,7 +14,7 @@
     <el-main>
       <div>
         <div  style="font-size:20px">{{seminarName}}</div>
-        <div style="float:left;font-size:15px">第{{nowPreOrder}}组展示</div>
+        <div style="float:left;font-size:15px">第{{nowPreOrder+1}}组展示</div>
         <div style="float:right;font-size:15px">已有{{questionNum}}名同学提问</div>
       </div>
       <br/>
@@ -25,7 +25,7 @@
       </div>
     </el-main>
     <el-footer>
-      <el-button class="bottomButt" type="primary" >Q&A</el-button>
+      <el-button class="bottomButt" type="primary" @click="question()">Q&A</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -39,24 +39,107 @@
         teams:[],
         seminarName:'',
         nowPreOrder:'',
-        questionNum:'',
+        questionNum:0,
+        websock:'',
 
       }
     },
-    created(){
+    mounted(){
       let _this=this;
       this.headerLocation=this.$route.query.courseName;
       this.seminarName=this.$route.query.seminarName;
+      this.initWebSocket();
       this.$axios({
         method:'get',
         url:'/presentation/'+this.$route.query.klassSeminarId,
       }).then(response=>{
         _this.teams=response;
+        for(var index=0;index<response.length;index++)
+        {
+          if(response[index].present===1) _this.nowPreOrder=index;
+        }
       })
     },
     methods: {
+      initWebSocket(){ //初始化weosocket
+        const wsuri = "ws://ghctcourse.natapp1.cc/websocket";//ws地址
+        this.websock = new WebSocket(wsuri);
+        this.websock.onopen = this.webSocketOnOpen;
+        let _this=this;
+        this.websock.addEventListener("message", function(event) {
+          if(event.data==='下一组')
+          {
+            _this.$message({
+              type: 'success',
+              message: '下一组展示!',
+              duration: 800
+            });
+            _this.nowPreOrder++;
+          }else if(event.data==='开始展示'){
+            _this.$message({
+              type: 'success',
+              message: '开始展示!',
+              duration: 800
+            });
+          }else if(event.data==='提问'){
+            _this.questionNum++;
+          }
+          else if(event.data.slice(0,1)==='请') {
+            _this.questionNum--;
+            _this.$alert(event.data, '提示', {
+              confirmButtonText: '确定',
+              callback: action => {
+                _this.$message({
+                  type: 'info',
+                  message: `action: ${ action }`
+                });
+              }
+            });
+          }else console.log(event.data);
+        });
+        this.websock.onerror = this.webSocketOnError;
+        this.websock.onclose = this.webSocketClose;
+      },
+      question(){
+        let _this=this;
+        this.$axios({
+          method:'post',
+          url:'/seminar/klass/'+this.$route.query.klassSeminarId+'/'+this.teams[this.nowPreOrder].attendanceId+'/question'
+        }).then(response=>{
+          if(response===true){
+            _this.$message({
+              type: 'success',
+              message: '发送提问成功!',
+              duration: 800
+            });
+            _this.webSocketSend("提问");
+          }else{
+            _this.$message({
+              type: 'error',
+              message: '发送提问失败!',
+              duration: 800
+            });
+          }
+        })
+      },
+      webSocketOnOpen() {
+        console.log("WebSocket连接成功");
+      },
+      webSocketOnError(e) { //错误
+        console.log("WebSocket连接发生错误");
+      },
+      webSocketSend(agentData){//数据发送
+        this.websock.send(agentData);
+      },
 
-    }
+      webSocketClose(e){ //关闭
+        console.log("connection closed (" + e + ")");
+      },
+    },
+    destroyed(){
+      //页面销毁时关闭长连接
+      this.websock.close();
+    },
   }
 </script>
 <style>

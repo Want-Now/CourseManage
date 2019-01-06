@@ -14,7 +14,7 @@
       </el-header>
       <el-main>
         <p class="seminarName">{{seminarName}}</p>
-        <el-tabs tab-position="left" @tab-click="handleClick"  v-if="isPrePage" :value="nowPre">
+        <el-tabs tab-position="left" v-if="isPrePage" :value="nowPre">
           <el-tab-pane v-for="item in seminarInfos" :label="item.preTeam" :key="item.teamId" :name="''+item.teamId" :disabled="item.present===0">
             <!--<div class="info">-->
               <!--已有{{item.questionNum}}位同学提问-->
@@ -56,10 +56,10 @@
             </el-dialog>
           </el-tab-pane>
         </el-tabs>
-        <el-tabs tab-position="left" @tab-click="handleClick" v-if="!isPrePage" :value="nowQues">
+        <el-tabs tab-position="left" v-if="!isPrePage" :value="nowQues">
           <el-tab-pane v-for="question in questions" :key="question.questionId" :name="question.questionId+''" :label="question.team">
             <div class="info">
-              {{question.preTeam}}正在展示
+              {{preTeam}}正在展示
             </div>
             <div class="info">
               已有{{questionNum}}名同学提问
@@ -67,9 +67,9 @@
             <el-input v-model="question.questionScore" type="input" class="scoreInput"></el-input>
             <p>提问分数</p>
             <div>
-              <el-button class="button" v-if="question.selecteBefore===false" @click="uploadQuesScore(question)">
+              <el-button class="button" v-if="question.selectBefore===false" @click="uploadQuesScore(question)">
                 确认打分
-              </el-button><br/>
+              </el-button>
               <el-button class="button" v-if="question.selectBefore===true" @click="uploadQuesScore(question)">确认修改</el-button><br/>
               <el-button class="button" @click="nextQues()">
                 下个提问
@@ -103,10 +103,11 @@
           websock:'',
           nowQues:'',
           nowAttendanceId:'',
-          questionNum:''
+          questionNum:0,
+          preTeam:''
         }
       },
-      created(){
+      mounted(){
         this.isPrePage=true;
         this.initWebSocket();
         this.load();
@@ -140,8 +141,7 @@
               }
               _this.preLength=response.length;
               if(_this.websock.readyState===1){
-                var message = JSON.stringify("开始展示");
-                _this.websock.send(message);
+                _this.websock.send("开始展示");
               }
             }
           );
@@ -158,6 +158,7 @@
           this.questions=[{}];
         },
         goQuesPage(item){
+          this.preTeam=item.preTeam;
           this.isPrePage=false;
           let _this=this;
           this.$axios({
@@ -176,6 +177,7 @@
                 _this.nowQues=_this.questions[index].questionId+'';
               }
               _this.nowAttendanceId=item.attendanceId;
+              _this.nextQues();
             }
           )
 
@@ -205,14 +207,11 @@
               console.log(response.questionId);
               _this.nowQues=response.questionId+'';
               var call='请'+response.klassSerial+'-'+response.teamSerial+' '+response.studentName+'进行提问';
-              _this.webSocketSend(JSON.stringify(call));
+              _this.webSocketSend(call);
               _this.websock.onmessage=function (msg) {
                 console.log(msg.data);
               }
-              _this.webSocketSend(JSON.stringify("提问人数-1"));
-              _this.websock.onmessage=function (message) {
-                _this.questionNum=message.data;
-              }
+              _this.webSocketSend("提问人数-1");
             }
           })
 
@@ -237,10 +236,7 @@
               _this.nowPre=_this.seminarInfos[_this.preIndex].teamId+'';
             })
           }
-          this.webSocketSend(JSON.stringify("下一组"));
-          this.websock.onmessage=function (msg) {
-            console.log(msg.data);
-          }
+          this.webSocketSend("下一组");
 
         },
         uploadPreScore(item){
@@ -337,6 +333,28 @@
           const wsuri = "ws://ghctcourse.natapp1.cc/websocket";//ws地址
           this.websock = new WebSocket(wsuri);
           this.websock.onopen = this.webSocketOnOpen;
+          let _this=this;
+          this.websock.addEventListener("message", function(event) {
+            if(event.data==='下一组')
+            {
+              _this.questionNum=0;
+              console.log(event.data);
+            }else if(event.data==='开始展示'){
+              _this.$message({
+                type: 'success',
+                message: '开始展示!',
+                duration: 800
+              });
+              console.log(event.data);
+            }else if(event.data==='提问'){
+              _this.questionNum++;
+              console.log(event.data);
+            }
+            else if(event.data.slice(0,1)==='请') {
+              _this.questionNum--;
+              console.log(event.data);
+            }else console.log(event.data);
+          });
           this.websock.onerror = this.webSocketOnError;
           this.websock.onclose = this.webSocketClose;
         },
@@ -357,7 +375,7 @@
       },
       destroyed(){
         //页面销毁时关闭长连接
-        this.webSocketClose();
+        this.websock.close();
       },
     }
 </script>
