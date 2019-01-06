@@ -74,28 +74,13 @@
             method: 'delete',
             url:'/share/deleteShare/'+shareId,
             params:{
-              shareType: that.type
-            }
+              shareType: that.type}
           }).then(function (response){
             if(response===true){
               alert("取消成功");
-              /*
-              that.$message({
-                message:'取消成功',
-                type:'success',
-                duration:2000
-              });
-              */
               window.location.reload();
             } else {
               alert("取消失败");
-              /*
-              that.$message({
-                message: '取消失败',
-                type: 'error',
-                duration: 2000
-              });
-              */
             }})
         }
       }
