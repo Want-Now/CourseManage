@@ -25,7 +25,7 @@
         <el-table-column
           label="报告" align="center">
           <template slot-scope="scope">
-            <span class="buttonText" v-if="scope.row.reportUrl" style="background-color: #494e8e" @click="dow(scope.row.reportName,scope.row.attendanceId)">{{scope.row.reportName}}</span>
+            <span class="buttonText" v-if="scope.row.reportUrl" style="color: #494e8e" @click="dow(scope.row.reportName,scope.row.attendanceId)">{{scope.row.reportName}}</span>
             <span class="buttonText" v-if="!scope.row.reportUrl" >未提交</span>
           </template>
         </el-table-column>
@@ -121,8 +121,8 @@
           let newTeam = [];
           for (var i = 0; i < team.length; i++) {
             newTeam.push({
-              teamId: team[i].teamId,
-              reportScore: team[i].reportScore,
+              teamId: parseInt(team[i].teamId),
+              reportScore: parseFloat(team[i].reportScore),
             });
           }
           console.log(newTeam);
@@ -130,7 +130,7 @@
             method: 'post',
             url: 'seminar/'+this.klassSeminarId+'/updateReportScore',
             data: {
-              thislist:newTeam,
+              scoreList:newTeam,
             },
           }).then(function (response) {
             if (response === true) {

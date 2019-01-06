@@ -1,6 +1,6 @@
 <template>
   <div id="page">
-    <div class="header" style="background-color:#efefef">
+    <div class="header" style="background-color:#dcdcdc">
       <button class="el-icon-back backButt" @click="back()"></button>
       <span>个人信息综合管理平台</span>
       <button class="el-icon-circle-close-outline exitButt" @click="loginOutPC()">&nbsp;退出系统</button>
@@ -27,12 +27,12 @@
             <el-collapse-item>
               <template slot="title"><span style="font-size:20px;padding-left:60px;">{{seminar.topic}}</span></template>
               <div class="scoreDiv">
-                <span>展示：</span><span class="scoreFont">{{seminar.presentationScore}}</span><br/>
-                <span>提问：</span><span class="scoreFont">{{seminar.questionScore}}</span><br/>
-                <span>书面报告：</span><span class="scoreFont">{{seminar.reportScore}}</span><br/>
-                <span>本次总成绩：</span><span class="scoreFont">{{seminar.seminarScore}}</span><br/>
-                <span>本轮总成绩：</span><span class="scoreFont">{{seminar.roundScore}}</span><br/>
+                <span>展示：</span><span class="scoreFont">{{seminar.score.presentationScore}}</span><br/>
+                <span>提问：</span><span class="scoreFont">{{seminar.score.questionScore}}</span><br/>
+                <span>书面报告：</span><span class="scoreFont">{{seminar.score.reportScore}}</span><br/>
+                <span>本次总成绩：</span><span class="scoreFont">{{seminar.score.totalScore}}</span><br/>
               </div>
+              <span>本轮总成绩：</span><span class="scoreFont">{{round.totalScore}}</span><br/>
             </el-collapse-item>
           </el-collapse>
         </el-collapse-item>
@@ -71,6 +71,8 @@
       },
       methods: {
         getSeminars(round){
+          let _this=this;
+          console.log(round.roundId);
           this.$axios({
             method:'get',
             url:'/course/round/'+round.roundId+'/team/roundSeminar'
@@ -80,9 +82,20 @@
               round.seminars.push({
                 id:response[index].id,
                 topic:response[index].topic,
+                klassSeminarId:response[index].klassSeminarId,
+                score:{}
               })
+              _this.getScore(round.seminars[index]);
             }
 
+          })
+        },
+        getScore(seminar){
+          this.$axios({
+            method:'get',
+            url:'/course/round/team/'+seminar.klassSeminarId+'/seminarScore'
+          }).then(res=>{
+            seminar.score=res;
           })
         },
         seminarIndex() {

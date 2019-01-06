@@ -17,7 +17,7 @@
         <span class="content" v-if="!(item.attendanceStatus)&& status=='0'&&!myTeamAttendance&&canApply" style="color:red"><u @click="signin(index+1)">可报名</u></span>
         <span class="content" v-if="!(item.attendanceStatus)&& status=='0'&&myTeamAttendance&&canApply" style="color:red"><u @click="modi(index+1)">可报名</u></span>
         <span class="content" v-if="!(item.attendanceStatus)&&!canApply" >无人报名</span>
-        <span class="content" v-if="(item.attendanceStatus)&& status=='0'" >{{item.klassSerial}}-{{item.teamSerial}}</span>
+        <span class="content" v-if="item.attendanceStatus" >{{item.klassSerial}}-{{item.teamSerial}}</span>
         <span class="content" v-if="(item.attendanceStatus)&& !(item.pptStatus)">ppt未提交</span>
         <span class="content" v-if="(item.attendanceStatus)&& item.pptStatus"><el-button @click="dow(item.pptName,item.attendanceId)">下载</el-button></span>
       </div>

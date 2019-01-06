@@ -25,7 +25,6 @@
                   <span>提问：</span><span class="scoreFont">{{seminar.score.questionScore}}</span><br/>
                   <span>书面报告：</span><span class="scoreFont">{{seminar.score.reportScore}}</span><br/>
                   <span>本次总成绩：</span><span class="scoreFont">{{seminar.score.totalScore}}</span><br/>
-
                 </div>
               <span>本轮总成绩：</span><span class="scoreFont">{{round.totalScore}}</span><br/>
             </el-collapse-item>
@@ -33,9 +32,6 @@
         </el-collapse-item>
       </el-collapse>
     </el-main>
-    <el-footer>
-      <el-button class="bottomButt">导出成绩</el-button>
-    </el-footer>
   </el-container>
 </template>
 
