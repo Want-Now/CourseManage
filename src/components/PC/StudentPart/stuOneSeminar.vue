@@ -34,8 +34,10 @@
           <br>
           <div v-if="status=='2'" style="font-size:30px;float:left;">&nbsp;&nbsp;<span>报告提交截止时间：</span><span>{{tableData[0].reportDDL|dateFmt('YYYY-MM-DD HH:mm:ss')}}</span></div>
           <br>
+          <br>
           <div style="font-size:30px;float:left;"><span style="float:left">&nbsp;&nbsp;&nbsp;内容：</span>
-            &nbsp;&nbsp;&nbsp;{{ListForm[0].introduction}}</div>
+          </div>
+            <div style="font-size:30px;padding-left:20px;text-align: left">{{ListForm[0].introduction}}</div>
         </el-form-item>
         <div>
           <span style="float:left;font-size:30px;color:#949494">&nbsp;&nbsp;已报名小组</span>
@@ -70,7 +72,7 @@
             label="ppt">
             <template slot-scope="scope" v-if="scope.row.attendanceStatus">
               <span v-if="scope.row.pptUrl" @click="dow(scope.row.pptName,scope.row.attendanceId)" style="color:#409dfe"> {{scope.row.pptName}}</span>
-              <span v-if="!scope.row.pptUrl" @click="dow(scope.row.pptName,scope.row.attendanceId)" > 未提交</span>
+              <span v-if="!scope.row.pptUrl" > 未提交</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -91,28 +93,27 @@
                 <el-button v-if="scope.row.myAttendanceStatus&&!(scope.row.pptUrl)" @click="dialogVisible=true">上传ppt</el-button>
                 <el-button v-if="scope.row.myAttendanceStatus&&scope.row.pptUrl" @click="dialogVisible = true">重新上传ppt</el-button>
               </span>
-              <span v-if="status=='2'">
+              <span v-if="status=='2'&&scope.row.myAttendanceStatus">
                 <el-button v-if="scope.row.submitStatus&&!(scope.row.reportUrl)" @click="RdialogVisible = true">上传书面报告</el-button>
                 <el-button v-if="scope.row.submitStatus&&scope.row.reportUrl"  @click="RdialogVisible = true">重新上传书面报告</el-button>
               </span>
               <el-dialog
                 title="提示"
                 :visible.sync="dialogVisible"
-                width="80%">
+                width="20%">
                 <input type="file" @change="getFile($event)">
                 <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="submit($event,scope.row.myAttendanceId)">上传</el-button>
-  </span>
+            <el-button type="primary" @click="submit($event)">上传</el-button></span>
               </el-dialog>
               <el-dialog
                 title="提示"
                 :visible.sync="RdialogVisible"
-                width="80%">
+                width="20%">
                 <input type="file" @change="RgetFile($event)">
                 <span slot="footer" class="dialog-footer">
     <el-button @click="RdialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="Rsubmit($event,scope.row.myAttendanceId)">上传</el-button>
+    <el-button type="primary" @click="Rsubmit($event)">上传</el-button>
   </span>
               </el-dialog>
             </template>
@@ -139,6 +140,7 @@
           klassSerial:'',
           klassId:'',
         }],
+        myAttendanceId:'',
         klassSeminarId:'',
         enrollEndTime:'',
         seminarSerial:'',
@@ -206,10 +208,15 @@
           url: '/seminar/'+this.$route.query.seminarId+'/klass/klassSeminar/pc'
         }).then(response => {
           _this.tableData = response;
-          console.log(response);
           var len=response.length;
          _this.klassSeminarId=response[len-1].klassSeminarId;
          _this.status=response[0].status;
+         console.log(response);
+         for(var a=0;a<len;a++ ){
+           if(response[a].myAttendanceStatus) {
+             _this.myAttendanceId = response[a].myAttendanceId;
+           }
+         }
         })
       },
       getteam(val){
@@ -301,13 +308,13 @@
         this.file = event.target.files[0];
         console.log(this.file);
       },
-      submit: function (event,attendanceId) {
+      submit: function (event) {
         var that=this;
         //阻止元素发生默认的行为
         event.preventDefault();
         let formData = new FormData();
         formData.append("file", this.file);
-        this.$axios.post('attendance/'+attendanceId+'/powerPoint', formData)
+        this.$axios.post('attendance/'+this.myAttendanceId+'/powerPoint', formData)
           .then(function (response) {
             alert("上传成功");
             window.location.reload();
@@ -322,13 +329,13 @@
         this.file = event.target.files[0];
         console.log(this.file);
       },
-      Rsubmit: function (event,attendanceId) {
+      Rsubmit: function (event) {
         var that=this;
         //阻止元素发生默认的行为
         event.preventDefault();
         let formData = new FormData();
         formData.append("file", this.file);
-        this.$axios.post('attendance/'+attendanceId+'/report', formData)
+        this.$axios.post('attendance/'+this.myAttendanceId+'/report', formData)
           .then(function (response) {
             alert("上传成功");
             window.location.reload();
@@ -339,12 +346,13 @@
             that.RdialogVisible=false;
           });
       },
-      dow(ol,aid){
+      dow(ol,al){
         this.ppt=ol;
         console.log(this.ppt);
+        console.log(al);
         this.$axios({
           method: 'get',
-          url: '/attendance/'+aid+'/powerPoint',
+          url: '/attendance/'+al+'/powerPoint',
           responseType: 'blob'
         }).then(response => {
           this.download(response)
@@ -366,7 +374,6 @@
         document.body.appendChild(link)
         link.click()
       },
-
     }
   }
 </script>

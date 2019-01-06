@@ -20,9 +20,6 @@
         <span class="content" v-if="(item.attendanceStatus)&& (item.pptStatus)" @click="dow(item.pptName,item.attendanceId)" style="font-size:20px;color:#494e8e"><u>{{item.pptName}}</u></span>
       </div>
     </el-main>
-    <el-footer>
-        <el-button class="bottomButt" @click="allD">批量下载</el-button>
-    </el-footer>
   </el-container>
 </template>
 
@@ -42,7 +39,7 @@
       //this.attendanceId=this.$route.query.attendanceId;
       this.$axios({
         method: 'get',
-        url: '/round/seminar/22/attendance'
+        url: '/round/seminar/'+this.klassSeminarId+'/attendance'
       }).then(response => {
         for (var i = 0; i < (response.length-1); i++) {
           _this.pptList.push({
@@ -57,23 +54,35 @@
       })
     },
     methods: {
+      /*
       allD(){
         this.$axios({
           method: 'get',
-          url: '/seminar/22/klass/report',
-          responseType: 'blob'
+          url: '/seminar/'+this.klassSeminarId+'/klass/report',
+         responseType: 'blob'
         }).then(response => {
-          conlose.log(response);
-          this.download(response)
+          this.download2(response)
           //window.open(response, '_blank');
           // window.location.href = response;
         }).catch((error) => {
           alert("下载失败");
         })
       },
+      download2(data) {
+        if (!data) {
+          alert("下载失败");
+        }
+        let url = window.URL.createObjectURL(new Blob([data]))
+        let link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download','压缩包.zip')
+        document.body.appendChild(link)
+        link.click()
+      },
+      */
       dow(ol,aid) {
         this.ppt = ol;
-        console.log(this.ppt);
         this.$axios({
           method: 'get',
           url: '/attendance/' + aid+ '/powerPoint',
