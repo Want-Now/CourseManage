@@ -76,8 +76,7 @@
             this.download2(response)
           }).catch((error) => {
             alert("下载失败");
-          })
-        },
+          })},
         download2(data) {
           if (!data) {
             alert("下载失败");

@@ -11,14 +11,10 @@ import emptyPage from '@/components/emptyPage'
 import roundSeting from '@/components/SeminarTeacher/roundSeting'
 import Seminarppt from '@/components/SeminarTeacher/Seminarppt'
 import teacherCourseSeminar from '@/components/SeminarTeacher/teacherCourseSeminar'
-import seminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
 import teacherSeminarIndex from '@/components/SeminarTeacher/teacherSeminarIndex'
 import TeacherSeminar from '@/components/SeminarTeacher/teacherSeminar'
 import SeminarProceed from '@/components/SeminarTeacher/seminarProceed'
-import SeminarChangePScore from '@/components/SeminarTeacher/seminarChangePScore'
 import ChangeReportScore from '@/components/SeminarTeacher/changeReportScore'
-import SeminarQuestionScore from '@/components/SeminarTeacher/seminarQuestionScore'
-import ViewReportScore from '@/components/SeminarTeacher/viewReportScore'
 import ViewScore from '@/components/SeminarTeacher/viewScore'
 import creatSeminar from '@/components/SeminarTeacher/creatSeminar'
 import modifySeminar from '@/components/SeminarTeacher/modifySeminar'
@@ -118,16 +114,6 @@ export default new Router({
       component: ChangeReportScore
     },
     {
-      path: '/SeminarChangePScore',
-      name: 'seminarChangePScore',
-      component: SeminarChangePScore
-    },
-    {
-      path: '/SeminarQuestionScore',
-      name: 'seminarQuestionScore',
-      component:SeminarQuestionScore
-    },
-    {
       path: '/Seminarppt',
       name: 'Seminarppt',
       component: Seminarppt
@@ -157,10 +143,6 @@ export default new Router({
       path: '/creatSeminar',
       name: 'creatSeminar',
       component: creatSeminar
-    }, {
-      path: '/ViewReportScore',
-      name: 'viewReportScore',
-      component: ViewReportScore
     },
     {
       path: '/ViewScore',
