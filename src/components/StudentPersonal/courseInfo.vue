@@ -11,7 +11,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
-      <el-main>
+      <el-main v-loading="loading">
         <el-card>
           <p>课程介绍</p>
           <div style="word-wrap: break-word;">{{courseIntro}}</div>
@@ -58,6 +58,7 @@
             items:[],
             courseLimitVOS:[],
             conflictCourseIdS:[],
+            loading:true
           }
       },
       created(){
@@ -82,6 +83,7 @@
               {
                 _this.items.push(response.conflictCourseIdS[index]);
               }
+              _this.loading=false;
             }
           )
       },

@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container v-loading="loading">
     <el-header>
       <el-button class="el-icon-back" @click="back()"></el-button>
       <p>{{headerLocation}}</p>
@@ -72,7 +72,7 @@
           <el-button type="danger" class="teamButton">提交审核</el-button>
         </div>
       </div>
-      <div v-if="!isLeader">
+      <div v-else>
         <div v-if="!canTeam">
           <el-button type="danger" class="teamButton" @click="quitTeam">退出小组</el-button>
         </div>
@@ -95,19 +95,15 @@
         searchStudent:'',
         status:'',
         teamId:'',
-        multipleSelection:[]
+        multipleSelection:[],
+        loading:true,
       }
-    },
-    inject:['reload'],
-    created(){
-
     },
     mounted(){
       this.load()
       this.unTeamList()
     },
     methods:{
-
       load(){
         let _this=this;
         this.headerLocation=this.$route.query.courseName;
@@ -135,7 +131,7 @@
               studentId:response.members[index].studentId
             })
           }
-
+          this.loading=false;
 
         })
       },
@@ -236,9 +232,9 @@
         let _this=this;
         this.$axios({
           method:'put',
-          url:'/team/'+_this.teamId+'/remove',
+          url:'/team/'+this.teamId+'/remove',
           data:{
-            studentId:_this.teamMember[index].studentId
+            studentId:this.$store.state.id
           }
         }).then(response=>{
           if(response===true){
@@ -321,7 +317,6 @@
     border-color: #494e8f;
     color: white;
     left: 10px;
-    top: 10px;
   }
 
   .el-header .el-icon-back:hover{background-color: #494e8f;border-color: #494e8f;}
