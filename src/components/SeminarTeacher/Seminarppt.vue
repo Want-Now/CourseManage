@@ -42,7 +42,7 @@
       //this.attendanceId=this.$route.query.attendanceId;
       this.$axios({
         method: 'get',
-        url: '/round/seminar/'+ this.klassSeminarId+'/attendance'
+        url: '/round/seminar/22/attendance'
       }).then(response => {
         for (var i = 0; i < (response.length-1); i++) {
           _this.pptList.push({
@@ -60,9 +60,10 @@
       allD(){
         this.$axios({
           method: 'get',
-          url: '/seminar/'+ this.klassSeminarId+'/klass/report',
+          url: '/seminar/22/klass/report',
           responseType: 'blob'
         }).then(response => {
+          conlose.log(response);
           this.download(response)
           //window.open(response, '_blank');
           // window.location.href = response;
@@ -93,7 +94,7 @@
         let link = document.createElement('a')
         link.style.display = 'none'
         link.href = url
-        link.setAttribute('download', this.ppt)
+        link.setAttribute('download',this.ppt)
         document.body.appendChild(link)
         link.click()
       },

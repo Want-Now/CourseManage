@@ -19,7 +19,7 @@
         <span class="content" v-if="!(item.attendanceStatus)&&!canApply" >无人报名</span>
         <span class="content" v-if="(item.attendanceStatus)&& status=='0'" >{{item.klassSerial}}-{{item.teamSerial}}</span>
         <span class="content" v-if="(item.attendanceStatus)&& !(item.pptStatus)">ppt未提交</span>
-        <span class="content" v-if="(item.attendanceStatus)&& item.pptStatus"><el-button @click="dow(tableData[o-1].pptName,item.attendanceId)">下载</el-button></span>
+        <span class="content" v-if="(item.attendanceStatus)&& item.pptStatus"><el-button @click="dow(item.pptName,item.attendanceId)">下载</el-button></span>
       </div>
     </el-main>
     <br>
@@ -91,7 +91,7 @@
               type: 'success',
               duration: 2000
             });
-            that.$router.push('/emptyPage');
+            window.location.reload();
           }else {
             that.$message({
               message: '报名失败',
@@ -116,7 +116,7 @@
               type: 'success',
               duration: 2000
             });
-           that.$router.push('/emptyPage');
+            window.location.reload();
           }else {
             that.$message({
               message: '修改失败',
@@ -138,7 +138,7 @@
                 type:'success',
                 duration:2000
               });
-              that.$router.push('/emptyPage');
+              window.location.reload();
             } else {
               that.$message({
                 message: '取消失败',

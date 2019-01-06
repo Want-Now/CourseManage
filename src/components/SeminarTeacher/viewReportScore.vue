@@ -27,7 +27,6 @@
       <el-row type="flex" justify="center">
         <el-button style="width: 80%;">修改</el-button>
       </el-row>
-
     </el-footer>
   </el-container>
 </template>

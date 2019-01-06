@@ -158,7 +158,7 @@
         this.$axios.post('attendance/'+this.attendanceId+'/powerPoint', formData)
           .then(function (response) {
             alert("上传成功");
-            that.$router.push('/emptyPage');
+            window.location.reload();
           })
           .catch(function (error) {
             alert("上传失败");
@@ -179,7 +179,7 @@
         this.$axios.post('attendance/'+this.attendanceId+'/report', formData)
           .then(function (response) {
             alert("上传成功");
-            that.$router.push('/emptyPage');
+            window.location.reload();
           })
           .catch(function (error) {
             alert("上传失败");
