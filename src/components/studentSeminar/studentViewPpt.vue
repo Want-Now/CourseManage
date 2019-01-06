@@ -12,14 +12,14 @@
       </el-dropdown>
     </el-header>
     <el-main>
-      <div v-for="o in tableData.length-1 " class="order" :key="o">
-        <span style="float:left">{{o}}</span>
-        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&& status=='0'&&!myTeamAttendance&&canApply" style="color:red"><u @click="signin(o)">可报名</u></span>
-        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&& status=='0'&&myTeamAttendance&&canApply" style="color:red"><u @click="modi(o)">可报名</u></span>
-        <span class="content" v-if="!(tableData[o-1].attendanceStatus)&&!canApply" >无人报名</span>
-        <span class="content" v-if="(tableData[o-1].attendanceStatus)&& status=='0'" >{{tableData[o-1].klassSerial}}-{{tableData[o-1].teamSerial}}</span>
-        <span class="content" v-if="(tableData[o-1].attendanceStatus)&& !(tableData[o-1].pptStatus)">ppt未提交</span>
-        <span class="content" v-if="(tableData[o-1].attendanceStatus)&& tableData[o-1].pptStatus"><el-button @click="dow(tableData[o-1].pptName)">下载</el-button></span>
+      <div v-for="item ,index in pptList" class="order" :key="index">
+        <span style="float:left">{{index+1}}</span>
+        <span class="content" v-if="!(item.attendanceStatus)&& status=='0'&&!myTeamAttendance&&canApply" style="color:red"><u @click="signin(index+1)">可报名</u></span>
+        <span class="content" v-if="!(item.attendanceStatus)&& status=='0'&&myTeamAttendance&&canApply" style="color:red"><u @click="modi(index+1)">可报名</u></span>
+        <span class="content" v-if="!(item.attendanceStatus)&&!canApply" >无人报名</span>
+        <span class="content" v-if="(item.attendanceStatus)&& status=='0'" >{{item.klassSerial}}-{{item.teamSerial}}</span>
+        <span class="content" v-if="(item.attendanceStatus)&& !(item.pptStatus)">ppt未提交</span>
+        <span class="content" v-if="(item.attendanceStatus)&& item.pptStatus"><el-button @click="dow(tableData[o-1].pptName,item.attendanceId)">下载</el-button></span>
       </div>
     </el-main>
     <br>
@@ -39,11 +39,7 @@
         canApply:'',
         loading:false,
         attendanceId:'',
-        tableData:[
-          {
-            attStatus:'',
-          }
-        ],
+        pptList:[],
         status:'0',
         klassSeminarId:'',
         length:6,
@@ -62,10 +58,20 @@
         method: 'get',
         url: '/round/seminar/'+ this.klassSeminarId+'/attendance'
       }).then(response => {
-        _this.tableData= response;
+        console.log(response);
         _this.length=response.length;
         _this.myTeamAttendance=response[_this.length-1].myTeamAttendance;
         _this.attendanceId=response[_this.length-1].myAttendanceId;
+        for (var i = 0; i < (response.length-1); i++) {
+          _this.pptList.push({
+            attendanceStatus: response[i].attendanceStatus,
+            klassSerial: response[i].klassSerial,
+            teamSerial: response[i].teamSerial,
+            pptName: response[i].pptName,
+            pptStatus: response[i].pptStatus,
+            attendanceId: response[i].attendanceId,
+          });
+        }
       })
     },
     methods:{
@@ -141,12 +147,12 @@
               });
             }})
         },
-      dow(ol){
+      dow(ol,aid){
         this.ppt=ol;
         console.log(this.ppt);
         this.$axios({
           method: 'get',
-          url: '/attendance/'+this.attendanceId+'/powerPoint',
+          url: '/attendance/'+aid+'/powerPoint',
           responseType: 'blob'
         }).then(response => {
           this.download(response)
