@@ -30,38 +30,37 @@
         <div>报名截止时间：<span style="color:red">{{seminarVO.enrollEndTime|dateFmt('YYYY-MM-DD HH:mm:ss')}}</span></div>
       </el-card>
     </el-main>
-    <br>
-    <br>
-    <el-footer style="height:10px;">
-      <el-form v-if="seminarVO.status=='0'&&!attendanceStatus">
+
+    <el-footer>
+      <el-form v-if="seminarVO.status=='0'&&!attendanceStatus&&canApply">
         <el-form-item>
-          <el-button style="width:100%;background-color:#494e8e" type="primary" @click="viewDe">报名</el-button>
+          <el-button class="bottomButt" type="primary" @click="viewDe">报名</el-button>
         </el-form-item>
     </el-form>
-      <el-form v-if="seminarVO.status=='0'&&attendanceStatus">
+      <el-form v-if="seminarVO.status=='0'&&attendanceStatus&&canApply">
         <el-form-item>
-          <el-button style="width:100%;background-color:#494e8e" type="primary" @click="signSem">修改报名</el-button>
+          <el-button class="bottomButt" type="primary" @click="signSem">修改报名</el-button>
         </el-form-item>
       </el-form>
       <el-form v-if="seminarVO.status!='2'&&attendanceStatus">
         <el-form-item v-if="!pptStatus">
-        <el-button style="width:100%;background-color:#494e8e" type="primary" @click="dialogVisible=true">PPT提交</el-button>
+        <el-button class="bottomButt" type="primary" @click="dialogVisible=true">PPT提交</el-button>
       </el-form-item>
         <el-form-item v-if="pptStatus">
-        <el-button style="width:100%;background-color:#494e8e" type="primary" @click="dialogVisible=true">重新提交PPT</el-button>
+        <el-button class="bottomButt" type="primary" @click="dialogVisible=true">重新提交PPT</el-button>
       </el-form-item>
     </el-form>
       <el-form v-if="seminarVO.status=='1'">
       <el-form-item>
-        <el-button style="width:100%;background-color:#494e8e" type="primary" @click="enterSem">进入讨论课</el-button>
+        <el-button class="bottomButt" type="primary" @click="enterSem">进入讨论课</el-button>
       </el-form-item>
     </el-form>
       <el-form v-if="seminarVO.status=='2'&&attendanceStatus">
         <el-form-item v-if="reportStatus!='已提交'&&submitStatus">
-          <el-button style="width:100%;background-color:#494e8e" type="primary" @click="RdialogVisible = true">书面报告提交</el-button>
+          <el-button class="bottomButt" type="primary" @click="RdialogVisible = true">书面报告提交</el-button>
         </el-form-item>
         <el-form-item v-if="reportStatus=='已提交'&&submitStatus">
-          <el-button style="width:100%;background-color:#494e8e" type="primary" @click="RdialogVisible = true">重新提交书面报告</el-button>
+          <el-button class="bottomButt" type="primary" @click="RdialogVisible = true">重新提交书面报告</el-button>
         </el-form-item>
     </el-form>
     </el-footer>
@@ -119,6 +118,7 @@
         klassSeminarId:'',
         teamOrder:'',
         teamSerial:'', //2-4的4
+        canApply:true,
       }
     },
     created(){
@@ -130,7 +130,7 @@
         method: 'get',
         url: "/seminar/"+this.$route.query.klassSeminarId+"/team/seminarInfo",
       }).then(function (response) {
-        console.log(response);
+        var date=_this.getDate(new Date());
         _this.attendanceStatus=response.attendanceStatus;
         _this.seminarVO=response.seminarVO;
         _this.teamSerial=response.teamSerial;
@@ -142,6 +142,8 @@
         _this.attendanceId=response.attendanceId;
         _this.grade=response.grade;
         console.log(response.grade);
+        if(date<_this.seminarVO.enrollEndTime&&date>_this.seminarVO.enrollStartTime) _this.canApply=true;
+        else _this.canApply=false;
       })
     },
     methods:{
@@ -191,7 +193,7 @@
         this.$router.push({path:"/studentSeminarPre",
           query:{
             klassSeminarId:this.klassSeminarId,
-            seminarName:this.seminarName,
+            seminarName:this.seminarVO.seminarName,
             courseName:this.courseName,
           }})
       },
@@ -213,13 +215,42 @@
             attendanceId:this.attendanceId,
           }})
       },
+      getDate(date) {
+        var seperator1 = "-";
+        var seperator2 = ":";
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+          month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = "0" + strDate;
+        }
+        var Hours = date.getHours();
+        var Minutes = date.getMinutes();
+        var Seconds = date.getSeconds();
+
+        if (Hours >= 0 && Hours <= 9) {
+          Hours = "0" + Hours;
+        }
+        if (Minutes >= 0 && Minutes <= 9) {
+          Minutes = "0" + Minutes;
+        }
+        if (Seconds >= 0 && Seconds <= 9) {
+          Seconds = "0" + Seconds;
+        }
+        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+          + " " + Hours + seperator2 + Minutes
+          + seperator2 + Seconds;
+        return currentdate;
+      }
 
     }
   }
 </script>
 <style scoped>
   .el-container{
-    height: 90vh;
+    height: 95vh;
   }
   .bottButt{
     height: 40%;

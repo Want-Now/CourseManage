@@ -72,6 +72,7 @@
         }
       );
     },
+
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
@@ -99,7 +100,8 @@
       goRoundSetting(round,seminars){
         this.$router.push({path:'/RoundSeting',
           query:{
-          roundId:round.roundId,
+            roundId:round.roundId,
+            roundSerial:round.roundSerial,
             courseId:this.$route.query.courseId,
             courseName:this.$route.query.courseName,
             seminars:seminars
@@ -122,7 +124,8 @@
           path:'/CreatSeminar',
           query:{courseId:this.$route.query.courseId,rounds:rounds}
         });
-      }
+      },
+
     }
   }
 </script>

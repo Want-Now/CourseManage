@@ -39,7 +39,7 @@
       </el-menu>
     </el-main>
     <el-footer>
-      <el-button class="bottomButt" @click="newcourse"><i class="el-icon-plus"></i>新建课程</el-button>
+      <el-button class="bottomButt" v-if="role==='student'"><i class="el-icon-plus"></i>新建课程</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -47,9 +47,7 @@
   export default {
     data() {
       return {
-        courseList:[
-
-        ],
+        courseList:[],
       };
     },
     computed:{
@@ -65,22 +63,19 @@
       }).then(function (response) {
         _this.courseList=response;
       }).catch(error=>{
-        console.log(error.massage);
-        console.log(error.data.massage);
+        console.log(error);
+        console.log(error);
       });
     },
     methods: {
       back(){
         this.$router.go(-1);
       },
-      newcourse(){
-        this.$router.push({path:'/createCourse'})
-      },
       handleChange(val) {
         console.log(val);
       },
       goStudentScore(item){
-
+        this.$router.push({path:'/StudentScore',query:{courseId:item.courseId}});
       },
       goTeamPage(item){
         // console.log(item.courseId);
@@ -103,7 +98,7 @@
 </script>
 <style>
   .el-container {
-    height: 90vh;
+    height: 95vh;
   }
 
   .el-submenu{

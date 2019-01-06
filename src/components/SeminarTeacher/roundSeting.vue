@@ -50,17 +50,17 @@
         </el-form>
       </el-card>
       <el-card class="box-card">
-        <div slot="header" class="clearfix" >
+        <div slot="header" class="clearfix">
           <span style="float:left;font-size:20px;color:#494e8f;">本轮讨论课报名次数：</span>
         </div>
-        <div class="klassItem" v-for="klass in klasses" :key="klass.klassId">
-          <span>{{klass.grade}}-({{klass.klassSerial}})</span>
-          <el-input-number v-model="klass.enroll"  :min="1" :max="2" label="申请次数"></el-input-number>
-        </div>
+        <p class="klassItem" v-for="klass in klasses" :key="klass.klassId">
+          <span style="margin-right: 10px">{{klass.grade}}-({{klass.klassSerial}})</span>
+          <el-input-number v-model="klass.enroll" :min="1" label="申请次数"></el-input-number>
+        </p>
       </el-card>
     </el-main>
     <el-footer>
-      <el-button class="bottomButt">确认修改</el-button>
+      <el-button class="bottomButt" @click="roundSetting()">确认修改</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -115,6 +115,51 @@
           return 1;
         }
       },
+      changeMethod(a){
+        if(a===0){
+          return '平均分';
+        }
+        else if(a===1){
+          return '最高分';
+        }
+      },
+      roundSetting(){
+        this.$axios({
+          method:'put',
+          url:'/round/modifyRoundInfo',
+          data:{
+            courseId: this.$route.query.courseId,
+            roundId:this.$route.query.roundId,
+            roundSerial:this.$route.query.roundSerial,
+            presentationScoreMethod:this.changeMethod(this.preMethod),
+            reportScoreMethod:this.changeMethod(this.repoMethod),
+            questionScoreMethod:this.changeMethod(this.quesMethod)
+          }
+        }).then(response=>{
+          if(response===true) {
+            this.$message({
+              type: 'success',
+              message: '修改成功!',
+              duration: 800
+            });
+          }else {
+            this.$message({
+              type: 'error',
+              message: '修改失败！',
+              duration: 800
+            });
+          }
+        });
+
+
+        this.$axios({
+          method:'put',
+          url:'/round/'+this.$route.query.roundId+'/modifyRoundEnroll',
+          data:{
+            roundEnrollList:this.klasses
+          }
+        })
+      }
     }
   }
 </script>

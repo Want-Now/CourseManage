@@ -6,18 +6,18 @@
       <el-dropdown>
         <el-button class="el-icon-menu"></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人页面</el-dropdown-item>
-          <el-dropdown-item>讨论课</el-dropdown-item>
+          <el-dropdown-item @click.native="stuCenter()">个人页面</el-dropdown-item>
+          <el-dropdown-item @click.native="stuSeminar()">讨论课</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
     <el-main>
       <el-collapse accordion>
-        <el-collapse-item v-for="round in rounds" :key="round.id">
-          <template slot="title">{{round.title}}</template>
+        <el-collapse-item v-for="round in rounds" :key="round.roundId">
+          <template slot="title">第{{round.roundSerial}}轮</template>
           <el-collapse v-for="seminar in round.seminars" :key="seminar.id">
             <el-collapse-item>
-              <template slot="title">{{seminar.name}}</template>
+              <template slot="title">{{seminar.topic}}</template>
                 <div class="scoreDiv">
                   <span>展示：</span><span class="scoreFont">{{seminar.presentationScore}}</span><br/>
                   <span>提问：</span><span class="scoreFont">{{seminar.questionScore}}</span><br/>
@@ -41,30 +41,45 @@
         name: "courseScore",
       data(){
           return{
-            headerLocation:'OOAD-2016(1)',
-            rounds:[
-              {
-                title:'第一轮',
-                seminars:[
-                  {
-                    name:'业务流程',
-                    presentationScore:'5.0',
-                    questionScore:'5.0',
-                    reportScore:'5.0',
-                    seminarScore:'5.0',
-                    roundScore:'5.0'
+            headerLocation:'',
+            rounds:[],
 
-                  },
-                  {
-                    name:'用例分析'
-                  }
-                ]
-              },
+          }
+      },
+      created(){
+          let _this=this;
+          this.headerLocation=this.$route.query.courseName+' '+this.$route.query.grade+'('+this.$route.query.klassSerial+')';
+          console.log(this.headerLocation);
+          this.$axios({
+            method:'get',
+            url:'/course/'+this.$route.query.courseId+'/round'
+          }).then(response=>{
+            for(var index=0;index<response.length;index++)
+            {
+              _this.rounds.push({
+                roundId:response[index].roundId,
+                roundSerial:response[index].roundSerial,
+                seminars:[]
+              });
+              _this.getSeminars(_this.rounds[index]);
+            }
+          })
+      },
+      methods:{
+          getSeminars(round){
+            this.$axios({
+              method:'get',
+              url:'/course/round/'+round.roundId+'/team/roundSeminar'
+            }).then(response=>{
+              for(var index=0;index<response.length;index++)
               {
-                title:'第二轮'
+                round.seminars.push({
+                  id:response[index].id,
+                  topic:response[index].topic,
+                })
               }
-            ],
 
+            })
           }
       }
     }

@@ -23,11 +23,20 @@
           <span class="itemSpan">组队开始</span><span class="itemSpan">{{teamStartTime}}</span>
           <span class="itemSpan">组队截止</span><span class="itemSpan">{{teamEndTime}}</span>
           <p>组员基本要求</p>
-          <span class="itemSpan">组队截止</span><span class="itemSpan">{{teamEndTime}}</span>
-
+          <span class="itemSpan">小组总人数</span><span class="itemSpan">{{minMember}}-{{maxMember}}</span>
+          <p>组内选修课程人数</p>
+          <div v-for="item in courseLimitVOS">
+            <span class="itemSpan">{{item.courseName}}</span><span class="itemSpan">{{item.minMember}}-{{item.maxMember}}</span>
+          </div>
+          <p>冲突课程</p>
+          <div v-for="item in items">
+            <div v-for="course in item">
+              <span class="itemSpan">{{course.courseName}}</span><span class="itemSpan">{{course.teacherName}}</span>
+            </div>
+            <hr/>
+          </div>
 
         </el-card>
-
       </el-main>
     </el-container>
 </template>
@@ -38,7 +47,7 @@
       data(){
           return{
             headerLocation:"",
-            courseIntro:"OOADfdsafadsfasfdsafdsfdasfdsafdsafdasfsdafdsafdfdsfds",
+            courseIntro:"",
             prePercent:'',
             quesPercent:'',
             repoPercent:'',
@@ -46,30 +55,9 @@
             teamEndTime:'',
             minMember:'',//组队人数
             maxMember:'',
-
-
-            tableIntroData:[{
-              dataName:'课程成绩分布',
-              dataContent:'XXXX 10%' +'dsadsa',
-            }, {
-                dataName:'小组人数',
-                dataContent:'6～8',
-              }, {
-                dataName:'组队开始时间',
-                dataContent:'2018.10.11 12:30',
-              }, {
-              dataName:'组队结束时间',
-              dataContent:'2018.11.11 12:30',
-            }, {
-              dataName:'组员性别要求',
-              dataContent:'男：2-4 女：2-4',
-            }, {
-              dataName:'组员星座要求',
-              dataContent:'无',
-            }, {
-              dataName:'冲突课程',
-              dataContent:'.net(XX老师)',
-            }]
+            items:[],
+            courseLimitVOS:[],
+            conflictCourseIdS:[],
           }
       },
       created(){
@@ -80,27 +68,23 @@
             url:'/course/'+this.$route.query.courseId
           }).then(
             function (response) {
-              var startDate=new Date(response.teamStartTime);
-              var endDate=new Date(response.teamEndTime);
               _this.courseIntro=response.introduction;
               _this.prePercent=response.presentationPercentage;
               _this.quesPercent=response.questionPercentage;
               _this.repoPercent=response.reportPercentage;
-              _this.teamStartTime=_this.toNormalDate(startDate);
-              _this.teamEndTime=_this.toNormalDate(endDate);
+              _this.teamStartTime=response.teamStartTime;
+              _this.teamEndTime=response.teamEndTime;
+              _this.minMember=response.minMember;
+              _this.maxMember=response.maxMember;
+              _this.courseLimitVOS=response.courseLimitVOS;
+              // _this.conflictCourseIdS=response.conflictCourseIdS[0];
+              for(var index=0;index<response.conflictCourseIdS.length;index++)
+              {
+                _this.items.push(response.conflictCourseIdS[index]);
+              }
             }
           )
-            .catch()
       },
-      methods: {
-        toNormalDate(date){
-          // var time1=date.toLocaleString();
-          // var date1=time1.substring(0,10);
-          // var date2=time1.substring(10,20);
-          // return date1+date2;
-          return date.getFullYear()+'.'+(date.getMonth()+1)+'.'+date.getDate()+'  '+date.getHours()+':'+date.getMinutes();
-        }
-      }
     }
 </script>
 

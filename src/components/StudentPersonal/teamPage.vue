@@ -64,13 +64,12 @@
               align="center">
             </el-table-column>
           </el-table>
-
         </el-collapse-item>
       </el-collapse>
     </el-main>
     <el-footer v-if="role==='student'">
-      <el-button class="bottomButt" @click="goCreateTeam()">创建小组<i class="el-icon-plus"></i></el-button>
-      <el-button class="bottomButt" @click="goMemberTeam()">我的小组</el-button>
+      <el-button class="bottomButt" v-if="isUnteamed===true&&canTeam===true" @click="goCreateTeam()">创建小组<i class="el-icon-plus"></i></el-button>
+      <el-button class="bottomButt" v-if="isUnteamed===false" @click="goMemberTeam()">我的小组</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -89,7 +88,10 @@
             seen:true,
             loading2:true,
             loading1:true,
-            loading:true
+            loading:true,
+            myTeamId:null,
+            isUnteamed:'',
+            canTeam:''
           }
       },
       computed:{
@@ -99,13 +101,23 @@
       },
       created(){
           var _this=this;
+          var now=this.getDate(new Date());
+          var startTime;
+          var endTime;
+          console.log(now);
           this.$axios({
             method:'get',
             url:'/course/'+this.$route.query.courseId+'/team'
           }).then(response=>{
+            startTime=_this.getDate(new Date(response.startTime));
+            endTime=_this.getDate(new Date(response.endTime));
             _this.headerLocation=_this.$route.query.courseName;
             _this.teams=response.teams;
             _this.loading=false;
+            if(response.myTeamId===null) _this.isUnteamed=true;
+            else _this.isUnteamed=false;
+            if(now<endTime&&now>startTime) _this.canTeam=true;
+            else _this.canTeam=false;
           })
 
       },
@@ -123,7 +135,7 @@
           let _this=this;
           this.$axios({
             method:'get',
-            url:'/team/'+team.teamId,
+            url:'/course/'+this.$route.query.courseId+'/team/'+team.teamId,
           }).then(response=>{
             _this.loading1=true;
             var member=response.members;
@@ -148,11 +160,43 @@
           })
         },
         goCreateTeam(){
-          this.$router.push('CreateTeam');
+          this.$router.push({
+            path:'/CreateTeam',
+            query:{courseName:this.$route.query.courseName,courseId:this.$route.query.courseId}
+          });
         },
         goMemberTeam(){
-          this.$router.push({path:'/MemberTeam',query:{}});
-        }
+          this.$router.push({path:'/MemberTeam',query:{courseName:this.$route.query.courseName,courseId:this.$route.query.courseId,canTeam:this.canTeam}});
+        },
+        getDate(date) {
+          var seperator1 = "-";
+          var seperator2 = ":";
+          var month = date.getMonth() + 1;
+          var strDate = date.getDate();
+          if (month >= 1 && month <= 9) {
+            month = "0" + month;
+          }
+          if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+          }
+          var Hours = date.getHours();
+          var Minutes = date.getMinutes();
+          var Seconds = date.getSeconds();
+
+          if (Hours >= 0 && Hours <= 9) {
+            Hours = "0" + Hours;
+          }
+          if (Minutes >= 0 && Minutes <= 9) {
+            Minutes = "0" + Minutes;
+          }
+          if (Seconds >= 0 && Seconds <= 9) {
+            Seconds = "0" + Seconds;
+          }
+          var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + Hours + seperator2 + Minutes
+            + seperator2 + Seconds;
+          return currentdate;
+        },
       }
 
     }
@@ -160,7 +204,7 @@
 
 <style scoped>
   .el-container{
-    height: 98vh;
+    height: 95vh;
 
   }
   .teamState{

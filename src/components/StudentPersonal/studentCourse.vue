@@ -59,10 +59,16 @@
         this.$router.push({path:'/CourseInfo',query:{courseId:item.courseId,courseName:item.courseName}});
       },
       goScorePage(item){
-        this.$router.push('/CourseScore');
+        this.$router.push({
+          path:'/CourseScore',
+          query:{courseName:item.courseName,grade:item.grade,klassSerial:item.klassSerial,courseId:item.courseId}
+        });
       },
       goMyTeam(item){
-        //判断是组长还是组员
+        this.$router.push({
+          path:'/TeamPage',
+          query:{courseId:item.courseId,courseName:item.courseName}
+        });
       }
     }
 

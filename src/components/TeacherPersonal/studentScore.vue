@@ -24,12 +24,28 @@
                   <span class="teamName">{{team.klassSerial}}-{{team.teamSerial}}</span>
                   <span class="teamScore">{{team.totalScore}}</span>
               </template>
-              <div class="scoreDiv" v-for="seminar in team.seminars"  v-loading="loading">
+              <div class="scoreDiv" v-for="seminar in team.seminars">
                 <p class="seminarName">{{seminar.seminarName}}</p>
                 <span>展示：</span><span class="scoreFont">{{seminar.presentationScore}}</span>
                 <span>提问：</span><span class="scoreFont">{{seminar.questionScore}}</span>
                 <span>书面报告：</span><span class="scoreFont">{{seminar.reportScore}}</span>
-                <el-button class="changeButt" size="mini">修改成绩</el-button>
+                <el-button class="changeButt" size="mini" @click="dialogVisible = true">修改成绩</el-button>
+                <el-dialog
+                  title="修改成绩"
+                  :visible.sync="dialogVisible"
+                  width="80%"
+                  center
+                  :modal-append-to-body='false'>
+                  <span>
+                    <span>展示：</span><el-input v-model="modifyPresentationScore"></el-input>
+                    <span>提问：</span><el-input v-model="modifyQuestionScore"></el-input>
+                    <span>书面报告：</span><el-input v-model="modifyReportScore"></el-input>
+                  </span>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="modifyScore(team,seminar)">确 定</el-button>
+                  </span>
+                </el-dialog>
               </div>
               <div class="scoreDiv">
                 <p class="seminarName">总成绩</p>
@@ -42,9 +58,6 @@
         </el-collapse-item>
       </el-collapse>
     </el-main>
-    <el-footer>
-      <el-button class="bottomButt">导出成绩</el-button>
-    </el-footer>
   </el-container>
 </template>
 <script>
@@ -56,13 +69,14 @@
         rounds:[],
         teams:[],
         seminars:[],
-        loading:true,
+        dialogVisible:false,
+        modifyPresentationScore:'',
+        modifyQuestionScore:'',
+        modifyReportScore:'',
       }
     },
     created(){
       this.getRound();
-
-
     },
     methods:{
       getRound(){
@@ -115,9 +129,34 @@
         }).then(
           res=>{
            team.seminars=res;
-           this.loading=false;
+
           });
       },
+      modifyScore(team,seminar){
+        this.$axios({
+          method:'put',
+          url:'/seminar/'+seminar.klassSeminarId+'/team/'+team.teamId+'/modifySeminarScore',
+          data:{
+            presentationScore: parseFloat(this.modifyPresentationScore),
+            questionScore:parseFloat(this.modifyQuestionScore),
+            reportScore: parseFloat(this.modifyReportScore)
+          }
+        }).then(response=>{
+          if(response===true) {
+            this.$message({
+              type: 'success',
+              message: '修改成功!',
+              duration: 800
+            });
+          }else {
+            this.$message({
+              type: 'error',
+              message: '修改失败！',
+              duration:800
+            });
+          }
+        })
+      }
     }
   }
 </script>
